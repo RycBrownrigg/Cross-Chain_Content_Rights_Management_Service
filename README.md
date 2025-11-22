@@ -12,9 +12,13 @@ Traditional content rights management systems primarily concentrate on preventin
 
 The motivation for this research arises from several fundamental considerations. Primarily, the shift towards the Web3 paradigm emphasizes the significance of user ownership and creator empowerment, thereby necessitating the development of innovative models for content monetization that are aligned with decentralized principles. Additionally, the fragmented landscape of existing blockchain ecosystems necessitates the implementation of cross-chain solutions to facilitate seamless content access and efficient payment processing. Furthermore, the growing adoption of subscription and micro-payment models in digital content consumption underscores the need for advanced, programmable rights management systems that can function autonomously across multiple platforms.
 
-### 2. Research Question
-* What are the most effective strategies for designing and implementing a cross-chain content rights management service that aims to facilitate decentralized subscription, pay-per-view, and purchase models while ensuring scalability, interoperability, and economic efficiency across multiple blockchain networks?
+### 2. Research Question (Revised after research)
 
-     Sub-questions:
-    * How might cross-chain protocols be employed to facilitate seamless transactions of content rights across multiple blockchain networks?
-    * What are the most effective design patterns for balancing decentralization with user experience in content rights management?
+* “How can a shared-security, multi-chain framework built on Polkadot’s XCM and ink! smart contracts deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, while achieving sub-second finality, sub-cent transaction costs, and creator revenue retention greater than 95 %?”
+
+     Sub-questions (Revised after research):
+    * How can XCM v5+ be extended to carry recurring subscription renewal messages and rich rights metadata (e.g., PPV counters, royalty splits) across Polkadot parachains and external networks (Ethereum, Cosmos) with >99 % atomic success rate?
+    
+    * What ink!-based design patterns (unified rights token, chain extensions, off-chain indexing) enable Netflix-like <1 second access verification latency while maintaining a decentralization index (HHI) below 1,500 across 5–50 validator nodes?
+    
+    * [NEW] Can a single on-chain rights object simultaneously enforce subscription auto-renewal, pay-per-view consumption limits, and permanent ownership with automated royalty distribution across chains, and what are the resulting creator cost savings compared to 2025 centralized (30–45 %) and bridge-based (8–15 %) alternatives?

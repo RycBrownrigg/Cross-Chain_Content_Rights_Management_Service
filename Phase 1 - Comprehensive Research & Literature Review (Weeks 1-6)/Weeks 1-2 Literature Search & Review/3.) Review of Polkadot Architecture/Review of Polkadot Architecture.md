@@ -4,7 +4,7 @@ Polkadot is designed as a heterogeneous multi-chain ecosystem that emphasizes in
 
 Connected to the relay chain are **parachains** (dedicated slots) and **on-demand parachains** (formerly parathreads), which handle specialized computations. The relay chain supports a fixed number of execution cores (e.g., CPU cores), enabling parallel processing. Parachains delegate computations away from the relay chain, enabling diverse use cases such as smart contracts and privacy-focused chains. **Bridges** extend this by connecting external standalone chains (e.g., Ethereum or Bitcoin), facilitating arbitrary data transfers while maintaining security through the relay chain's consensus.
 
-The **shared security model** is an essential characteristic: all interconnected parachains benefit from the validator security of the relay chain, which is supported by staked DOT. This consolidated security architecture eliminates the need for each parachain to establish its own validators, thereby reducing risks such as 51% attacks commonly associated with sovereign chains. If the relay chain reverts a block, all parachains revert accordingly, thereby ensuring system-wide integrity consistency.
+The **shared security model** is an essential characteristic: all interconnected parachains benefit from the validator security of the relay chain, which staked DOT supports. This consolidated security architecture eliminates the need for each parachain to establish its own validators, thereby reducing risks such as 51% attacks commonly associated with sovereign chains. If the relay chain reverts a block, all parachains revert accordingly, thereby ensuring system-wide integrity consistency.
 
 **Scalability** is attained through parallel processing across cores, adaptable resource allocation facilitated by DOT-based coretime purchases, and the delegation of workloads. This approach differentiates from monolithic blockchains, thereby enabling the network to manage high transaction volumes without central overload. As of October 2025, no significant architectural updates have been observed beyond the implementation of Agile Coretime, which enhances resource management.
 
@@ -40,9 +40,9 @@ As of October 2025, version 6 (v6) is the current version, with Solidity/MetaMas
 
 XCM (Cross-Consensus Messaging) constitutes a messaging format rather than a protocol, designed for intent-based communication between consensus systems to promote interoperability within Polkadot and beyond. It facilitates chains in transmitting actions (e.g., asset transfers) without presuming a specific consensus mechanism, thereby supporting asynchronous, absolute, asymmetric, and agnostic principles: messages are autonomous, assuredly accurate, unidirectional, and universally applicable.
 
-**Message formats** utilize instructions such as WithdrawAsset (to remove assets to a holding register), BuyExecution (to pay fees based on weight), and DepositAsset (to transfer assets to the beneficiary). MultiLocations specify entities (e.g., accounts, chains) hierarchically; MultiAssets describe fungible and NFT assets. For example, transferring tokens involves withdrawing, executing a purchase, and depositing, with the details intricately defined.
+**Message formats** utilize instructions such as WithdrawAsset (to remove assets to a holding register), BuyExecution (to pay fees based on weight), and DepositAsset (to transfer assets to the beneficiary). MultiLocations specify entities (e.g., accounts, chains) hierarchically; MultiAssets describe fungibles and NFTs. For example, transferring tokens involves withdrawing, executing a purchase, and depositing, with the details intricately defined.
 
-**Asset transfers**: Use instructions for the sender to withdraw, execute fees, and deposit to the recipient, with specified weight limits to facilitate control costs.
+**Asset transfers**: Utilize instructions for the sender to withdraw, execute fees, and deposit to the recipient, with specified weight limits to facilitate control costs.
 
 **Remote execution**: Messages delineate the intents for remote chains to interpret, thereby facilitating function calls, asset locking, and NFT operations. Programmability encompasses branching and safety features dispatches.
 
@@ -58,6 +58,6 @@ Parachain mechanisms facilitate the migration of prototypes to dedicated slots f
 
 The ink! smart contracts are fundamental: SubscriptionManager.rs manages recurring access, PayPerView.rs handles one-time tokens, and PurchaseVerification.rs facilitates ownership transfers. The safety features of Rust and the efficiency of WebAssembly (WASM) are well-suited to the project's low-latency objectives, with integration achieved through Substrate chain extensions for state management.
 
-XCM facilitates seamless cross-chain rights transfers, such as subscription activations, between parachains or via Ethereum bridges, using instructions for asset movements and remote execution. This approach addresses the research question on interoperability, thereby promoting economic efficiency by reducing fees and enabling transparent revenue-sharing.
+XCM facilitates seamless cross-chain rights transfers, such as subscription activations between parachains or through Ethereum bridges, utilizing instructions for asset movements and remote executions. This approach addresses the research question concerning interoperability, thereby promoting economic efficiency through the reduction of fees and enabling transparent revenue management sharing.
 
-Overall, these components establish a scalable, interoperable framework that enables creators, as outlined in the methodology and evaluation phases.
+Overall, these components establish a scalable and interoperable framework that enables creators, as delineated in the methodology and evaluation phases.
