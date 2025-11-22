@@ -1,0 +1,98 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{float}
+
+% Page geometry
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+    breaklinks=true,
+}
+
+% URL line breaking
+\Urlmuskip=0mu plus 1mu
+\def\UrlBreaks{\do\/\do-\do.\do=\do?\do\&}
+\urlstyle{same}
+
+\title{High-Level System Concepts\\
+\large Cross-Chain Content Rights Management Service (Theoretical Framework)}
+\author{}
+\date{}
+
+\begin{document}
+
+\sloppy
+
+\maketitle
+
+These concepts constitute the fundamental intellectual foundations of the system. They do not include code, palette names, or detailed sequence diagrams---solely the overarching ideas that will subsequently be translated into concrete architecture.
+
+{\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{3cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.5cm}}
+\caption{High-Level System Concepts} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{3cm}}{\textbf{Concept}} & 
+\multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Description}} & 
+\multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Why It Exists (Gap it closes)}} & 
+\multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Key Property Delivered}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{3cm}}{\textbf{Concept}} & 
+\multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Description}} & 
+\multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Why It Exists (Gap it closes)}} & 
+\multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Key Property Delivered}} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\textbf{1. Unified Rights Token} & A singular on-chain object capable of concurrently representing three conditions: an active subscription, the remaining pay-per-view views, or permanent ownership. One token corresponds to one piece of content, one creator, and one set of rules. & G1 + G7---No existing system offers subscription + PPV + purchase in the same rights primitive. & Eliminates the need for creators to manage three separate contracts or platforms. \\
+\addlinespace
+\textbf{2. Recurring Cross-Chain Subscription} & Subscription renewal is not managed through an off-chain cron job or a bridge call; rather, it is executed via a scheduled XCM message that automatically transfers from one parachain (or external chain) to another during each billing cycle. & G2---No native recurring cross-chain payment mechanism exists in 2025. & True cross-chain Netflix/Spotify-style subscriptions without relayers. \\
+\addlinespace
+\textbf{3. Pay-Per-View as a Counter, Not a New Token} & Each view reduces an integer counter within the same rights token. There is no minting of ``view tickets'' nor additional transactions. & G4---Current PPV solutions are too expensive and slow for per-minute or per-segment billing. & Enables genuine micro-transactions (<\$0.002) and per-second video monetisation. \\
+\addlinespace
+\textbf{4. Metadata-Carrying Cross-Chain Messages} & XCM messages encompass not only value but also structured rights metadata, including royalty splits, expiration dates, geographic rules, and collaborator lists, enabling any chain receiving the token to immediately comprehend the complete policy. & G3---Existing cross-chain standards move fungibles/NFTs but lose rich rights expression. & Rights travel with the token; no separate oracle or registry needed. \\
+\addlinespace
+\textbf{5. Ownership = Subscription Upgrade} & Purchasing permanent ownership automatically confers the right to an indefinite subscription on the same token, thereby eliminating the necessity for separate subscription renewal. A single transaction upgrades the access tier permanently. & G7---Forces creators/users to choose between models today. & ``Buy-to-own'' becomes a first-class feature instead of a separate marketplace. \\
+\addlinespace
+\textbf{6. Automatic Royalty Propagation Across Chains} & Every resale or secondary subscription payment allocates revenue in accordance with an on-chain vector and disburses royalties via XCM to collaborators on any supported chain (Polkadot, Ethereum, Cosmos, etc.). & G1 + G3---Royalties usually stop at the first chain border. & Global, frictionless collaboration revenue (e.g., co-authors, featured artists, translators). \\
+\addlinespace
+\textbf{7. Sub-Second Access Verification with Full Decentralisation} & Access control inquiries are addressed within one second, comparable to the response time of Netflix, while settlement and state data remain entirely on-chain and are secured by Polkadot's shared validator set. & G5---Current solutions sacrifice either speed or decentralisation. & Mass-market UX without trusting a central server. \\
+\addlinespace
+\textbf{8. Optional Privacy Layer for Regulatory Compliance} & Creators or platforms may append zero-knowledge proofs to the rights token in order to selectively disclose information to regulatory authorities, such as tax jurisdictions and AML flags, without revealing user identities or the complete revenue data. & G6---Growing regulatory pressure on tokenized assets (2026--2027 horizon). & Future-proofing without compromising Web3 privacy defaults. \\
+\addlinespace
+\textbf{9. Creator-First Economic Flywheel} & The same rights token incorporates an integrated Monte Carlo pricing simulator, which creators may query on-chain to evaluate subscription pricing, pay-per-view (PPV) pricing, and outright sale options prior to launch. & No literature precedent---moves from reactive analytics to predictive economics. & Higher creator earnings through data-driven pricing. \\
+\end{longtable}
+}
+
+These nine concepts collectively constitute the foundational theoretical framework of the system. They are intentionally designed to be technology-agnostic at this stage; however, they are sufficiently detailed to inform every architectural decision.
+
+\end{document}

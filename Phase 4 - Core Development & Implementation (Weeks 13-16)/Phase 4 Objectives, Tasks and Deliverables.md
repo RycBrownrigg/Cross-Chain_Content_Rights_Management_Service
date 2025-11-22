@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #### **Phase 4: Core Development & Implementation (Weeks 13-16)**
+=======
+### **Phase 4: Core Development & Implementation (Weeks 13-16)**
+>>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
 
 #### **Objectives**
 
