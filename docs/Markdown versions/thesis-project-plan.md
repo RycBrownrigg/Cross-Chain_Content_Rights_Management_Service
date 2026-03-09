@@ -5,311 +5,28 @@
 **Program:** Masters in Blockchain and Distributed Ledger Technologies (ITC) 
 **Thesis Type:** Research + Implementation  
 **Target Word Count:** 15,000 words  
-<<<<<<< HEAD
 **Estimated Duration:** 20-24 weeks (5-6 months)
-=======
-**Estimated Duration:** 24 weeks (6 months)
->>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
 
 ---
 
-### **Executive Summary**
+## **Executive Summary**
 
 This project plan delineates a systematic methodology for the completion of a Master's thesis focused on cross-chain content rights management. The plan harmonizes academic research and scholarly writing with practical system development, ultimately producing a 15,000-word thesis and a functional prototype constructed on Polkadot's platform ecosystem.
 
 ---
 
-### **Project Timeline Overview**
+## **Project Timeline Overview**
 
-<<<<<<< HEAD
-#### **Phase 1: Foundation & Research (Weeks 1-4)**
-#### **Phase 2: System Design & Architecture (Weeks 5-8)**
-#### **Phase 3: Core Development (Weeks 9-14)**
-#### **Phase 4: Testing & Evaluation (Weeks 15-18)**
-#### **Phase 5: Thesis Writing & Finalization (Weeks 19-24)**
-=======
 #### **Phase 1 - Comprehensive Research & Literature Review (Weeks 1-6)**
 #### **Phase 2 - Thesis Drafting & Design Conceptualization (Weeks 7-10)**
 #### **Phase 3 - System Design & Architecture Finalization (Weeks 11-12)**
 #### **Phase 4 - Core Development & Implementation (Weeks 13-16)**
 #### **Phase 5 - Testing, Evaluation, & Thesis Integration (Weeks 17-20)**
 #### **Phase 6 - Finalization & Submission Preparation (Weeks 21-24)**
->>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
-
 ---
 
-### **Detailed Phase Breakdown**
+## **Detailed Phase Breakdown**
 
-<<<<<<< HEAD
-#### **Phase 1: Foundation & Research (Weeks 1-4)**
-
-#### **Objectives**
-
-- Establish development environment
-- Conduct a comprehensive literature review
-- Finalize technical approach and system architecture
-
-#### **Development Tasks**
-
-- **Week 1:** Environment Setup
-  - Install Rust, Cargo, and Substrate toolchain
-  - Set up ink! development environment
-  - Configure Docker for local node deployment
-  - Create a GitHub repository with proper structure
-  - Set up documentation framework
-
-- **Week 2:** Technology Deep Dive
-  - Study Polkadot architecture and parachain mechanics
-  - Learn ink! smart contract development
-  - Understand XCM protocol specifications
-  - Review existing cross-chain implementations
-
-- **Week 3-4:** Research & Design
-  - Conduct systematic literature review (expand bibliography)
-  - Analyze competing solutions (Ethereum-based, centralized systems)
-  - Design high-level system architecture
-  - Create technical specification document
-
-#### **Writing Tasks (Target: 2,000 words)**
-
-- Introduction draft (1,000 words)
-- Background and Related Work expansion (1,000 words)
-- Create an annotated bibliography
-
-#### **Deliverables**
-
-- Configured development environment
-- Literature review matrix (50+ papers)
-- System architecture diagram
-- Technical specification document v1.0
-- Introduction and Background chapters (draft)
-
----
-
-#### **Phase 2: System Design & Architecture (Weeks 5-8)**
-
-#### **Objectives**
-
-- Finalize detailed system design
-- Create smart contract specifications
-- Design evaluation methodology
-
-#### **Development Tasks**
-
-- **Week 5:** Smart Contract Architecture
-  - Design subscription contract interface
-  - Design pay-per-view contract interface
-  - Design purchase verification contract interface
-  - Define data structures and storage patterns
-
-- **Week 6:** Cross-Chain Integration Design
-  - Design XCM message formats for rights transfers
-  - Plan bridge integration with Ethereum
-  - Design cross-chain subscription activation flow
-  - Create sequence diagrams for key operations
-
-- **Week 7:** Infrastructure Planning
-  - Design local testnet topology (Docker configuration)
-  - Plan migration path to public testnets (Westend/Kusama)
-  - Design monitoring and logging strategy
-  - Create database schema for off-chain components
-
-- **Week 8:** Evaluation Framework
-  - Define all evaluation metrics and KPIs
-  - Design test scenarios and stress test plans
-  - Create baseline comparison methodology
-  - Develop data collection strategy
-
-#### **Writing Tasks (Target: 3,000 words)**
-
-- Methodology chapter (2,000 words)
-- System Design and Architecture section (1,000 words)
-- Evaluation plan documentation
-
-#### **Deliverables**
-
-- Complete system design document
-- Smart contract specifications
-- UML/sequence diagrams for all major flows
-- Evaluation framework document
-- Methodology chapter (draft)
-
----
-
-#### **Phase 3: Core Development (Weeks 9-14)**
-
-#### **Objectives**
-
-- Implement all smart contracts
-- Deploy local testnet
-- Integrate XCM functionality
-
-#### **Development Tasks**
-
-- **Week 9-10:** Subscription Contract Implementation
-  - Develop subscription state management
-  - Implement recurring payment logic
-  - Create access verification mechanisms
-  - Write unit tests (target: 80% coverage)
-  - Deploy to local testnet
-
-- **Week 11:** Pay-Per-View Contract Implementation
-  - Develop one-time access logic
-  - Implement payment verification
-  - Create time-limited access mechanisms
-  - Write unit tests
-  - Deploy to local testnet
-
-- **Week 12:** Purchase Verification Contract
-  - Develop ownership transfer logic
-  - Implement permanent access rights
-  - Create transfer and resale mechanisms
-  - Write unit tests
-  - Deploy to local testnet
-
-- **Week 13:** XCM Integration
-  - Implement cross-chain message handlers
-  - Develop parachain-to-parachain rights transfer
-  - Create Ethereum bridge integration
-  - Test cross-chain subscriptions
-
-- **Week 14:** Integration & Testing
-  - Integrate all three contract types
-  - Develop chain extensions (if needed)
-  - Create end-to-end test scenarios
-  - Deploy complete system to local testnet
-  - Begin logging performance metrics
-
-#### **Writing Tasks (Target: 2,000 words)**
-
-- Implementation details section (1,500 words)
-- Document technical challenges and solutions (500 words)
-- Create code documentation
-
-#### **Deliverables**
-
-- Three functional smart contracts (subscription, PPV, purchase)
-- Integrated local testnet deployment
-- XCM message passing implementation
-- Unit test suite (80%+ coverage)
-- Implementation documentation
-
----
-
-#### **Phase 4: Testing & Evaluation (Weeks 15-18)**
-
-#### **Objectives**
-
-- Conduct a comprehensive system evaluation
-- Collect performance data
-- Deploy to public testnet
-
-#### **Development Tasks**
-
-- **Week 15:** Performance Testing
-  - Develop load testing scripts (Rust with subxt)
-  - Conduct TPS testing (10-1000 transactions/minute)
-  - Measure latency and success rates
-  - Monitor resource utilization
-  - Collect baseline metrics
-
-- **Week 16:** Scalability Testing
-  - Deploy to Westend or Kusama testnet
-  - Scale from 5 to 50 nodes
-  - Conduct stress testing with thousands of concurrent users
-  - Measure block creation times
-  - Analyze bottlenecks
-
-- **Week 17:** Security & Reliability Testing
-  - Run cargo-contract static analysis
-  - Conduct cargo-fuzz testing
-  - Perform penetration testing
-  - Simulate node failures (Chaos Mesh)
-  - Measure MTTR and uptime
-
-- **Week 18:** Comparative Analysis
-  - Set up centralized comparison (AWS-based DRM simulation)
-  - Conduct parallel testing
-  - Analyze economic efficiency metrics
-  - Calculate cost savings
-  - Compute decentralization metrics (HHI)
-
-#### **Writing Tasks (Target: 4,000 words)**
-
-- Results chapter (2,500 words)
-- Evaluation and Analysis (1,500 words)
-- Create all charts, graphs, and tables
-
-#### **Deliverables**
-
-- Complete evaluation dataset
-- Performance benchmarking report
-- Security audit report
-- Comparative analysis with centralized systems
-- Results chapter (draft) with visualizations
-
----
-
-#### **Phase 5: Thesis Writing & Finalization (Weeks 19-24)**
-
-#### **Objectives**
-
-- Complete all thesis chapters
-- Refine and polish content
-- Prepare defense presentation
-
-#### **Writing Tasks**
-
-- **Week 19:** Discussion & Conclusion (Target: 3,000 words)
-  - Discussion of findings (1,500 words)
-  - Implications and contributions (750 words)
-  - Limitations (375 words)
-  - Future work (375 words)
-
-- **Week 20:** Executive Summary & Abstract
-  - Write executive summary (500 words)
-  - Refine abstract (300 words)
-  - Create table of contents
-  - Write acknowledgments
-
-- **Week 21:** First Revision Pass
-  - Review all chapters for coherence
-  - Ensure consistent terminology
-  - Verify all citations
-  - Check word count distribution
-  - Fill any content gaps
-
-- **Week 22:** Technical Review
-  - Verify all technical details
-  - Ensure code snippets are accurate
-  - Validate all performance metrics
-  - Check calculations and formulas
-  - Review diagrams and figures
-
-- **Week 23:** Final Polish
-  - Proofread entire document
-  - Format according to university guidelines
-  - Verify bibliography (APA/IEEE format)
-  - Create list of figures and tables
-  - Final formatting check
-
-- **Week 24:** Submission Preparation
-  - Create defense presentation (30-45 minutes)
-  - Prepare demo video of system
-  - Print and bind thesis
-  - Submit to committee
-  - Rehearse defense
-
-#### **Deliverables**
-
-- Complete 15,000-word thesis
-- Defense presentation
-- System demonstration video
-- GitHub repository with complete code
-- Final submission package
-
----
-=======
 ### **Phase 1: Comprehensive Research & Literature Review (Weeks 1-6)**
 
 #### **Objectives**
@@ -343,7 +60,7 @@ This project plan delineates a systematic methodology for the completion of a Ma
 - Introduction draft (1,000 words).
 - Background and Related Work chapter (2,000 words).
 - Research Questions and Objectives chapter (1,000 words).
-- Create an annotated bibliography.
+- Create annotated bibliography.
 
 #### **Deliverables**
 
@@ -351,7 +68,6 @@ This project plan delineates a systematic methodology for the completion of a Ma
 - Annotated bibliography.
 - Initial chapters: Introduction, Background and Related Work, Research Questions and Objectives (drafts).
 - Research findings report for potential pivots in technical approach.
-
 ---
 ### **Phase 2: Thesis Drafting & Design Conceptualization (Weeks 7-10)**
 
@@ -447,7 +163,7 @@ This project plan delineates a systematic methodology for the completion of a Ma
 - **Week 16:** Full System Integration
   - Integrate all contracts.
   - Create end-to-end test scenarios.
-  - Deploy complete system to local testnet.
+  - Deploy the complete system to the local testnet.
   - Begin preliminary performance logging.
 
 #### **Writing Tasks (Target: 1,500 words)**
@@ -541,9 +257,8 @@ This project plan delineates a systematic methodology for the completion of a Ma
 - GitHub repository with code.
 - Final submission package.
 ---
->>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
 
-### **Thesis Structure & Word Count Allocatio**n
+### **Thesis Structure & Word Count Allocation**
 
 #### **Total: 15,000 words**
 

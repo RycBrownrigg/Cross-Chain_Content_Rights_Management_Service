@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 #### **Phase 6: Finalization & Submission Preparation (Weeks 21-24)**
-=======
-### **Phase 6: Finalization & Submission Preparation (Weeks 21-24)**
->>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
 
 #### **Objectives**
 

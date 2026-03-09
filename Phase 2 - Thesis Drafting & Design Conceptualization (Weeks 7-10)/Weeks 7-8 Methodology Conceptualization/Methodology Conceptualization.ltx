@@ -1,0 +1,403 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+% Page geometry
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+    breaklinks=true,
+}
+
+% URL line breaking
+\Urlmuskip=0mu plus 1mu
+\def\UrlBreaks{\do\/\do-\do.\do=\do?\do\&}
+\urlstyle{same}
+
+\title{Methodology Conceptualization}
+\author{}
+\date{}
+
+\begin{document}
+
+\sloppy
+
+\maketitle
+
+\section{Minor Updates to Research Questions and Objectives}
+
+Based on the three approved pivots from Phase 1 (21 Nov 2025) and subsequent refinements to adopt a measurement-focused approach, I have updated the research questions (RQs) and objectives (OBs) to enhance precision and ensure better alignment. These updates emphasise the Kusama/Polkadot ecosystem, composable NFTs, and cross-chain messaging, while framing the research around \textbf{measuring and evaluating achievable outcomes} rather than committing to specific predetermined targets. This approach maintains academic rigour by allowing results to be analysed and interpreted regardless of the specific performance figures achieved.
+
+\subsection{Primary Research Question (Refined)}
+
+\textbf{``How can a shared-security, multi-chain framework built on Polkadot's XCM and ink! smart contracts deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?''}
+
+\subsection{Refined Sub-Questions}
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.8cm}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}p{6cm}}
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{0.8cm}}{\textbf{ID}} & \multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Sub-Question}} & \multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Rationale from Gap Analysis (G1--G7)}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{0.8cm}}{\textbf{ID}} & \multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Sub-Question}} & \multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Rationale from Gap Analysis (G1--G7)}} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+SQ1 & To what extent can XCM v5+ be extended to carry recurring subscription renewal messages and rich rights metadata (e.g., PPV counters, royalty splits) across Polkadot parachains and external networks (Ethereum, Cosmos), and what atomic success rates and cross-chain finality times are achievable? & Addresses G2 (no native recurring cross-chain) + G3 (missing rights metadata) \\
+\addlinespace
+
+SQ2 & What ink!-based design patterns (unified rights token, chain extensions, off-chain indexing) can minimise access verification latency while maintaining decentralisation, and how do the resulting latency and decentralisation index (HHI) metrics compare across varying validator node configurations (5--50 nodes)? & Directly tackles G5 (decentralisation vs. UX trade-off) \\
+\addlinespace
+
+SQ3 & Can a single on-chain rights object simultaneously enforce subscription auto-renewal, pay-per-view consumption limits, and permanent ownership with automated royalty distribution across chains, and what are the resulting creator cost savings compared to 2025 centralised (30--45\%) and bridge-based (8--15\%) alternatives? & Targets G1 (protection focus) + G7 (no hybrid model exists) --- the thesis's core novelty \\
+
+\end{longtable}
+}
+
+\subsection{Refined Research Objectives}
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.8cm}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}p{6cm}}
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{0.8cm}}{\textbf{ID}} & \multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Objective}} & \multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Target Metric / Deliverable}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{0.8cm}}{\textbf{ID}} & \multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Objective}} & \multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Target Metric / Deliverable}} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+RO1 & Design and prototype XCM extensions for recurring and metadata-rich rights transfers, and measure the resulting atomic success rates and cross-chain finality times & Functional prototype; documented measurements of atomic success rate and finality times across test scenarios \\
+\addlinespace
+
+RO2 & Implement a unified ink! rights token with chain extensions and off-chain indexing, and evaluate access verification latency under varying conditions & Single storage item enforcing all three monetisation models; latency measurements and analysis \\
+\addlinespace
+
+RO3 & Develop and merge subscription, PPV, and purchase logic into one composable rights pallet, assessing the feasibility and trade-offs of unification & One contract suite instead of three separate ones; documented design trade-offs \\
+\addlinespace
+
+RO4 & Benchmark scalability, interoperability, and economic efficiency against 2025 Ethereum L2s, centralised DRM, and bridge-based solutions & Comparative analysis of TPS, transaction costs, and creator revenue retention across systems \\
+\addlinespace
+
+RO5 & Incorporate optional zero-knowledge proof hooks for selective regulatory disclosure and assess implementation feasibility & Proof-of-concept implementation; feasibility analysis for 2026--2027 EU/US tokenised securities regulations \\
+\addlinespace
+
+RO6 & Quantify potential creator savings of the hybrid unified-rights-token model via Monte-Carlo simulation and comparative cost analysis & Simulation results with cost comparisons against centralised platforms and current bridge-based alternatives \\
+
+\end{longtable}
+}
+
+These updates incorporate the pivots seamlessly (e.g., specifying RMRK/XCM/Kusama) while adopting an exploratory, measurement-focused framing that supports rigorous academic evaluation regardless of specific outcomes achieved.
+
+\section{Methodology Chapter Draft}
+
+\subsection{Introduction to Methodology}
+
+This chapter delineates the research methodology employed in developing the Cross-Chain Content Rights Management Service (CCRMS) framework. Given the interdisciplinary nature of the thesis---encompassing blockchain technology, decentralized systems, and content economics---the methodology adopts an iterative, design-oriented approach. It draws from design science research (DSR) paradigms, as proposed by Hevner et al. (2004), which emphasise artifact creation and evaluation within information systems. This approach is further complemented by mixed-methods evaluation to address both technical feasibility and practical implications.
+
+The methodology is structured around iterative prototyping on the Kusama network, aligning with the modifications identified in Phase 1: initial implementation on a dedicated Kusama parachain through the Canary Chaos academic program; utilization of RMRK 2.0 composable NFTs with scheduled Cross-Chain Messaging (XCM); and provision of on-demand coretime via Asset Hub as a contingency. This approach ensures a cost-effective and pragmatic testing environment without dependency on custom tokens or the mainnet Polkadot.
+
+The research adopts a \textbf{measurement-focused evaluation philosophy}, wherein the primary aim is to document and analyse the levels of performance, efficiency, and usability that can be attained, rather than to meet predetermined benchmarks. This approach ensures that the research contributions remain valid and valuable regardless of the specific metrics achieved and enables meaningful interpretation of both expected and unexpected outcomes results.
+
+Key principles guiding the methodology include:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Decentralisation Focus:} All designs emphasize trustless interactions, deliberately avoiding the involvement of centralized intermediaries.
+    
+    \item \textbf{Iterative Development:} Prototyping cycles facilitate enhancements through feedback and analysis testing.
+    
+    \item \textbf{Measurement-Oriented Evaluation:} Outcomes are documented and analyzed rather than being evaluated against fixed standards or criteria targets.
+    
+    \item \textbf{Ethical Considerations:} Compliance with data privacy standards, such as GDPR-inspired principles in smart contracts, and adherence to open-source licensing for reproducibility purposes.
+\end{itemize}
+
+\subsection{Research Design: Iterative Prototyping on Kusama}
+
+The primary research framework employs an iterative prototyping methodology, drawing inspiration from agile methodologies tailored to blockchain development, such as Ethereum's iterative upgrade process. This approach entails the development of successive prototypes on Kusama, a ``canary network'' for Polkadot, which facilitates rapid iteration and mitigates risks relative to alternative approaches to mainnets.
+
+\textbf{Phase Breakdown:}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Conceptualisation (Weeks 7--10):} High-level architecture and design patterns are outlined without code, utilizing tools such as UML diagrams and flowcharts.
+    
+    \item \textbf{Prototyping (Weeks 11--16):} The implementation commences with the deployment of smart contracts on the Substrate framework for parachains, utilizing ink! for logic based on WebAssembly. RMRK 2.0 NFTs serve to represent content rights, with scheduled XCM protocols facilitating cross-chain transfers (e.g., from Kusama to other parachains).
+    
+    \item \textbf{Evaluation (Weeks 17--20):} Mixed-methods testing on testnet deployments, with comprehensive data collection across technical, economic, and user-centric domains.
+    
+    \item \textbf{Refinement and Documentation (Weeks 21--24):} Final iterations and thesis completion, including analysis and interpretation of all collected measurements.
+\end{itemize}
+
+Prototyping iterates through build-test-refine cycles:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Build:} Develop modular components (e.g., NFT minting for subscriptions).
+    \item \textbf{Test:} Deploy on Kusama parachain; simulate scenarios like PPV access.
+    \item \textbf{Measure:} Collect comprehensive data on performance, costs, and user experience.
+    \item \textbf{Refine:} Address gaps (e.g., scalability via Asset Hub coretime) based on measured outcomes.
+\end{enumerate}
+
+This approach alleviates the challenges identified in Phase 1, including interoperability (G1) and resource costs (G3), by utilizing free academic resources.
+
+\subsection{Data Collection Methods}
+
+Data collection utilizes both qualitative and quantitative methodologies within a mixed-methods framework, thereby ensuring triangulation to enhance validity.
+
+\textbf{Qualitative Methods:}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Literature Synthesis:} Building upon the compilation of 112 sources from Phase 1 and the top-25 annotated bibliography, subsequent reviews will incorporate emerging scholarly works (e.g., post-2025 Polkadot updates).
+    
+    \item \textbf{Expert Interviews:} Semi-structured interviews with 5--10 blockchain experts (e.g., via Polkadot forums or academic networks) to validate designs. Questions focus on pivots, e.g., ``How does RMRK 2.0 enhance content rights composability?''
+    
+    \item \textbf{Case Studies:} Analysis of existing systems such as Audius or Theta Network, tailored for cross-chain applications.
+\end{itemize}
+
+\textbf{Quantitative Methods:}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Simulation and Benchmarking:} Utilize tools such as Substrate's benchmarking pallet to assess transaction throughput, gas costs, and latency in prototypes. All measurements are meticulously documented for comparative analysis.
+    
+    \item \textbf{User Surveys:} Post-prototype testing involving 20 to 30 participants, recruited through Web3 communities, utilizing Likert-scale questionnaires for usability.
+    
+    \item \textbf{On-Chain Metrics:} Gather data from Kusama deployments, including NFT minting rates and XCM success ratios.
+\end{itemize}
+
+\subsection{System Design and Architecture}
+
+\subsubsection{Overview of CCRMS Architecture}
+
+The CCRMS framework consists of interconnected modules operating on Kusama, leveraging Polkadot's shared security and XCM for interoperability. The architecture comprises:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Smart Contract Layer:} Implements ink!-based contracts for rights management.
+    \item \textbf{Rights Token Module:} Uses RMRK 2.0 NFTs as composable rights containers.
+    \item \textbf{XCM Bridge:} Facilitates cross-chain transfers with scheduled renewal logic.
+    \item \textbf{Access Control:} Verifies on-chain ownership before content delivery.
+    \item \textbf{Oracle Layer:} Fetches off-chain data (e.g., IPFS content metadata).
+\end{itemize}
+
+Figure 1 (conceptual): High-level block diagram illustrating the interaction between creators, consumers, and parachains via XCM.
+
+\subsubsection{Core Components}
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{4cm}>{\raggedright\arraybackslash}p{5cm}>{\raggedright\arraybackslash}p{4.5cm}}
+\caption{Core System Components} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{4cm}}{\textbf{Component}} & \multicolumn{1}{>{\centering\arraybackslash}p{5cm}}{\textbf{Function}} & \multicolumn{1}{>{\centering\arraybackslash}p{4.5cm}}{\textbf{Technology Stack}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{4cm}}{\textbf{Component}} & \multicolumn{1}{>{\centering\arraybackslash}p{5cm}}{\textbf{Function}} & \multicolumn{1}{>{\centering\arraybackslash}p{4.5cm}}{\textbf{Technology Stack}} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Rights Token (RMRK NFT) & Stores metadata (expiration, royalty info). & RMRK 2.0 standard; ink! contracts. \\
+\addlinespace
+
+XCM Scheduler & Automates cross-chain subscription renewals. & Polkadot XCM v5+; Kusama relay chain. \\
+\addlinespace
+
+Access Control Module & Enforces rights via on-chain verification. & Substrate pallets; ZK-SNARKs for off-chain proofs (feasibility to be evaluated). \\
+\addlinespace
+
+Oracle Integration & Fetches off-chain content metadata (e.g., IPFS hashes). & Polkadot oracles; Decentralised storage like IPFS/Arweave. \\
+\addlinespace
+
+User Dashboard & Web3 interface for creators/consumers. & Conceptual: React + Polkadot.js; No code yet. \\
+
+\end{longtable}
+}
+
+\subsubsection{Conceptual Data Flows}
+
+Content creators mint NFTs on the Kusama parachain, embedding rights metadata (e.g., expiration for subscriptions). Consumers interact via:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Subscription Flow:} User sends DOT/KSM; smart contract mints renewable NFT, schedules XCM for renewals.
+    \item \textbf{PPV Flow:} On-demand payment unlocks temporary access; NFT burns post-view.
+    \item \textbf{Purchase Flow:} Permanent NFT transfer; cross-chain via XCM to user's preferred chain.
+\end{enumerate}
+
+Fallback: If parachain resources spike, migrate logic to Asset Hub for on-demand coretime, ensuring continuity.
+
+\subsubsection{Design Patterns and Challenges}
+
+\textbf{Patterns Employed:}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Composable Design:} RMRK 2.0 allows NFTs to nest (e.g., PPV as child of subscription NFT), enhancing flexibility.
+    \item \textbf{Cross-Chain Atomicity:} Scheduled XCM ensures fail-safe transfers, addressing G1 (interoperability gaps).
+    \item \textbf{Scalability Layers:} Use Kusama's relay chain for consensus; offload storage to IPFS.
+\end{itemize}
+
+\textbf{Addressed Challenges (from Phase 1's 10 Documented):}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{C1: High Transaction Costs:} Mitigated by free parachain via Canary Chaos; batching XCM calls.
+    \item \textbf{C2: User Onboarding Barriers:} Simplified via wallet integrations (e.g., Talisman).
+    \item \textbf{C3: Rights Enforcement:} On-chain ACLs with off-chain oracles for content delivery.
+    \item \textbf{C4: Cross-Chain Latency:} Scheduled XCM; actual latency to be measured during evaluation.
+    \item \textbf{C5--C10:} Similar mappings, e.g., security via runtime upgrades.
+\end{itemize}
+
+\subsubsection{Security and Scalability Considerations}
+
+Security relies on Substrate's FRAME macros for audited pallets. Scalability will be measured via parachain optimisations; fallback to Asset Hub prevents bottlenecks. The evaluation phase will document achievable TPS and identify any performance constraints.
+
+This conceptual design sets the foundation for prototyping, aligning with updated RO2 and RO3.
+
+\section{Evaluation Plan Section}
+
+\subsection{Evaluation Objectives and Scope}
+
+The evaluation plan assesses the CCRMS framework's effectiveness in addressing RQs, focusing on technical viability, economic sustainability, and user adoption. It occurs in Weeks 17--20, post-prototyping, using mixed-methods on Kusama testnet. Scope: Simulated environments with 50--100 transactions; no real monetary value.
+
+The evaluation adopts a \textbf{measurement-focused approach}, documenting achievable outcomes across all KPI categories rather than assessing against predetermined targets. This ensures that the research contribution is valid regardless of specific results and enables meaningful analysis of both successes and limitations.
+
+\subsection{Key Performance Indicators (KPIs)}
+
+Table 2 lists KPIs across categories, with measurement methods and comparative baselines:
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.5cm}}
+\caption{Key Performance Indicators} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{2.5cm}}{\textbf{Category}} & \multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{KPI}} & \multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Measurement Method}} & \multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Comparative Baseline}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{2.5cm}}{\textbf{Category}} & \multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{KPI}} & \multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Measurement Method}} & \multicolumn{1}{>{\centering\arraybackslash}p{3.5cm}}{\textbf{Comparative Baseline}} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\textbf{Technical} & Transaction Throughput (TPS) & Benchmarking tools (Substrate) & Ethereum L2s, centralised DRM systems \\
+\addlinespace
+
+\textbf{Technical} & XCM Success Rate & On-chain logs analysis & Bridge-based alternatives \\
+\addlinespace
+
+\textbf{Technical} & Cross-Chain Finality Time & Timestamp analysis across chains & Existing cross-chain solutions \\
+\addlinespace
+
+\textbf{Technical} & Access Verification Latency & End-to-end timing measurements & Centralised streaming services \\
+\addlinespace
+
+\textbf{Economic} & Cost per Transaction & Gas fee analysis and simulation & Ethereum, centralised platforms \\
+\addlinespace
+
+\textbf{Economic} & Creator Revenue Retention & Revenue flow analysis & Centralised (30--45\% fees), bridge-based (8--15\% fees) \\
+\addlinespace
+
+\textbf{Economic} & Model Viability & ROI modelling via simulation & Break-even analysis \\
+\addlinespace
+
+\textbf{User-Centric} & Usability Score & Likert-scale surveys (post-testing) & Industry benchmarks \\
+\addlinespace
+
+\textbf{User-Centric} & Adoption Barriers & Interview feedback and thematic analysis & Qualitative assessment \\
+\addlinespace
+
+\textbf{Security} & Vulnerability Assessment & Automated audits (e.g., Cargo-Clippy, cargo-fuzz) & Industry security standards \\
+\addlinespace
+
+\textbf{Decentralisation} & HHI Index & Validator distribution analysis & Centralised alternatives \\
+
+\end{longtable}
+}
+
+\subsection{Methods and Procedures}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Quantitative Testing:} Deploy prototypes; run scripts for load testing (e.g., 1,000 PPV requests). Collect and document all metrics via tools like Prometheus.
+    
+    \item \textbf{Qualitative Assessment:} User testing sessions (n=20); thematic analysis of feedback on pivots (e.g., RMRK ease of use).
+    
+    \item \textbf{Comparative Analysis:} Benchmark measured results against baselines (e.g., ERC-721 on Ethereum, centralised DRM systems).
+    
+    \item \textbf{Validity Measures:} Triangulation (multiple data sources); peer debriefing.
+\end{itemize}
+
+\subsection{Analysis Approach}
+
+All collected data will be analysed to:
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Document achieved performance levels} across all KPI categories
+    \item \textbf{Compare results} against existing solutions (Ethereum L2s, centralised DRM, bridge-based systems)
+    \item \textbf{Identify trade-offs} between competing objectives (e.g., decentralisation vs. latency)
+    \item \textbf{Assess feasibility} of the unified rights token approach for real-world deployment
+    \item \textbf{Inform recommendations} for future development and adoption
+\end{enumerate}
+
+\subsection{Timeline and Resources}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Week 17:} Setup testnet; baseline tests and initial data collection.
+    \item \textbf{Week 18:} User evaluations and qualitative data gathering.
+    \item \textbf{Weeks 19--20:} Comprehensive data analysis; documentation of findings; refinements.
+\end{itemize}
+
+Resources: Free Kusama parachain via Canary Chaos program; open-source tools.
+
+This plan ensures comprehensive validation through measurement and comparative analysis, informing the Discussion and Conclusion chapters with evidence-based findings.
+
+\end{document}

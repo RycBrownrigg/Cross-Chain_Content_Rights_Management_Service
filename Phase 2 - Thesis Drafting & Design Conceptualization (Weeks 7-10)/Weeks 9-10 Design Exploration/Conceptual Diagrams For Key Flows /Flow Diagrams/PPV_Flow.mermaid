@@ -1,0 +1,70 @@
+sequenceDiagram
+    autonumber
+    participant Creator
+    participant CCRMS as CCRMS Parachain
+    participant RMRK as RMRK 2.0 NFT Module
+    participant User
+    participant Oracle as Content Delivery Oracle
+    participant XCM as XCM Handler
+
+    %% Content Registration Phase
+    rect rgb(230, 245, 255)
+        note over Creator,RMRK: Content Registration Phase
+        Creator->>CCRMS: Register PPV content (metadata, price per view)
+        CCRMS->>RMRK: Mint Content NFT with PPV configuration
+        RMRK->>RMRK: Initialise view counter resource (if bundle)
+        RMRK-->>Creator: Content NFT ID confirmed
+    end
+
+    %% PPV Purchase Phase
+    rect rgb(255, 245, 230)
+        note over User,RMRK: PPV Purchase Phase
+        User->>CCRMS: Request PPV access (Content ID)
+        CCRMS->>CCRMS: Calculate payment (single view or view bundle)
+        User->>CCRMS: Transfer DOT/KSM payment
+        alt Single View
+            CCRMS->>RMRK: Mint single-use View Token (burns after use)
+            RMRK-->>User: View Token issued
+        else View Bundle (e.g., 10 views)
+            CCRMS->>RMRK: Mint View Pack resource with counter = N
+            RMRK-->>User: View Pack equipped
+        end
+    end
+
+    %% Content Access Phase
+    rect rgb(230, 255, 230)
+        note over User,Oracle: Content Access Phase
+        User->>CCRMS: Request content view
+        CCRMS->>RMRK: Verify view rights
+        alt Single View Token
+            RMRK->>RMRK: Validate token exists
+            RMRK-->>CCRMS: Access approved
+            CCRMS->>Oracle: Generate time-limited access credential
+            Oracle-->>User: Deliver encrypted content stream
+            CCRMS->>RMRK: Burn View Token
+        else View Pack
+            RMRK->>RMRK: Check counter > 0
+            RMRK-->>CCRMS: Access approved
+            CCRMS->>Oracle: Generate time-limited access credential
+            Oracle-->>User: Deliver encrypted content stream
+            CCRMS->>RMRK: Decrement counter by 1
+            RMRK->>RMRK: If counter = 0, mark resource exhausted
+        end
+    end
+
+    %% Cross-Chain PPV (Optional)
+    rect rgb(255, 230, 255)
+        note over User,XCM: Cross-Chain PPV Access
+        User->>XCM: Request PPV from external chain
+        XCM->>CCRMS: Forward request with payment
+        CCRMS->>RMRK: Process as above
+        CCRMS->>XCM: Return access credential via XCM
+        XCM-->>User: Credential delivered to origin chain
+    end
+
+    %% Revenue Distribution
+    rect rgb(255, 255, 230)
+        note over CCRMS,Creator: Instant Revenue Distribution
+        CCRMS->>Creator: Transfer creator share (immediate)
+        CCRMS->>XCM: Distribute collaborator royalties
+    end

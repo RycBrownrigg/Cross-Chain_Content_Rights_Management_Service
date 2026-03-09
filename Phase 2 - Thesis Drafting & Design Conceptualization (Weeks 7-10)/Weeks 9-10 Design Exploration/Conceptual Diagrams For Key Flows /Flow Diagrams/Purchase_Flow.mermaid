@@ -1,0 +1,77 @@
+sequenceDiagram
+    autonumber
+    participant Creator
+    participant CCRMS as CCRMS Parachain
+    participant RMRK as RMRK 2.0 NFT Module
+    participant Buyer as Buyer (User)
+    participant XCM as XCM Handler
+    participant ExtChain as External Chain (Ethereum via Snowbridge)
+    participant Secondary as Secondary Buyer
+
+    %% Content Listing Phase
+    rect rgb(230, 245, 255)
+        note over Creator,RMRK: Content Listing Phase
+        Creator->>CCRMS: List content for purchase (metadata, price, royalty %)
+        CCRMS->>RMRK: Mint Ownership NFT with royalty configuration
+        RMRK->>RMRK: Embed perpetual subscription resource
+        RMRK-->>Creator: Ownership NFT minted (Creator = owner)
+    end
+
+    %% Primary Purchase Phase
+    rect rgb(255, 245, 230)
+        note over Buyer,RMRK: Primary Purchase Phase
+        Buyer->>CCRMS: Request purchase (Content ID)
+        CCRMS->>CCRMS: Verify payment amount
+        Buyer->>CCRMS: Transfer DOT/KSM payment
+        CCRMS->>RMRK: Transfer Ownership NFT to Buyer
+        RMRK->>RMRK: Update owner record
+        RMRK-->>Buyer: Ownership confirmed
+        CCRMS->>Creator: Transfer full payment (primary sale)
+    end
+
+    %% Ownership Benefits
+    rect rgb(230, 255, 230)
+        note over Buyer,RMRK: Ownership Benefits
+        Buyer->>CCRMS: Request content access
+        CCRMS->>RMRK: Verify ownership
+        RMRK-->>CCRMS: Owner confirmed + perpetual subscription active
+        CCRMS-->>Buyer: Unlimited access granted
+        Note over Buyer,RMRK: Ownership = Perpetual Subscription (Concept #5)
+    end
+
+    %% Cross-Chain Transfer
+    rect rgb(255, 230, 255)
+        note over Buyer,ExtChain: Cross-Chain Transfer Phase
+        Buyer->>CCRMS: Request transfer to Ethereum
+        CCRMS->>XCM: Initiate cross-chain transfer
+        XCM->>XCM: Package NFT + metadata + royalty config
+        XCM->>ExtChain: Send via Snowbridge
+        ExtChain->>ExtChain: Mint wrapped Ownership NFT (ERC-721)
+        ExtChain-->>Buyer: NFT available on Ethereum
+        CCRMS->>RMRK: Mark original as "bridged" (locked)
+    end
+
+    %% Secondary Sale with Royalties
+    rect rgb(255, 255, 230)
+        note over Buyer,Creator: Secondary Sale with Automatic Royalties
+        Secondary->>ExtChain: Purchase NFT from Buyer
+        ExtChain->>ExtChain: Execute sale
+        ExtChain->>XCM: Trigger royalty distribution via bridge
+        XCM->>CCRMS: Receive royalty notification
+        CCRMS->>CCRMS: Calculate splits per on-chain config
+        CCRMS->>Creator: Transfer creator royalty share
+        CCRMS->>XCM: Distribute collaborator royalties (multi-chain)
+        ExtChain->>Secondary: Transfer wrapped NFT
+    end
+
+    %% Return to Native Chain (Optional)
+    rect rgb(240, 240, 240)
+        note over Secondary,RMRK: Return to Native Chain
+        Secondary->>ExtChain: Request bridge back to Kusama
+        ExtChain->>XCM: Initiate return transfer
+        XCM->>CCRMS: Receive unwrap request
+        CCRMS->>RMRK: Unlock original NFT
+        RMRK->>RMRK: Update owner to Secondary
+        RMRK-->>Secondary: Native NFT restored
+        ExtChain->>ExtChain: Burn wrapped token
+    end

@@ -50,26 +50,22 @@
 
 \subsection*{Refined}
 
-\textbf{``How can a shared-security, multi-chain framework built on Polkadot's XCM and ink! smart contracts deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, while achieving sub-second finality, sub-cent transaction costs, and creator revenue retention greater than 95\%?''}
+``How can a shared-security, multi-chain framework built on Polkadot's XCM and ink! smart contracts deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?''
 
 \section{Refined Sub-Questions}
 
 {\small
-\setlength{\tabcolsep}{2pt}
-\begin{longtable}{>{\raggedright\arraybackslash}p{1cm}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}p{6cm}}
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{1cm}>{\raggedright\arraybackslash}p{7cm}>{\raggedright\arraybackslash}p{5.5cm}}
 \caption{Refined Sub-Questions (November 2025)} \\
 \toprule
-\multicolumn{1}{>{\centering\arraybackslash}p{1cm}}{\textbf{ID}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Sub-Question (November 2025)}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Rationale from Gap Analysis (G1--G7)}} \\
+\textbf{ID} & \textbf{Refined Sub-Question (November 2025)} & \textbf{Rationale from Gap Analysis (G1--G7)} \\
 \midrule
 \endfirsthead
 
 \multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
 \toprule
-\multicolumn{1}{>{\centering\arraybackslash}p{1cm}}{\textbf{ID}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Sub-Question (November 2025)}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Rationale from Gap Analysis (G1--G7)}} \\
+\textbf{ID} & \textbf{Refined Sub-Question (November 2025)} & \textbf{Rationale from Gap Analysis (G1--G7)} \\
 \midrule
 \endhead
 
@@ -80,32 +76,28 @@
 \bottomrule
 \endlastfoot
 
-SQ1 & How can XCM v5+ be extended to carry recurring subscription renewal messages and rich rights metadata (e.g., PPV counters, royalty splits) across Polkadot parachains and external networks (Ethereum, Cosmos) with >99\% atomic success rate? & Addresses G2 (no native recurring cross-chain) + G3 (missing rights metadata) \\
+SQ1 & To what extent can XCM v5+ be extended to carry recurring subscription renewal messages and rich rights metadata (e.g., PPV counters, royalty splits) across Polkadot parachains and external networks (Ethereum, Cosmos), and what atomic success rates and cross-chain finality times are achievable? & Addresses G2 (no native recurring cross-chain) + G3 (missing rights metadata) \\
 \addlinespace
-SQ2 & What ink!-based design patterns (unified rights token, chain extensions, off-chain indexing) enable Netflix-like <1 second access verification latency while maintaining a decentralization index (HHI) below 1,500 across 5--50 validator nodes? & Directly tackles G5 (decentralisation vs. UX trade-off) \\
+SQ2 & What ink!-based design patterns (unified rights token, chain extensions, off-chain indexing) can minimise access verification latency while maintaining decentralisation, and how do the resulting latency and decentralisation index (HHI) metrics compare across varying validator node configurations (5--50 nodes)? & Directly tackles G5 (decentralisation vs. UX trade-off) \\
 \addlinespace
-SQ3 (new) & Can a single on-chain rights object simultaneously enforce subscription auto-renewal, pay-per-view consumption limits, and permanent ownership with automated royalty distribution across chains, and what are the resulting creator cost savings compared to 2025 centralized (30--45\%) and bridge-based (8--15\%) alternatives? & Targets G1 (protection focus) + G7 (no hybrid model exists) -- the thesis's core novelty \\
+SQ3 (new) & Can a single on-chain rights object simultaneously enforce subscription auto-renewal, pay-per-view consumption limits, and permanent ownership with automated royalty distribution across chains, and what are the resulting creator cost savings compared to 2025 centralised (30--45\%) and bridge-based (8--15\%) alternatives? & Targets G1 (protection focus) + G7 (no hybrid model exists) -- the thesis's core novelty \\
 \end{longtable}
 }
 
 \section{Refined Research Objectives}
 
 {\small
-\setlength{\tabcolsep}{2pt}
-\begin{longtable}{>{\raggedright\arraybackslash}p{1cm}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}p{6cm}}
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{1cm}>{\raggedright\arraybackslash}p{7cm}>{\raggedright\arraybackslash}p{5.5cm}}
 \caption{Refined Research Objectives (November 2025)} \\
 \toprule
-\multicolumn{1}{>{\centering\arraybackslash}p{1cm}}{\textbf{ID}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Objective (November 2025)}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Target Metric / Deliverable (derived from 2025 benchmarks \& gaps)}} \\
+\textbf{ID} & \textbf{Refined Objective (November 2025)} & \textbf{Target Metric / Deliverable} \\
 \midrule
 \endfirsthead
 
 \multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
 \toprule
-\multicolumn{1}{>{\centering\arraybackslash}p{1cm}}{\textbf{ID}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6.5cm}}{\textbf{Refined Objective (November 2025)}} & 
-\multicolumn{1}{>{\centering\arraybackslash}p{6cm}}{\textbf{Target Metric / Deliverable (derived from 2025 benchmarks \& gaps)}} \\
+\textbf{ID} & \textbf{Refined Objective (November 2025)} & \textbf{Target Metric / Deliverable} \\
 \midrule
 \endhead
 
@@ -116,20 +108,31 @@ SQ3 (new) & Can a single on-chain rights object simultaneously enforce subscript
 \bottomrule
 \endlastfoot
 
-RO1 & Design and prototype XCM extensions for recurring and metadata-rich rights transfers & >99\% atomic success, <2 s cross-chain finality \\
+RO1 & Design and prototype XCM extensions for recurring and metadata-rich rights transfers, and measure the resulting atomic success rates and cross-chain finality times & Functional prototype; documented measurements of atomic success rate and finality times across test scenarios \\
 \addlinespace
-RO2 & Implement a unified ink! rights token with chain extensions and off-chain indexing & Single storage item enforcing all three monetisation models; <1 s access check \\
+RO2 & Implement a unified ink! rights token with chain extensions and off-chain indexing, and evaluate access verification latency under varying conditions & Single storage item enforcing all three monetisation models; latency measurements and analysis \\
 \addlinespace
-RO3 & Develop and merge subscription, PPV, and purchase logic into one composable rights pallet & One contract suite instead of three separate ones \\
+RO3 & Develop and merge subscription, PPV, and purchase logic into one composable rights pallet, assessing the feasibility and trade-offs of unification & One contract suite instead of three separate ones; documented design trade-offs \\
 \addlinespace
-RO4 & Benchmark scalability, interoperability, and economic efficiency against 2025 Ethereum L2s, centralised DRM, and bridge-based solutions & >500 TPS, <\$0.002 effective cost per micro-tx, >95\% creator revenue retention \\
+RO4 & Benchmark scalability, interoperability, and economic efficiency against 2025 Ethereum L2s, centralised DRM, and bridge-based solutions & Comparative analysis of TPS, transaction costs, and creator revenue retention across systems \\
 \addlinespace
-RO5 (new) & Incorporate optional zero-knowledge proof hooks for selective regulatory disclosure & Future-proof for 2026--2027 EU/US tokenized securities regulations \\
+RO5 (new) & Incorporate optional zero-knowledge proof hooks for selective regulatory disclosure and assess implementation feasibility & Proof-of-concept implementation; feasibility analysis for 2026--2027 EU/US tokenised securities regulations \\
 \addlinespace
-RO6 (new) & Quantify creator savings of the hybrid unified-rights-token model via Monte-Carlo simulation & >60\% cost reduction vs centralised platforms; >40\% vs current bridge-based alternatives \\
+RO6 (new) & Quantify potential creator savings of the hybrid unified-rights-token model via Monte-Carlo simulation and comparative cost analysis & Simulation results with cost comparisons against centralised platforms and current bridge-based alternatives \\
 \end{longtable}
 }
 
-These refined questions and objectives are now precisely aligned with the specific gaps identified in the literature (notably G1, G2, G3, G5, G7), and they establish measurable success criteria for the remainder of the thesis. They are prepared for direct inclusion into the revised Chapter 3 (Research Questions and Objectives).
+\section*{Alignment with Literature Gaps}
+
+These refined questions and objectives are precisely aligned with the specific gaps identified in the literature (notably G1, G2, G3, G5, G7). By framing the research around \textbf{measurement and evaluation} rather than predetermined targets, the thesis:
+
+\begin{enumerate}
+\item \textbf{Maintains academic rigour} -- Results are analysed and interpreted regardless of whether they meet hypothetical benchmarks
+\item \textbf{Allows for meaningful contribution} -- Even unexpected or suboptimal results provide valuable insights for the field
+\item \textbf{Supports honest evaluation} -- The Discussion chapter can critically assess what was achieved and why
+\item \textbf{Establishes a foundation for future work} -- Measured baselines inform subsequent research directions
+\end{enumerate}
+
+The deliverables now emphasise functional prototypes, documented measurements, comparative analyses, and feasibility assessments -- all of which constitute valid academic contributions regardless of the specific performance figures achieved.
 
 \end{document}

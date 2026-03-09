@@ -4,7 +4,7 @@ This systematic literature review scrutinizes over 70 scholarly and industry pub
 
 Key themes emerged:
 
-- **Blockchain for DRM and Copyright Protection**: Numerous scholarly articles (e.g., Xie et al., 2022; Zhang et al., 2024, as cited in the proposal) underscore the significance of blockchain technology in improving security, transparency, and traceability for digital content. Multi-blockchain frameworks mitigate vulnerabilities associated with single chains, while cross-chain protocols facilitate more effective dispute resolution and rights transfer. However, the majority of these studies concentrate on protection mechanisms rather than on monetization, thereby revealing a gap in practical applications such as subscription services and pay-per-view models.
+- **Blockchain for DRM and Copyright Protection**: The rapid expansion of the DRM market underscores the pressing economic need to surpass protection-only strategies. Valued at approximately USD 6.72 billion in 2025, it is projected to reach USD 11.05 billion by 2030, with a compound annual growth rate of 10.5% (MarketsandMarkets, July 2025). Broader estimates corroborate this trajectory, including Mordor Intelligence's forecast of USD 6.93 billion in 2026 growing to USD 11.76 billion by 2031, with a CAGR of 11.16% (Mordor Intelligence, January 2026). This growth is driven by increasing streaming services, OTT platforms, and AI-related piracy threats. Consequently, this justifies the emphasis on decentralized, low-fee alternatives that incorporate diverse monetization models such as subscription, pay-per-view, and purchase, areas where current blockchain research remains limited.
 
 - **Cross-Chain Interoperability**: Research related to Polkadot (e.g., Wood, 2016; Habermeier et al., 2021) and the extensive domain of cross-chain technology (e.g., surveys on XCM and consensus messaging) investigates scalable architectures for asset transfer and remote execution. These advancements align with the proposed application of Polkadot to facilitate seamless cross-network transactions; however, challenges such as latency and security issues in bridges (e.g., Ethereum-Polkadot) persist, necessitating a comprehensive investigation.
 
@@ -330,5 +330,16 @@ The following is an annotated bibliography comprising 78 selected papers, includ
 
 75. **Goyal, P., et al. (2019)**. Secure Incentivization for Decentralized Content Delivery. https://www.usenix.org/system/files/hotedge19-paper-goyal_0.pdf  
     
-    **Annotation: **This paper examines the effectiveness of monetary incentives in P2P content delivery systems. It introduces Gringotts, a secure transaction system with an innovative Proof of Delivery to confirm file delivery. Gringotts uses cryptocurrency for payments, safeguarding against dishonesty and Sybil attacks. 
+    **Annotation:** This paper examines the effectiveness of monetary incentives in P2P content delivery systems. It introduces Gringotts, a secure transaction system with an innovative Proof of Delivery to confirm file delivery. Gringotts uses cryptocurrency for payments, safeguarding against dishonesty and Sybil attacks. 
 
+76. **MarketsandMarkets. (2025, July)**. Digital Rights Management Market by Application (Audio Content, Images, Video Content, Confidential Documents, Software & Games, E-Books), DRM Solutions, DRM Services (Consulting, Integration, Operation & Maintenance) - Global Forecast to 2030. https://www.marketsandmarkets.com/Market-Reports/digital-rights-management-market-152806525.html 
+
+    **Annotation:** The global Digital Rights Management (DRM) market is projected to reach USD 6.72 billion in 2025 and is expected to expand to USD 11.05 billion by 2030, with a compound annual growth rate (CAGR) of 10.5%. Key factors driving this growth include the expansion of streaming services, the proliferation of OTT platforms, emerging threats from AI-enabled piracy, and the increasing demand for sophisticated content protection and monetization solutions in media/entertainment.
+
+77. **Grand View Research. (2025)**. Digital Rights Management Market Size, Share & Trends Analysis Report. https://www.grandviewresearch.com/industry-analysis/digital-rights-management-market 
+
+    **Annotation:** Estimates the DRM market at USD 6.16 billion in 2024, reaching USD 6.72 billion in 2025 and USD 14.48 billion by 2033 (CAGR 10.1% from 2025). Emphasizes growth from digital content proliferation, streaming services, and the imperative for low-intermediary-fee alternatives to centralized models.
+
+78. **Mordor Intelligence. (2026, January)**. Digital Rights Management (DRM) Market - Size, Share & Industry Analysis - Growth Trends and Forecast (2026 - 2031). https://www.mordorintelligence.com/industry-reports/digital-rights-management-drm-market
+
+    **Annotation:** Provides updated market sizing projects valuations of USD 6.23 billion in 2025, USD 6.93 billion in 2026, and an increase to USD 11.76 billion by 2031, at a compound annual growth rate (CAGR) of 11.16%. The analysis highlights key drivers including OTT subscriptions, AI-driven piracy threats, regulatory mandates, and the transition to cloud-based and multi-DRM solutions. Additionally, the report underscores the economic rationale for adopting decentralized, blockchain-based monetization alternatives within content rights management.

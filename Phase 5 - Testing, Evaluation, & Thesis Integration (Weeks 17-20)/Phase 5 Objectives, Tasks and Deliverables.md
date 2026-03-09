@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 #### **Phase 5: Testing, Evaluation, & Thesis Integration (Weeks 17-20)**
-=======
-### **Phase 5: Testing, Evaluation, & Thesis Integration (Weeks 17-20)**
->>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
 
 #### **Objectives**
 

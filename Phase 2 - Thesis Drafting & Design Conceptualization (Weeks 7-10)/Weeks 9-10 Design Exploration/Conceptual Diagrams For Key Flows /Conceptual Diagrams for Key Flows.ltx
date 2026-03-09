@@ -1,0 +1,234 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{float}
+
+% Page geometry
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+    breaklinks=true,
+}
+
+\title{Conceptual Diagrams for Key Flows\\
+\large Cross-Chain Content Rights Management Service}
+\author{}
+\date{}
+
+\begin{document}
+
+\sloppy
+
+\maketitle
+
+This document provides conceptual diagrams and comprehensive textual descriptions for the three fundamental monetisation flows within the CCRMS framework: Subscription, Pay-Per-View (PPV), and Purchase. Each flow is depicted in sequence diagrams and accompanied by a narrative.
+
+\section{Subscription Flow}
+
+\subsection{Sequence Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Subscription_Flow.png}
+\caption{Subscription Flow Sequence Diagram}
+\label{fig:subscription_flow}
+\end{figure}
+
+\subsection{Textual Description}
+
+\subsubsection{Subscription Flow Overview}
+
+The subscription process allows creators to provide time-constrained, recurring access to content via a modular NFT-based rights management system. This process uses RMRK 2.0's nested resource architecture and scheduled XCM messaging to enable native cross-chain subscription renewals without relying on centralized intermediaries.
+
+\subsubsection{Setup Phase}
+
+The subscription process begins when the creator registers content on the CCRMS parachain. Content metadata, including IPFS content hashes and licensing terms, is submitted to the parachain, which then initiates minting a base Content NFT via the RMRK 2.0 module. This NFT serves as the primary object to which subscription resources will be linked. The creator then defines subscription tiers, specifying parameters such as price (in DOT or KSM), duration (measured in block height or Unix timestamp), and associated benefits. These configurations are stored on-chain, ensuring transparent, verifiable subscription management terms.
+
+\subsubsection{Subscription Purchase Phase}
+
+When a user elects to subscribe, they submit a subscription request specifying the desired content and tier. The CCRMS smart contract verifies the payment amount against the stored tier configuration. Upon successful payment transfer, the RMRK 2.0 module mints a Subscription Resource as a child of the Content NFT, which is then assigned to the user's account. This resource contains an expiration timestamp calculated from the current block height plus the subscription duration. Concurrently, the XCM Scheduler receives instructions to dispatch a renewal reminder at a specified block height in the future.
+
+\subsubsection{Access Verification Phase}
+
+Content access requests initiate an on-chain verification process. The CCRMS parachain consults the RMRK 2.0 module to ascertain the subscription status linked to the requesting user. The module compares the subscription's expiration timestamp with the current block height. If the subscription is still valid, an access token is produced and provided to the user, permitting content retrieval. If the subscription has expired, the user is prompted to renew their subscription.
+
+\subsubsection{Auto-Renewal Phase}
+
+The auto-renewal mechanism constitutes a significant innovation, utilizing scheduled XCM to facilitate cross-chain recurring payments. When the predetermined block height is reached, the XCM Scheduler transmits a renewal request to the user's preferred chain (e.g., Asset Hub or an external network via bridge). The destination chain verifies the user's pre-authorized balance and, if it is adequate, initiates a cross-chain payment transfer back to the CCRMS parachain. Upon receipt, the RMRK module extends the subscription expiration, and a new renewal is scheduled. If the balance is insufficient, the subscription is marked as lapsed, and the user is notified.
+
+\subsubsection{Revenue Distribution}
+
+Following each subscription payment, the CCRMS parachain calculates royalty distributions according to on-chain configuration. The creator's share is transferred directly, whilst collaborator shares may be distributed cross-chain via XCM to recipients on other parachains or external networks.
+
+\section{Pay-Per-View (PPV) Flow}
+
+\subsection{Sequence Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{PPV_Flow.png}
+\caption{Pay-Per-View Flow Sequence Diagram}
+\label{fig:ppv_flow}
+\end{figure}
+
+\subsection{Textual Description}
+
+\subsubsection{Pay-Per-View Flow Overview}
+
+The Pay-Per-View (PPV) flow facilitates micro-transaction-based content access through a counter-driven mechanism embedded within an NFT resource. This approach addresses the thesis proposition that ``PPV = Counter, Not Token'' (High-Level System Concept \#3), thereby eliminating the requirement for separate token contracts while maintaining precise consumption tracking.
+
+\subsubsection{View Pack Creation Phase}
+
+Creators initiate the PPV flow by defining View Pack parameters, including the number of views per pack, price per pack, and expiration duration. The CCRMS parachain stores this configuration on-chain. Upon the first purchase, the RMRK 2.0 module mints a View Pack Resource as a child of the Content NFT, initializing a counter to the specified quantity (e.g., 5 views). This resource is equipped to the user's account and includes an expiration timestamp to prevent indefinite hoarding of unused views.
+
+\subsubsection{Purchase and Redemption Phase}
+
+When a user purchases a View Pack, they transfer the specified payment to the CCRMS parachain. The system verifies the payment, mints the View Pack resource with the initial counter value, and assigns it to the user. This resource functions as a reusable access credential; users do not need to execute separate transactions for each view. Instead, the counter decrements upon each content access request.
+
+\subsubsection{Content Access Phase}
+
+Users request access to content by submitting a request to the CCRMS parachain. The system queries the RMRK 2.0 module to verify the existence and status of an active View Pack. If the counter is greater than zero and the expiration timestamp has not elapsed, the parachain decrement operations are conducted atomically. The content is then made available via an off-chain Content Delivery Oracle, which receives a signed access token from the parachain. Critically, the Oracle does not perform rights verification; its sole function is content delivery based on pre-verified tokens.
+
+\subsubsection{View Pack Exhaustion and Renewal}
+
+Once the counter reaches zero, the View Pack is marked as exhausted. The NFT resource is retained for audit purposes, with a status flag indicating exhaustion. Users may purchase additional View Packs, which mint new resources with fresh counters. Alternatively, users may upgrade to a subscription or purchase, thereby bypassing the PPV model entirely. If the View Pack expires before exhaustion, the remaining views are forfeited, incentivizing timely consumption.
+
+\section{Purchase Flow}
+
+\subsection{Sequence Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Purchase_Flow.png}
+\caption{Purchase Flow Sequence Diagram}
+\label{fig:purchase_flow}
+\end{figure}
+
+\subsection{Textual Description}
+
+\subsubsection{Purchase Flow Overview}
+
+The purchase process enables the permanent transfer of content rights, constituting the most comprehensive access level within the CCRMS framework. This process operationalizes the thesis that ``Ownership = Subscription Upgrade'' (High-Level System Concept \#5), whereby acquiring content automatically grants lifelong subscription privileges. Additionally, the process supports cross-chain portability and secondary-market transactions with automatic enforcement of royalty payments.
+
+\subsubsection{Content Listing Phase}
+
+Creators compile content for purchase by submitting metadata, pricing details, and royalty configurations to the CCRMS parachain. The RMRK 2.0 module facilitates the minting of an Ownership NFT with integrated royalty percentages for secondary sales. Importantly, a perpetual subscription resource is automatically embedded in the Ownership NFT, ensuring that ownership inherently grants unlimited access to content without the need for a separate subscription management system.
+
+\subsubsection{Primary Purchase Phase}
+
+When a purchaser initiates a purchase request, the CCRMS parachain validates the payment amount against the listed price. Upon successful transfer of funds, the Ownership NFT is transferred from the creator to the purchaser, with the ownership record being updated within the RMRK module. In the case of primary sales, the creator receives the entire payment amount, less nominal network fees, thereby maximizing the creator's revenue retention.
+
+\subsubsection{Ownership Benefits}
+
+Owners are granted continuous, unrestricted access to the content. Whenever an owner requests access, the CCRMS parachain verifies the ownership status along with the embedded perpetual subscription resource. Verification affirms both ownership and an active subscription status, thereby providing access without any expiration checks or renewal obligations. This integration eradicates the necessity for separate subscription management for owned content.
+
+\subsubsection{Cross-Chain Transfer Phase}
+
+A distinctive characteristic of the CCRMS framework is its capability to facilitate ownership transfers across different blockchain networks. Owners may initiate requests to transfer assets to external chains, such as Ethereum via Snowbridge. The XCM Handler consolidates the NFT along with its comprehensive metadata and royalty configuration, transmitting it to the designated chain. Subsequently, the external chain mints a wrapped representation, such as ERC-721 on Ethereum, which maintains all associated rights and royalty obligations. The original NFT on the CCRMS parachain is subsequently marked as ``bridged'' and locked to prevent unauthorized duplication.
+
+\subsubsection{Secondary Sale with Automatic Royalties}
+
+When a wrapped NFT is sold on a secondary marketplace, such as OpenSea on the Ethereum network, the transaction initiates an automatic royalty distribution process. The external blockchain notifies the CCRMS parachain through the bridge mechanism, which then calculates the appropriate royalty divisions in accordance with the on-chain configuration. The creator's royalty portion is subsequently transferred, and shares allocated to collaborators are distributed via XCM to recipients across multiple chains. This process embodies ``Automatic Royalty Propagation Across Chains'' (High-Level System Concept \#6), thereby ensuring that creators receive royalties irrespective of the chain hosting the secondary sale.
+
+\subsubsection{Return to Native Chain}
+
+Owners on external chains may elect to return their NFT to the native Kusama/Polkadot ecosystem. Upon initiating the return transfer, the wrapped token is burned on the external chain, and the original NFT on the CCRMS parachain is unlocked with the new owner record updated. This bidirectional bridging ensures that content rights remain portable whilst maintaining a single source of truth.
+
+\section{Unified Rights Token State Diagram}
+
+\subsection{State Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Unified_Rights_Token_States.png}
+\caption{Unified Rights Token State Diagram}
+\label{fig:unified_rights_token_states}
+\end{figure}
+
+\subsection{Textual Description}
+
+\subsubsection{Unified Rights Token States}
+
+The concept of the Unified Rights Token (High-Level System Concept \#1) facilitates the representation of multiple access states through a single on-chain object simultaneously. The above state diagram delineates the potential states and transitions applicable to a content rights token within the CCRMS framework.
+
+\textbf{Content Registered:} Represents the initial state following creator registration. The Content NFT is present; however, no user has acquired any access rights.
+
+\textbf{Subscription Active:} Indicates that a user holds an active, time-limited subscription. The token encompasses an expiration timestamp and a scheduled XCM renewal. Successful auto-renewal sustains this state; failure of renewal or the elapsing of time results in a transition to Subscription Expired.
+
+\textbf{Subscription Expired:} Signifies that the subscription has lapsed. Users may manually renew to return to Subscription Active, upgrade to ownership (transitioning to Owned), or allow the grace period to expire, which reverts the state to Content Registered, making it available for new users.
+
+\textbf{PPV Available:} Denotes that a user possesses a View Pack with remaining views (counter $>$ 0). Each view consumption decreases the counter. Users may add subscriptions or upgrade to ownership while retaining remaining views.
+
+\textbf{PPV Exhausted:} The View Pack counter has reached zero. The token is retained for audit purposes. Users may purchase additional views, subscribe, or upgrade to ownership.
+
+\textbf{Owned:} The user holds permanent ownership, inclusive of a perpetual subscription resource. Owners may transfer the NFT on the native chain to a new owner or initiate a cross-chain transfer.
+
+\textbf{Owned (Bridged):} The NFT has been transferred to an external chain. The native NFT is locked. Secondary sales on the external chain update ownership while triggering royalty distribution. The NFT may be returned to the native chain.
+
+This unified state model enables seamless transitions between monetization models and supports bundling benefits (e.g., ``purchase includes perpetual subscription'').
+
+\section{Summary of Key Design Patterns}
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5cm}>{\raggedright\arraybackslash}p{4cm}}
+\caption{Summary of Key Design Patterns} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{4.5cm}}{\textbf{Pattern}} & \multicolumn{1}{>{\centering\arraybackslash}p{5cm}}{\textbf{Implementation}} & \multicolumn{1}{>{\centering\arraybackslash}p{4cm}}{\textbf{Thesis Concept Addressed}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule
+\multicolumn{1}{>{\centering\arraybackslash}p{4.5cm}}{\textbf{Pattern}} & \multicolumn{1}{>{\centering\arraybackslash}p{5cm}}{\textbf{Implementation}} & \multicolumn{1}{>{\centering\arraybackslash}p{4cm}}{\textbf{Thesis Concept Addressed}} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\textbf{Composable NFT Architecture} & RMRK 2.0 nested resources; subscription/PPV as children of Content NFT & \#1: Unified Rights Token \\
+\addlinespace
+
+\textbf{Counter-Based PPV} & Integer counter within View Pack resource; decrement per view & \#3: PPV as Counter, Not Token \\
+\addlinespace
+
+\textbf{Scheduled Cross-Chain Messaging} & XCM scheduler triggers renewal at specified block height & \#2: Recurring Cross-Chain Subscription \\
+\addlinespace
+
+\textbf{Metadata-Carrying Transfers} & XCM messages include rights metadata, royalty config, expiration & \#4: Metadata-Carrying Messages \\
+\addlinespace
+
+\textbf{Ownership-Subscription Unification} & Ownership NFT embeds perpetual subscription resource & \#5: Ownership = Subscription Upgrade \\
+\addlinespace
+
+\textbf{Cross-Chain Royalty Propagation} & Bridge notifications trigger on-chain royalty calculation and XCM distribution & \#6: Automatic Royalty Propagation \\
+\addlinespace
+
+\textbf{Bidirectional Bridging} & Lock/mint on transfer out; burn/unlock on return & Interoperability requirement \\
+
+\end{longtable}
+}
+
+\end{document}

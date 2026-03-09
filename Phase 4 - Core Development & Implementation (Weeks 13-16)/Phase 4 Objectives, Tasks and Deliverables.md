@@ -1,8 +1,5 @@
-<<<<<<< HEAD
+
 #### **Phase 4: Core Development & Implementation (Weeks 13-16)**
-=======
-### **Phase 4: Core Development & Implementation (Weeks 13-16)**
->>>>>>> 280faa1 (COMPLETE Phase 1 of Masters Thesis)
 
 #### **Objectives**
 
@@ -27,7 +24,7 @@
 - **Week 16:** Full System Integration
   - Integrate all contracts.
   - Create end-to-end test scenarios.
-  - Deploy complete system to local testnet.
+  - Deploy the complete system to the local testnet.
   - Begin preliminary performance logging.
 
 #### **Writing Tasks (Target: 1,500 words)**

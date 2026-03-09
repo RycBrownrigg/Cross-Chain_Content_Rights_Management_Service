@@ -1,0 +1,33 @@
+stateDiagram-v2
+    [*] --> ContentRegistered: Creator mints Content NFT
+
+    ContentRegistered --> SubscriptionActive: User subscribes
+    ContentRegistered --> PPVAvailable: User purchases view pack
+    ContentRegistered --> Owned: User purchases ownership
+
+    SubscriptionActive --> SubscriptionActive: Auto-renewal success
+    SubscriptionActive --> SubscriptionExpired: Auto-renewal failed / time elapsed
+    SubscriptionActive --> Owned: User upgrades to ownership
+
+    SubscriptionExpired --> SubscriptionActive: User manually renews
+    SubscriptionExpired --> Owned: User upgrades to ownership
+    SubscriptionExpired --> ContentRegistered: Grace period expired
+
+    PPVAvailable --> PPVAvailable: View consumed (counter > 1)
+    PPVAvailable --> PPVExhausted: Final view consumed (counter = 0)
+    PPVAvailable --> SubscriptionActive: User adds subscription
+    PPVAvailable --> Owned: User upgrades to ownership
+
+    PPVExhausted --> PPVAvailable: User purchases additional views
+    PPVExhausted --> SubscriptionActive: User subscribes
+    PPVExhausted --> Owned: User purchases ownership
+
+    Owned --> OwnedBridged: Cross-chain transfer initiated
+    OwnedBridged --> Owned: Return to native chain
+    OwnedBridged --> OwnedBridged: Secondary sale (new owner)
+
+    Owned --> Owned: Secondary sale (native chain)
+
+    note right of Owned: Perpetual subscription included
+    note right of SubscriptionActive: Auto-renewal via scheduled XCM
+    note right of PPVAvailable: Counter decrements per view

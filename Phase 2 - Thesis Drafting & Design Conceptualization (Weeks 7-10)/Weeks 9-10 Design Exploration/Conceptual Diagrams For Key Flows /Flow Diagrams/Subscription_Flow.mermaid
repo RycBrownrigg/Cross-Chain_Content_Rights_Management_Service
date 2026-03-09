@@ -1,0 +1,71 @@
+sequenceDiagram
+    autonumber
+    participant Creator
+    participant CCRMS as CCRMS Parachain
+    participant RMRK as RMRK 2.0 NFT Module
+    participant XCM as XCM Scheduler
+    participant User
+    participant UserChain as User's Chain (e.g., Asset Hub)
+
+    %% Setup Phase
+    rect rgb(230, 245, 255)
+        note over Creator,RMRK: Setup Phase
+        Creator->>CCRMS: Register content metadata (IPFS hash, terms)
+        CCRMS->>RMRK: Mint base Content NFT
+        RMRK-->>Creator: Content NFT ID returned
+        Creator->>CCRMS: Define subscription tiers (price, duration, benefits)
+        CCRMS->>CCRMS: Store subscription configuration on-chain
+    end
+
+    %% Subscription Purchase Phase
+    rect rgb(255, 245, 230)
+        note over User,RMRK: Subscription Purchase Phase
+        User->>CCRMS: Request subscription (Content ID, Tier)
+        CCRMS->>CCRMS: Verify payment amount
+        User->>CCRMS: Transfer DOT/KSM payment
+        CCRMS->>RMRK: Mint Subscription Resource (child of Content NFT)
+        RMRK->>RMRK: Set expiration timestamp
+        RMRK-->>User: Subscription NFT equipped to user
+        CCRMS->>XCM: Schedule renewal reminder message
+    end
+
+    %% Access Verification Phase
+    rect rgb(230, 255, 230)
+        note over User,CCRMS: Access Verification Phase
+        User->>CCRMS: Request content access
+        CCRMS->>RMRK: Query subscription status
+        RMRK->>RMRK: Check expiration vs current block
+        alt Subscription Active
+            RMRK-->>CCRMS: Access granted
+            CCRMS-->>User: Deliver content access token
+        else Subscription Expired
+            RMRK-->>CCRMS: Access denied
+            CCRMS-->>User: Prompt for renewal
+        end
+    end
+
+    %% Auto-Renewal Phase (Cross-Chain)
+    rect rgb(255, 230, 255)
+        note over XCM,UserChain: Auto-Renewal Phase (Cross-Chain)
+        XCM->>XCM: Scheduled block height reached
+        XCM->>UserChain: Send renewal request via XCM
+        UserChain->>UserChain: Check user's pre-authorised balance
+        alt Sufficient Balance
+            UserChain->>CCRMS: Transfer renewal payment via XCM
+            CCRMS->>RMRK: Extend subscription expiration
+            RMRK-->>User: Renewal confirmed
+            CCRMS->>XCM: Schedule next renewal
+        else Insufficient Balance
+            UserChain-->>CCRMS: Payment failed notification
+            CCRMS->>RMRK: Mark subscription as lapsed
+            CCRMS-->>User: Renewal failed notification
+        end
+    end
+
+    %% Revenue Distribution
+    rect rgb(255, 255, 230)
+        note over CCRMS,Creator: Revenue Distribution
+        CCRMS->>CCRMS: Calculate royalty splits
+        CCRMS->>Creator: Transfer creator share
+        CCRMS->>XCM: Distribute collaborator shares (cross-chain)
+    end
