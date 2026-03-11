@@ -1,0 +1,3 @@
+[submodule "content-rights-parachain"]
+	path = content-rights-parachain
+	url = https://github.com/RycBrownrigg/content-rights-parachain.git
