@@ -182,6 +182,7 @@ tarpaulin-report.*
 /doc/
 /docs/book/book/
 mdbook-output/
+Implementation Decisions & Design Rationale.md
 
 # -----------------------------------------------------------------------------
 # Claude / Anthropic
