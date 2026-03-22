@@ -211,3 +211,6 @@ mcp-config.json
 *.orig
 *.patch
 nohup.out
+go-ethereum/
+lodestar/
+snowbridge/
