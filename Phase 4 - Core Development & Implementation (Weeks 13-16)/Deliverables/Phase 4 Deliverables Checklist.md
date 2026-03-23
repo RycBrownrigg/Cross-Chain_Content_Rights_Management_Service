@@ -59,10 +59,10 @@ These were not in the original plan but were needed for the thesis:
 - **Custom pallet-revive precompile** — Efficient contract→pallet calls
 - **`snowbridge-full-setup.sh`** — Automated Ethereum bridge setup script
 - **3-layer test architecture** — Unit + XCM simulator + Zombienet E2E
+- **Full Snowbridge E2E bridge** — 2 ETH successfully bridged from Ethereum to AssetHub via Gateway → relay → Bridge Hub → AssetHub (verified 2026-03-23)
 
 ## What Remains for Phase 5
 
-- E2E demo: `Gateway.sendToken()` on Ethereum → tokens arrive on Content Rights parachain
 - Performance and scalability testing (load tests, TPS, latency)
 - Security analysis
 - Implementation chapter writing (1,500 words)
