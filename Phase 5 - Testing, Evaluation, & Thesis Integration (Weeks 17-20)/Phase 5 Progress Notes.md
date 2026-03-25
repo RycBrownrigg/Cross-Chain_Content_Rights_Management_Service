@@ -1,31 +1,42 @@
 # Phase 5 Progress Notes
 
-## Status: Partially Started (via Phase 4 overlap)
+## Status: Weeks 17-18 Complete, Weeks 19-20 Remaining
 
-Some Phase 5 deliverables were produced during Phase 4 as part of integration testing. The following maps planned Phase 5 tasks to current status:
+### Week 17: Performance & Scalability Testing — COMPLETE
+- [x] Run load tests (TPS, latency) — `scripts/perf/local-throughput.mjs`
+- [x] Block weight saturation — `scripts/perf/block-utilization.mjs`
+- [x] Storage growth analysis — `scripts/perf/storage-growth.mjs`
+- [x] XCM cross-chain latency — `scripts/perf/xcm-latency.mjs`
+- [x] Resource utilization monitoring — `scripts/perf/resource-monitor.mjs`
+- [x] Stress test (breaking point) — `scripts/perf/stress-test.mjs`
 
-### Week 17: Performance & Scalability Testing — NOT STARTED
-- [ ] Run load tests (TPS, latency) with scripts
-- [ ] Scale nodes on testnets
-- [ ] Measure resource utilization and bottlenecks
-- **Note:** Preliminary fee data collected (XCM fees ~75-100B tokens), but systematic load testing not yet done
+**Key results:** 27 TPS sustained, 181 txs/block, 300 txs at 13% weight, ~283 TPS theoretical max, 3-5 block XCM latency, 192 bytes/content storage, RPC (not chain) is the breaking point.
 
-### Week 18: Security & Reliability Testing — NOT STARTED
-- [ ] Perform static analysis
-- [ ] Fuzzing
-- [ ] Simulate failures
-- [ ] Measure MTTR and uptime
+**Report:** `Week 17 Performance & Scalability Testing/Performance Testing Report.md` (22 findings, 9 tables)
+
+### Week 18: Security & Reliability Testing — COMPLETE
+- [x] Static analysis (clippy zero warnings, cargo audit 8 transitive advisories)
+- [x] Access control matrix (13 extrinsics documented)
+- [x] Security unit tests (10 new, 44 total, all passing)
+- [x] XCM security review (barriers, sovereign isolation, replay protection)
+- [x] Simulate failures / MTTR (~15-20s recovery)
+- [x] Uptime measurement (90% block production rate)
+
+**Key results:** 1 Medium finding (xcm_transfer_ownership auth gap), 4 Low findings, MTTR ~15-20s, 100% state persistence after crash, 44 unit tests passing.
+
+**Report:** `Week 18 Security & Reliability Testing/Security Testing Report.md` (8 findings, 5 tables)
 
 ### Week 19: Comparative Analysis — NOT STARTED
-- [ ] Set up centralized benchmarks
-- [ ] Conduct parallel tests
-- [ ] Analyze economic efficiency and decentralization
+- [ ] Compare against centralized DRM (cost, latency, trust model)
+- [ ] Analyze economic efficiency (tx fees vs intermediary fees)
+- [ ] Decentralization metrics
 
 ### Week 20: Data Collection & Refinements — PARTIALLY STARTED
 - [x] 3-layer test suite operational (unit + XCM simulator + Zombienet E2E)
-- [x] Snowbridge E2E pipeline running (beacon relay + ethereum relay)
-- [ ] E2E demo: Gateway.sendToken() → Content Rights parachain
-- [ ] Compile complete evaluation dataset
+- [x] Snowbridge E2E complete (2 ETH bridged from Ethereum to AssetHub)
+- [x] Performance dataset collected (6 test scripts, all results in JSON)
+- [x] Security dataset collected (audit results, access control matrix, findings)
+- [ ] Compile complete evaluation dataset (aggregate all results)
 - [ ] Final implementation adjustments
 
 ### Writing Tasks — NOT STARTED
@@ -33,12 +44,11 @@ Some Phase 5 deliverables were produced during Phase 4 as part of integration te
 - [ ] Evaluation and Analysis (1,500 words)
 - [ ] Charts, graphs, and tables
 
-## What's Available for Phase 5 Testing
+## Test Infrastructure
 
-The following infrastructure is ready for systematic testing:
-
-1. **4-chain Zombienet** with all HRMP channels and Snowbridge configured
-2. **Full Snowbridge pipeline** (Ethereum → Bridge Hub → AssetHub → Content Rights)
-3. **Test scripts** in `tests/xcm-e2e/` and `scripts/`
-4. **Automated setup** via `scripts/snowbridge-full-setup.sh`
-5. **23 unit tests** providing baseline regression coverage
+1. **6 performance scripts** in `content-rights-parachain/scripts/perf/`
+2. **44 unit tests** in `pallets/content-rights/src/tests.rs`
+3. **XCM simulator tests** in `xcm-simulator-tests/`
+4. **Zombienet E2E tests** in `tests/xcm-e2e/`
+5. **Snowbridge full setup** via `scripts/snowbridge-full-setup.sh`
+6. **All raw data** in `scripts/perf/results/*.json`

@@ -1,0 +1,23 @@
+{
+  "name": "centralized-drm-benchmark",
+  "version": "1.0.0",
+  "description": "Centralized DRM comparison benchmark for thesis evaluation",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsx src/server.ts",
+    "bench:throughput": "node bench/throughput.mjs",
+    "bench:storage": "node bench/storage.mjs",
+    "bench:stress": "node bench/stress.mjs",
+    "bench:all": "npm run bench:throughput && npm run bench:storage && npm run bench:stress"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "sql.js": "^1.11.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.7.0",
+    "tsx": "^4.19.0"
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "timestamp": "2026-03-25T18:06:59.467Z",
+  "server": "http://localhost:3000",
+  "numAccounts": 100,
+  "batchSizes": [
+    1,
+    10,
+    20,
+    50,
+    100,
+    200,
+    500,
+    1000
+  ],
+  "results": {
+    "register_content": {
+      "1": {
+        "batchSize": 1,
+        "succeeded": 1,
+        "failed": 0,
+        "wallClockMs": 0,
+        "tps": null,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0.234
+      },
+      "10": {
+        "batchSize": 10,
+        "succeeded": 10,
+        "failed": 0,
+        "wallClockMs": 6,
+        "tps": 1666.6666666666667,
+        "meanLatencyMs": 4.6,
+        "p95LatencyMs": 6,
+        "meanServerLatencyMs": 0.185
+      },
+      "20": {
+        "batchSize": 20,
+        "succeeded": 20,
+        "failed": 0,
+        "wallClockMs": 7,
+        "tps": 2857.142857142857,
+        "meanLatencyMs": 4.3,
+        "p95LatencyMs": 6,
+        "meanServerLatencyMs": 0.146
+      },
+      "50": {
+        "batchSize": 50,
+        "succeeded": 50,
+        "failed": 0,
+        "wallClockMs": 17,
+        "tps": 2941.176470588235,
+        "meanLatencyMs": 9.16,
+        "p95LatencyMs": 15,
+        "meanServerLatencyMs": 0.147
+      },
+      "100": {
+        "batchSize": 100,
+        "succeeded": 100,
+        "failed": 0,
+        "wallClockMs": 33,
+        "tps": 3030.30303030303,
+        "meanLatencyMs": 17.8,
+        "p95LatencyMs": 28,
+        "meanServerLatencyMs": 0.138
+      },
+      "200": {
+        "batchSize": 200,
+        "succeeded": 200,
+        "failed": 0,
+        "wallClockMs": 48,
+        "tps": 4166.666666666667,
+        "meanLatencyMs": 26.36,
+        "p95LatencyMs": 41,
+        "meanServerLatencyMs": 0.103
+      },
+      "500": {
+        "batchSize": 500,
+        "succeeded": 500,
+        "failed": 0,
+        "wallClockMs": 139,
+        "tps": 3597.122302158273,
+        "meanLatencyMs": 66.24,
+        "p95LatencyMs": 124,
+        "meanServerLatencyMs": 0.096
+      },
+      "1000": {
+        "batchSize": 1000,
+        "succeeded": 1000,
+        "failed": 0,
+        "wallClockMs": 201,
+        "tps": 4975.124378109453,
+        "meanLatencyMs": 106.89,
+        "p95LatencyMs": 173,
+        "meanServerLatencyMs": 0.088
+      }
+    },
+    "subscribe": {
+      "1": {
+        "batchSize": 1,
+        "succeeded": 0,
+        "failed": 1,
+        "wallClockMs": 1,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "10": {
+        "batchSize": 10,
+        "succeeded": 0,
+        "failed": 10,
+        "wallClockMs": 4,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "20": {
+        "batchSize": 20,
+        "succeeded": 0,
+        "failed": 20,
+        "wallClockMs": 8,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "50": {
+        "batchSize": 50,
+        "succeeded": 0,
+        "failed": 50,
+        "wallClockMs": 22,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "100": {
+        "batchSize": 100,
+        "succeeded": 0,
+        "failed": 100,
+        "wallClockMs": 42,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "200": {
+        "batchSize": 200,
+        "succeeded": 0,
+        "failed": 200,
+        "wallClockMs": 83,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "500": {
+        "batchSize": 500,
+        "succeeded": 0,
+        "failed": 500,
+        "wallClockMs": 180,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      },
+      "1000": {
+        "batchSize": 1000,
+        "succeeded": 0,
+        "failed": 1000,
+        "wallClockMs": 376,
+        "tps": 0,
+        "meanLatencyMs": 0,
+        "p95LatencyMs": 0,
+        "meanServerLatencyMs": 0
+      }
+    },
+    "check_access": {
+      "1": {
+        "batchSize": 1,
+        "succeeded": 1,
+        "failed": 0,
+        "wallClockMs": 1,
+        "tps": 1000,
+        "meanLatencyMs": 1,
+        "p95LatencyMs": 1,
+        "meanServerLatencyMs": 0.075
+      },
+      "10": {
+        "batchSize": 10,
+        "succeeded": 10,
+        "failed": 0,
+        "wallClockMs": 1,
+        "tps": 10000,
+        "meanLatencyMs": 0.4,
+        "p95LatencyMs": 1,
+        "meanServerLatencyMs": 0.06
+      },
+      "20": {
+        "batchSize": 20,
+        "succeeded": 20,
+        "failed": 0,
+        "wallClockMs": 3,
+        "tps": 6666.666666666667,
+        "meanLatencyMs": 1.4,
+        "p95LatencyMs": 2,
+        "meanServerLatencyMs": 0.051
+      },
+      "50": {
+        "batchSize": 50,
+        "succeeded": 50,
+        "failed": 0,
+        "wallClockMs": 5,
+        "tps": 10000,
+        "meanLatencyMs": 2.46,
+        "p95LatencyMs": 4,
+        "meanServerLatencyMs": 0.049
+      },
+      "100": {
+        "batchSize": 100,
+        "succeeded": 100,
+        "failed": 0,
+        "wallClockMs": 9,
+        "tps": 11111.111111111111,
+        "meanLatencyMs": 4.21,
+        "p95LatencyMs": 7,
+        "meanServerLatencyMs": 0.048
+      },
+      "200": {
+        "batchSize": 200,
+        "succeeded": 200,
+        "failed": 0,
+        "wallClockMs": 17,
+        "tps": 11764.70588235294,
+        "meanLatencyMs": 6.99,
+        "p95LatencyMs": 12,
+        "meanServerLatencyMs": 0.044
+      },
+      "500": {
+        "batchSize": 500,
+        "succeeded": 500,
+        "failed": 0,
+        "wallClockMs": 41,
+        "tps": 12195.121951219511,
+        "meanLatencyMs": 19.42,
+        "p95LatencyMs": 30,
+        "meanServerLatencyMs": 0.044
+      },
+      "1000": {
+        "batchSize": 1000,
+        "succeeded": 1000,
+        "failed": 0,
+        "wallClockMs": 76,
+        "tps": 13157.894736842105,
+        "meanLatencyMs": 33.7,
+        "p95LatencyMs": 55,
+        "meanServerLatencyMs": 0.042
+      }
+    }
+  }
+}

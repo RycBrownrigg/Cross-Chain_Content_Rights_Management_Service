@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-03-25T18:10:45.884Z",
+  "config": {
+    "numClients": 200,
+    "durationSecs": 180
+  },
+  "summary": {
+    "totalSubmitted": 1315000,
+    "totalSucceeded": 1315000,
+    "totalFailed": 0,
+    "successRate": 1,
+    "sustainedTps": 7304.784494969975,
+    "latencyP50": 15,
+    "latencyP95": 24,
+    "latencyP99": 27
+  }
+}
