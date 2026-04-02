@@ -1,0 +1,77 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Phase 3: System Design \& Architecture Finalization (Weeks 11--12)}
+
+\subsection*{Objectives}
+
+\begin{itemize}
+    \item Finalize detailed system design based on research insights.
+    \item Prepare smart contract specifications and infrastructure plans.
+    \item Set up development environment now that research is complete.
+\end{itemize}
+
+\subsection*{Development \& Design Tasks}
+
+\begin{itemize}
+    \item \textbf{Week 11:} Smart Contract \& Integration Design
+    \begin{itemize}
+        \item Design subscription, pay-per-view, and purchase verification contract interfaces.
+        \item Define data structures, storage patterns, and XCM message formats.
+        \item Plan bridge integration with Ethereum and cross-chain flows.
+        \item Create sequence diagrams for operations.
+    \end{itemize}
+
+    \item \textbf{Week 12:} Infrastructure \& Evaluation Setup
+    \begin{itemize}
+        \item Design testnet topology (Docker configuration).
+        \item Plan migration to public testnets (Westend/Kusama).
+        \item Finalize monitoring, logging, and database schema.
+        \item Refine evaluation metrics and test plans based on research.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Writing Tasks (Target: 1,000 words)}
+
+\begin{itemize}
+    \item Refine System Design and Architecture section (1,000 words).
+\end{itemize}
+
+\subsection*{Deliverables}
+
+\begin{itemize}
+    \item Complete system design document.
+    \item Smart contract specifications.
+    \item UML/sequence diagrams.
+    \item Evaluation framework document (final).
+    \item Configured development environment (Rust, Cargo, Substrate, ink!, Docker, GitHub repo).
+\end{itemize}
+
+\end{document}

@@ -48,3 +48,48 @@ These pivots do not weaken the academic contribution – they strengthen it by:
 - leveraging newer, audited standards,
 - producing results on a real chaos network,
 - and still delivering the first known production system that combines subscription + PPV + purchase in a single cross-chain rights primitive.
+
+---
+
+## Implementation Outcomes (Phase 4-5)
+
+This report was written in November 2025 during Phase 1. The following documents which pivot recommendations were adopted, which were modified, and which were not taken.
+
+### Pivot A: Kusama + Polkadot Dual Deployment
+
+**Status: Not adopted.**
+
+The implementation used a local Zombienet testnet (Rococo-local) rather than deploying to Kusama or Polkadot. This was sufficient for thesis evaluation — all performance, security, and comparative analysis was conducted on the local testnet. Deployment to Kusama/Polkadot is documented as future work.
+
+### Pivot B: RMRK 2.0 + Scheduled XCM
+
+**Status: Not adopted as recommended. Significant pivot required.**
+
+| Recommendation | What Happened | Why |
+|---------------|---------------|-----|
+| Use RMRK 2.0 as rights token | Used `pallet-nfts` instead | RMRK 2.0 pallets were abandoned by the community — frozen at polkadot-v0.9.36, incompatible with current polkadot-sdk. This was discovered during Phase 3 setup. |
+| Scheduled XCM for auto-renewal | Used `on_initialize` hook pattern | XCM v5 `Schedule` instruction is not production-ready. The on-chain scheduler achieves the same result. |
+| "First production use of scheduled XCM + RMRK" | Contribution reframed | Thesis contribution is: first unified cross-chain content rights pallet with subscription + PPV + ownership + automatic royalty propagation + Ethereum bridge via Snowbridge. |
+
+**The core thesis contribution remains valid** — the system is the first known implementation combining all three monetisation models in a single cross-chain rights primitive. The implementation details differ from the recommendation (FRAME pallet + pallet-nfts instead of RMRK 2.0 + scheduled XCM), but the novelty is preserved.
+
+### Pivot C: On-Demand Coretime via Asset Hub
+
+**Status: Not applicable.** Local Zombienet testnet was used instead of any coretime model. On-demand coretime remains a viable deployment option for future production use.
+
+### Actual Architecture Adopted
+
+| Component | Recommended | Actual |
+|-----------|------------|--------|
+| NFT standard | RMRK 2.0 | `pallet-nfts` with attribute-based nesting |
+| Rights logic | RMRK equipped resources | `pallet-content-rights` (17 extrinsics, unified `RightsType` enum) |
+| Auto-renewal | Scheduled XCM | `on_initialize` hook with `AutoRenewIndex` storage |
+| Royalty distribution | RMRK cross-chain royalties | `set_royalty_splits` with up to 10 collaborators, basis-point precision |
+| Metadata | RMRK multi-resource | `RightsMetadata` struct emitted via `query_rights_metadata` |
+| Ethereum bridge | Not in pivot recommendations | Full Snowbridge v1 E2E (exceeded original scope) |
+| Deployment | Kusama → Polkadot | Local Zombienet (Rococo-local) |
+| ink! role | Primary logic layer | API layer via pallet-revive precompile |
+
+### Lessons for the Thesis Discussion Chapter
+
+The RMRK 2.0 pivot recommendation illustrates a key finding: **ecosystem maturity directly impacts architectural decisions in blockchain development.** The recommendation was sound based on October 2025 information, but by the time implementation began, RMRK 2.0 was no longer viable. This forced a pivot to `pallet-nfts` — a maintained but less feature-rich alternative. The thesis Discussion chapter should analyse this as an example of how rapidly evolving blockchain ecosystems create implementation risk that theoretical designs cannot fully anticipate.

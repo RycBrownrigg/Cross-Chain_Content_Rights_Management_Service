@@ -41,3 +41,27 @@ These refined questions and objectives are precisely aligned with the specific g
 4. **Establishes a foundation for future work** — Measured baselines inform subsequent research directions
 
 The deliverables now emphasise functional prototypes, documented measurements, comparative analyses, and feasibility assessments — all of which constitute valid academic contributions regardless of the specific performance figures achieved.
+
+---
+
+### Research Objective Status (Phase 4-5 Results)
+
+| Objective | Deliverable Planned | Deliverable Produced | Status |
+|-----------|-------------------|---------------------|--------|
+| **RO1**: XCM extensions for recurring/metadata-rich transfers | Functional prototype; success rate and finality measurements | `pallet-content-rights` with 6 XCM extrinsics; 100% success rate; 18-32s cross-chain latency measured. `query_rights_metadata` emits rich metadata via events. Auto-renewal via `on_initialize` hook. | **Delivered** |
+| **RO2**: Unified ink! rights token with access verification | Single storage item; latency measurements | Unified `RightsType` enum in FRAME pallet (not ink! — pivoted for performance). Access verification ~6s (one block). Ink! contract provides API layer via pallet-revive precompile. | **Delivered (adapted)** |
+| **RO3**: Composable rights pallet | One contract suite; trade-off documentation | Single `pallet-content-rights` with 17 extrinsics covering all three models. Trade-offs documented (NFT nesting limit, latency vs trustlessness). | **Delivered** |
+| **RO4**: Benchmark against alternatives | Comparative analysis of TPS, costs, retention | Centralized benchmark (Express+SQLite): 270× TPS ratio, 67,000× latency. Self-publishing model eliminates intermediary commissions. No Ethereum L2 benchmark (used published data). | **Delivered** |
+| **RO5**: ZK proof hooks | Proof-of-concept; feasibility analysis | Not implemented. | **Future work** |
+| **RO6**: Monte Carlo simulation | Simulation results; cost comparisons | Not implemented. Replaced by direct centralized benchmark comparison. | **Future work (replaced)** |
+
+### Sub-Question Measured Results
+
+| Sub-Question | Phase 1 Expectation | Phase 5 Measured |
+|-------------|--------------------|-----------------|
+| SQ1: XCM success rates and finality times | High success, <2s finality | **100% success, 18-32s finality** |
+| SQ2: Access verification latency | Sub-second | **~6 seconds (one block)** |
+| SQ3: Feasibility of unification | Feasible | **Confirmed — single pallet, 56 tests passing** |
+| SQ4: Performance vs alternatives | Favourable | **270× slower than centralized, but trustless** |
+| SQ5: ZK proof feasibility | Assessed | **Not assessed — deferred** |
+| SQ6: Creator savings | 60% via Monte Carlo | **100% retention via self-publishing model (no intermediary)** |

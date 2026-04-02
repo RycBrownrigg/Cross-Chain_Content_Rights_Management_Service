@@ -1,0 +1,155 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Week 16: Full System Integration Summary}
+
+\subsection*{Planned Deliverables (from thesis plan)}
+
+\begin{itemize}
+    \item Integrate all contracts
+    \item Create end-to-end test scenarios
+    \item Deploy the complete system to the local testnet
+    \item Begin preliminary performance logging
+\end{itemize}
+
+\subsection*{What Was Built}
+
+\subsubsection*{1. Multi-Layer Test Suite}
+
+A comprehensive 3-layer test architecture was implemented:
+
+\textbf{Layer 1: Unit Tests (23 tests)}
+
+Location: pallets/content-rights/src/tests.rs + pallets/content-rights/src/mock.rs
+\begin{itemize}
+    \item Mock runtime with pallet-nfts + pallet-content-rights
+    \item Tests for all extrinsics: register, subscribe, renew, PPV, transfer, check\_access
+    \item Error path coverage (unauthorized, expired, not found)
+\end{itemize}
+
+\textbf{Layer 2: XCM Simulator Integration Tests}
+
+Location: xcm-simulator-tests/
+\begin{itemize}
+    \item Simulates relay chain + 2 parachains
+    \item Tests cross-chain subscription, renewal, PPV, ownership transfer
+    \item Verifies XCM message construction and execution
+    \item No actual network required
+\end{itemize}
+
+Relevant commit: adcacc4
+
+\textbf{Layer 3: Zombienet E2E Tests}
+
+Location: tests/xcm-e2e/
+\begin{itemize}
+    \item Live multi-chain tests against running Zombienet
+    \item Tests the full pipeline: fund sovereign accounts $\rightarrow$ send XCM $\rightarrow$ verify state changes
+    \item Covers: cross-chain subscribe, renew, PPV, ownership transfer
+    \item Uses polkadot-js API for direct chain interaction
+\end{itemize}
+
+Relevant commits:
+\begin{itemize}
+    \item 7b61e08 --- Zombienet XCM E2E tests (Layer 3)
+    \item a754117 --- E2E tests for all cross-chain XCM operations
+\end{itemize}
+
+\subsubsection*{2. Full System Deployment}
+
+The complete system runs on a 4-chain Zombienet topology:
+
+\begin{verbatim}
+Rococo Relay Chain (alice, bob)
++-- Bridge Hub (para 1013) -- Snowbridge beacon client, message routing
++-- AssetHub (para 1000) -- Ether foreign asset, reserve transfers
++-- Content Rights (para 100) -- pallet-content-rights, pallet-nfts,
+                                  pallet-revive
+        ^
+    Ethereum (Geth + Lodestar)
+        ^
+    Gateway contracts (GatewayProxy, BeefyClient, etc.)
+\end{verbatim}
+
+\textbf{HRMP channels:}
+\begin{itemize}
+    \item Bridge Hub (1013) $\leftrightarrow$ AssetHub (1000)
+    \item AssetHub (1000) $\leftrightarrow$ Content Rights (100)
+\end{itemize}
+
+\subsubsection*{3. End-to-End Test Scenarios}
+
+\begin{table}[H]
+\centering
+\caption{End-to-End Test Scenarios}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LLl}
+\toprule
+\textbf{Scenario} & \textbf{Chains Involved} & \textbf{Status} \\
+\midrule
+Register content + subscribe (local) & Content Rights & Passing \\
+Cross-chain subscription renewal & Content Rights $\rightarrow$ Content Rights (via relay) & Passing \\
+Cross-chain PPV access & Content Rights $\rightarrow$ Content Rights (via relay) & Passing \\
+Cross-chain ownership transfer & Content Rights $\rightarrow$ Content Rights (via relay) & Passing \\
+Ethereum $\rightarrow$ Bridge Hub beacon relay & Ethereum $\rightarrow$ Bridge Hub & Passing \\
+Ethereum $\rightarrow$ AssetHub token bridge & Ethereum $\rightarrow$ BH $\rightarrow$ AH & Passing (2 ETH bridged, verified) \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsubsection*{4. Performance Logging}
+
+Preliminary performance data collected:
+\begin{itemize}
+    \item XCM fees: \textasciitilde{}75--100B tokens per cross-chain operation (due to BlockRatioFee proof\_size scaling)
+    \item Beacon finalization time: \textasciitilde{}39 minutes with 8 validators on mainnet preset
+    \item Local testnet block time: 12s (relay), 12s (parachains)
+\end{itemize}
+
+\subsection*{Deviations from Plan}
+
+\begin{table}[H]
+\centering
+\caption{Deviations from Plan}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Planned} & \textbf{Actual} & \textbf{Rationale} \\
+\midrule
+Single testnet topology & 4-chain topology (Relay + BH + AH + CR) & Snowbridge requires Bridge Hub and AssetHub for Ethereum interop \\
+Simple integration tests & 3-layer test architecture (unit + XCM simulator + Zombienet E2E) & Comprehensive coverage across different abstraction levels \\
+``Integrate all contracts'' & Pallet + ink! contract + Snowbridge pipeline & The system is a pallet + contract + bridge architecture, not multiple contracts \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\end{document}

@@ -116,3 +116,59 @@ services:
     image: onfinality/subql-node:latest
     # config for indexing your parachain...
 ```
+
+---
+
+## Implementation Notes (Phase 4-5)
+
+### Actual Architecture Deployed
+
+The local development architecture evolved significantly beyond the original plan. Two distinct topologies were used:
+
+**Topology 1: XCM Testing (2-chain)**
+```
+Rococo Relay Chain (alice, bob)
+├── ParaA (100) — Content Rights at ws://127.0.0.1:9990
+└── ParaB (200) — Consumer chain at ws://127.0.0.1:9991
+```
+Config: `zombienet-xcm-test.toml`, used for performance testing and XCM latency measurement.
+
+**Topology 2: Snowbridge Testing (4-chain + Ethereum)**
+```
+Rococo Relay Chain (alice, bob)
+├── Bridge Hub (1013) at ws://127.0.0.1:8943
+├── AssetHub (1000) at ws://127.0.0.1:9910
+└── Content Rights (100) at ws://127.0.0.1:9990
+    ↑
+Ethereum (Geth v1.17.1 at :8545 + Lodestar v1.35.0 at :9596)
+├── Gateway contracts (16 deployed)
+├── Beacon state service at :8080
+├── Beacon relay
+└── Ethereum relay
+```
+Config: `zombienet-snowbridge.toml`, used for Ethereum bridge E2E testing.
+
+### Changes From Original Plan
+
+| Planned | Actual | Notes |
+|---------|--------|-------|
+| 4 relay validators | 2 validators (alice, bob) | Sufficient for local dev |
+| ParaA at ws://9946 | ParaA at ws://9990 | Port changed in config |
+| ParaB as Asset Hub at ws://9948 | ParaB as consumer chain at ws://9991 | Separate AssetHub in 4-chain topology |
+| Mock Snowbridge | **Full Snowbridge v1** | Geth + Lodestar + real relayers + 16 Gateway contracts |
+| RMRK pallet | `pallet-nfts` | RMRK abandoned |
+| SubQuery/Subsquid | Not used | Events queried directly via polkadot-js API |
+| Prometheus + Grafana | Prometheus only | Scraped via `resource-monitor.mjs` |
+| Local IPFS | Not used | Metadata hash stored on-chain |
+| Docker for all components | Zombienet native provider | Simpler, faster startup |
+
+### Setup Scripts Created
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/start-ethereum.sh` | Start Geth + Lodestar for local Ethereum |
+| `scripts/deploy-gateway.sh` | Deploy 16 Snowbridge contracts via Forge |
+| `scripts/snowbridge-full-setup.sh` | Full automated Ethereum bridge setup (~40 min) |
+| `scripts/open-hrmp-channels.mjs` | Open HRMP between 2 parachains |
+| `scripts/open-hrmp-snowbridge.mjs` | Open HRMP for 4-chain topology |
+| `scripts/configure-snowbridge.mjs` | Configure gateway, Ether asset, accounts |

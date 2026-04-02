@@ -1,48 +1,37 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt]{article}
 
-% Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
+\geometry{a4paper, margin=1in}
 \usepackage{hyperref}
-\usepackage{url}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{graphicx}
-\usepackage{enumitem}
-\usepackage{parskip}
-\usepackage{float}
-
-
-% Page geometry
-\geometry{left=1in, right=1in, top=1in, bottom=1in}
-
-% Hyperref settings
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=blue,
-    breaklinks=true,
+    filecolor=magenta,
+    urlcolor=blue,
 }
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
-% URL line breaking
-\Urlmuskip=0mu plus 1mu
-\def\UrlBreaks{\do\/\do-\do.\do=\do?\do\&}
-\urlstyle{same}
-
-\title{Research Findings Report: Potential Pivots in Technical Approach\\
-\large Cross-Chain Content Rights Management Service}
-\author{}
-\date{}
 
 \begin{document}
 
-\sloppy
-
-\maketitle
+\section*{Research Findings Report: Potential Pivots in Technical Approach}
+\subsection*{Cross-Chain Content Rights Management Service}
 
 Following the completion of the comprehensive systematic review encompassing 112 sources, the gap analysis, and ecosystem monitoring through November 2025, three significant new developments have arisen, which were not entirely apparent at the time of the original proposal. These developments are sufficiently substantial to justify serious consideration of controlled, low-risk adjustments that would reinforce the thesis rather than undermine it.
 
@@ -185,5 +174,64 @@ These pivots do not weaken the academic contribution -- they strengthen it by:
     \item producing results on a real chaos network,
     \item and still delivering the first known production system that combines subscription + PPV + purchase in a single cross-chain rights primitive.
 \end{itemize}
+
+\bigskip\hrule\bigskip
+
+\section*{Implementation Outcomes (Phase 4--5)}
+
+This report was written in November 2025 during Phase~1. The following documents which pivot recommendations were adopted, which were modified, and which were not taken.
+
+\subsection*{Pivot A: Kusama + Polkadot Dual Deployment}
+
+\textbf{Status: Not adopted.} The implementation used a local Zombienet testnet (Rococo-local) rather than deploying to Kusama or Polkadot. This was sufficient for thesis evaluation. Deployment to Kusama/Polkadot is documented as future work.
+
+\subsection*{Pivot B: RMRK 2.0 + Scheduled XCM}
+
+\textbf{Status: Not adopted as recommended. Significant pivot required.}
+
+\begin{table}[H]
+\centering
+\caption{Pivot B: Recommendation vs Outcome}
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Recommendation} & \textbf{What Happened} & \textbf{Why} \\
+\midrule
+Use RMRK 2.0 as rights token & Used \texttt{pallet-nfts} instead & RMRK 2.0 pallets were abandoned by the community---frozen at polkadot-v0.9.36, incompatible with current polkadot-sdk. \\
+Scheduled XCM for auto-renewal & Used \texttt{on\_initialize} hook pattern & XCM v5 \texttt{Schedule} instruction is not production-ready. The on-chain scheduler achieves the same result. \\
+``First production use of scheduled XCM + RMRK'' & Contribution reframed & Thesis contribution is: first unified cross-chain content rights pallet with subscription + PPV + ownership + automatic royalty propagation + Ethereum bridge via Snowbridge. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The core thesis contribution remains valid---the system is the first known implementation combining all three monetisation models in a single cross-chain rights primitive.
+
+\subsection*{Pivot C: On-Demand Coretime via Asset Hub}
+
+\textbf{Status: Not applicable.} Local Zombienet testnet was used instead of any coretime model. On-demand coretime remains a viable deployment option for future production use.
+
+\subsection*{Actual Architecture Adopted}
+
+\begin{table}[H]
+\centering
+\caption{Recommended vs Actual Architecture}
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Component} & \textbf{Recommended} & \textbf{Actual} \\
+\midrule
+NFT standard & RMRK 2.0 & \texttt{pallet-nfts} with attribute-based nesting \\
+Rights logic & RMRK equipped resources & \texttt{pallet-content-rights} (17 extrinsics, unified \texttt{RightsType} enum) \\
+Auto-renewal & Scheduled XCM & \texttt{on\_initialize} hook with \texttt{AutoRenewIndex} storage \\
+Royalties & RMRK cross-chain royalties & \texttt{set\_royalty\_splits} with up to 10 collaborators \\
+Metadata & RMRK multi-resource & \texttt{RightsMetadata} struct emitted via \texttt{query\_rights\_metadata} \\
+Ethereum bridge & Not in pivot recommendations & Full Snowbridge v1 E2E (exceeded original scope) \\
+Deployment & Kusama $\rightarrow$ Polkadot & Local Zombienet (Rococo-local) \\
+ink! role & Primary logic layer & API layer via pallet-revive precompile \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Lessons for the Thesis Discussion Chapter}
+
+The RMRK 2.0 pivot recommendation illustrates a key finding: \textbf{ecosystem maturity directly impacts architectural decisions in blockchain development.} The recommendation was sound based on October 2025 information, but by the time implementation began, RMRK 2.0 was no longer viable. This forced a pivot to \texttt{pallet-nfts}---a maintained but less feature-rich alternative. The thesis Discussion chapter should analyse this as an example of how rapidly evolving blockchain ecosystems create implementation risk that theoretical designs cannot fully anticipate.
 
 \end{document}

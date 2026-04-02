@@ -76,6 +76,22 @@ These gaps confirm the project's novelty: No 2025 framework fully integrates cro
 - **Fills Gaps**: XCM enables multi-chain PPV; shared security reduces hacks; Rust/ink! ensures low fees.
 - **Contributions**: Novel hybrid model boosts creator retention to 95%, addressing 2025's $12B piracy losses.
 
+---
+
+#### Implementation Notes (Phase 4-5 Measured Results)
+
+The targets and claims above were Phase 1 theoretical projections. Phase 5 testing produced the following measured results:
+
+| Phase 1 Target | Measured Result | Assessment |
+|----------------|----------------|------------|
+| TPS: 500+ (Parachains) | **27 TPS sustained; 283 TPS theoretical per parachain** | Single-parachain throughput is bounded by relay chain slot allocation. Polkadot scales horizontally via more parachains. |
+| Cross-Chain Success Rate: 99% | **100% success** (9 XCM operations, all succeeded) | Exceeded target — though measured sample was smaller than planned |
+| PPV Tx Cost: $0.02 | Transaction weight fees are minimal (~0.000001 DOT equivalent) | Achieved — on-chain fees are negligible |
+| Latency: <2 seconds | **~6 seconds** (single-chain), **18-32 seconds** (cross-chain XCM) | Not achieved — 6s block time is inherent to the parachain model |
+| Economic efficiency: 60% savings | **Self-publishing model eliminates intermediary entirely** (0% commission vs 15-30% traditional) | Exceeded — but via a different mechanism (disintermediation, not Monte Carlo optimisation) |
+| Architecture: ink! contracts | **FRAME pallet** + ink! API layer | Pivoted — FRAME pallet provides better performance and direct storage access |
+| NFT standard: RMRK 2.0 | **pallet-nfts** with attribute-based nesting | RMRK 2.0 was abandoned by the community |
+
 ### Bibliography
 
 1. Blockchain Content Monetization Models: How Creators Earn in Web3. (2025). *Indspn.org*. https://indspn.org/blockchain-content-monetization-models-how-creators-earn-in-web3 

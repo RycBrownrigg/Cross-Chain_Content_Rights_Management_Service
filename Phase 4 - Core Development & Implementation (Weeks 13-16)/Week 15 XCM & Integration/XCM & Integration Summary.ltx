@@ -1,0 +1,157 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Week 15: XCM \& Integration Summary}
+
+\subsection*{Planned Deliverables (from thesis plan)}
+
+\begin{itemize}
+    \item Implement cross-chain message handlers and parachain transfers
+    \item Integrate Ethereum bridge
+    \item Develop chain extensions for efficiency
+    \item Test initial integrations
+\end{itemize}
+
+\subsection*{What Was Built}
+
+\subsubsection*{1. XCM Cross-Chain Extrinsics}
+
+\textbf{Location:} pallets/content-rights/src/lib.rs
+
+Cross-chain operations implemented as pallet extrinsics that construct and send XCM messages:
+
+\begin{table}[H]
+\centering
+\caption{XCM Cross-Chain Extrinsics}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Operation} & \textbf{Extrinsic} & \textbf{XCM Flow} \\
+\midrule
+Cross-chain subscription renewal & renew\_subscription\_cross\_chain & Source parachain $\rightarrow$ Target parachain via WithdrawAsset + BuyExecution + Transact \\
+Cross-chain PPV access & pay\_per\_view\_cross\_chain & Same pattern as renewal \\
+Cross-chain ownership transfer & transfer\_ownership\_cross\_chain & Source $\rightarrow$ Target with ownership state update \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\textbf{XCM config changes} (runtime/src/configs/xcm\_config.rs):
+\begin{itemize}
+    \item RelayNetwork set to Some(NetworkId::ByGenesis(ROCOCO\_GENESIS\_HASH))
+    \item UniversalLocation includes GlobalConsensus for absolute location resolution
+    \item LocationToAccountId extended with HashedDescription, GlobalConsensusParachainConvertsFor for Ethereum origins
+    \item Paid execution barriers (WithdrawAsset + BuyExecution, not UnpaidExecution)
+\end{itemize}
+
+\textbf{Relevant commits:}
+\begin{itemize}
+    \item 9d88646 --- Add XCM cross-chain extrinsics for content rights operations
+    \item 25265ee --- Add Snowbridge XCM config (Ethereum origin converters, GlobalConsensus)
+\end{itemize}
+
+\subsubsection*{2. Ethereum Bridge Integration (Snowbridge)}
+
+Full local Snowbridge v1 bridge setup connecting Ethereum to the Content Rights parachain:
+
+\textbf{Infrastructure:}
+\begin{itemize}
+    \item 4-chain Zombienet topology (Relay, Bridge Hub 1013, AssetHub 1000, Content Rights 100)
+    \item Geth v1.17.1 (Ethereum execution layer)
+    \item Lodestar v1.35.0 (Ethereum consensus/beacon layer, mainnet preset)
+    \item 16 Gateway contracts deployed on Ethereum via Forge
+    \item Beacon light client initialized on Bridge Hub
+    \item Beacon relay + Ethereum relay running
+\end{itemize}
+
+\textbf{Key scripts:}
+\begin{itemize}
+    \item scripts/snowbridge-full-setup.sh --- Automated end-to-end Ethereum side setup
+    \item scripts/open-hrmp-snowbridge.mjs --- HRMP channel setup for 4-chain topology
+    \item scripts/configure-snowbridge.mjs --- Substrate-side Snowbridge configuration
+    \item scripts/deploy-gateway.sh --- Contract deployment + BEEFY checkpoint
+\end{itemize}
+
+\textbf{Relevant commits:}
+\begin{itemize}
+    \item 25265ee --- Snowbridge local bridge setup
+    \item 7b967d8 --- Automated full setup script
+\end{itemize}
+
+\textbf{Documentation:}
+\begin{itemize}
+    \item docs/SNOWBRIDGE\_SETUP.md --- Setup plan (7 phases)
+    \item docs/SNOWBRIDGE\_SESSION\_LOG.md --- Detailed session log with lessons learned
+\end{itemize}
+
+\subsubsection*{3. Chain Extensions / Precompiles}
+
+Instead of traditional chain extensions, a \textbf{custom pallet-revive precompile} was implemented for efficient contract-to-pallet calls:
+
+\begin{itemize}
+    \item Precompile address: 0x0000...0400
+    \item Function: check\_access(content\_id, account) --- returns access status
+    \item Allows ink! contracts to query pallet state without cross-contract calls
+\end{itemize}
+
+\textbf{Relevant commit:} 7bc9651
+
+\subsubsection*{4. Cross-Chain Storage Proof Verification}
+
+\textbf{Location:} pallets/rights-verifier/
+
+pallet-rights-verifier enables trustless cross-chain verification of content rights by verifying Merkle storage proofs from remote parachains:
+
+\begin{itemize}
+    \item verify\_rights\_proof --- Verifies a storage proof against a relay chain state root
+    \item Enables a parachain to confirm subscription/ownership status on another parachain without XCM round-trips
+\end{itemize}
+
+\textbf{Relevant commit:} 696d990
+
+\subsection*{Deviations from Plan}
+
+\begin{table}[H]
+\centering
+\caption{Deviations from Plan}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Planned} & \textbf{Actual} & \textbf{Rationale} \\
+\midrule
+Chain extensions (substrate) & Custom pallet-revive precompile & pallet-revive uses PolkaVM, not WASM --- precompiles are the equivalent of chain extensions \\
+Simple bridge integration & Full Snowbridge v1 local setup & Thesis requires demonstrating heterogeneous blockchain interop; Snowbridge is the production Polkadot $\leftrightarrow$ Ethereum bridge \\
+Basic XCM messages & Paid execution XCM with proper fee handling & Realistic XCM requires WithdrawAsset + BuyExecution, not unpaid shortcuts \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\end{document}

@@ -415,4 +415,47 @@ This unified state model enables seamless transitions between monetization model
 
 ---
 
+## 6. Implementation Notes (Phase 4-5)
 
+The conceptual diagrams above represent the original design intent from Phase 2. During Phase 4 implementation, several architectural pivots were made in response to ecosystem changes and practical constraints. The diagrams remain valid as conceptual designs; the notes below document what changed and why.
+
+### Architectural Pivots
+
+**Table 2a: Architectural Pivots — Original vs Actual**
+
+| Diagram Element | Original Design | Actual Implementation |
+|----------------|----------------|----------------------|
+| **RMRK 2.0 NFT Module** | All flows reference RMRK 2.0 as a participant | Replaced by `pallet-nfts` with attribute-based nesting |
+| **XCM Scheduler** | Auto-renewal via scheduled XCM at block height | `on_initialize` hook with `AutoRenewIndex` storage map |
+| **Content Delivery Oracle** | PPV flow references an oracle for content streaming | Not implemented — out of scope |
+| **Royalty Distribution** | Revenue split and cross-chain distribution after each payment | `pay_with_royalties` distributes to up to 10 collaborators per payment |
+| **Subscription Tiers** | Multiple tiers per content | Single subscription price per content |
+| **Cross-Chain NFT Transfer** | Lock/mint wrapped ERC-721 on Ethereum via Snowbridge | Snowbridge v1 bridges fungible tokens (ETH), not NFTs |
+| **Secondary Sale Royalties** | Bridge triggers royalty distribution on resale | Not implemented |
+
+**Table 2b: Architectural Pivots — Rationale**
+
+| Diagram Element | Rationale for Change |
+|----------------|---------------------|
+| **RMRK 2.0 NFT Module** | RMRK 2.0 pallets were abandoned by the community (frozen at polkadot-v0.9.36, incompatible with current polkadot-sdk) |
+| **XCM Scheduler** | XCM v5 `Schedule` instruction is not production-ready; on-chain scheduler pattern achieves the same result |
+| **Content Delivery Oracle** | Content delivery is an off-chain concern; the pallet manages access rights only |
+| **Royalty Distribution** | Implemented for local collaborators; cross-chain royalty distribution via XCM is architecturally supported but not separately tested |
+| **Subscription Tiers** | Simplified for thesis scope; multiple tiers could be added via separate content registrations |
+| **Cross-Chain NFT Transfer** | NFT bridging requires Snowbridge v2 `Transact`; documented as future work |
+| **Secondary Sale Royalties** | Requires marketplace integration and event-driven bridge callbacks |
+
+### What Was Added Beyond the Original Design
+
+- **`pallet-rights-verifier`** — Merkle storage proof verification for trustless cross-chain rights checking (not in original diagrams)
+- **Custom pallet-revive precompile** — Efficient contract-to-pallet bridge for `check_access` (not in original diagrams)
+- **Full Snowbridge v1 E2E** — Complete Ethereum → Bridge Hub → AssetHub token bridge with beacon light client, relayers, and proof verification (exceeded the original "mock bridge" scope)
+- **`RightsMetadata` struct** — Rich metadata emitted via events for cross-chain consumption, addressing Concept #4
+
+### State Diagram Accuracy
+
+The Unified Rights Token State Diagram (Section 4) remains conceptually accurate. All states and transitions are implemented in `pallet-content-rights`:
+- ContentRegistered → SubscriptionActive/PPVAvailable/Owned: Complete
+- SubscriptionActive → SubscriptionExpired (with auto-renewal): Complete
+- PPVAvailable → PPVExhausted: Complete
+- Owned → OwnedBridged: Partially (token bridging only, not NFT bridging)

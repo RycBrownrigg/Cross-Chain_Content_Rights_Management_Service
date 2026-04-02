@@ -1,42 +1,37 @@
-\documentclass[12pt,a4paper]{article}
-
-% Packages
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
+\geometry{a4paper, margin=1in}
 \usepackage{hyperref}
-\usepackage{url}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{enumitem}
-\usepackage{parskip}
-\usepackage{graphicx}
-\usepackage{float}
-
-% Page geometry
-\geometry{left=1in, right=1in, top=1in, bottom=1in}
-
-% Hyperref settings
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=blue,
-    breaklinks=true,
+    filecolor=magenta,
+    urlcolor=blue,
 }
-
-\title{Conceptual Diagrams for Key Flows\\
-\large Cross-Chain Content Rights Management Service}
-\author{}
-\date{}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\usepackage{graphicx}
+\graphicspath{{Flow Diagrams/}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
 \begin{document}
 
-\sloppy
-
-\maketitle
+\section*{Conceptual Diagrams for Key Flows}
+\subsection*{Cross-Chain Content Rights Management Service}
 
 This document provides conceptual diagrams and comprehensive textual descriptions for the three fundamental monetisation flows within the CCRMS framework: Subscription, Pay-Per-View (PPV), and Purchase. Each flow is depicted in sequence diagrams and accompanied by a narrative.
 
@@ -186,49 +181,89 @@ This unified state model enables seamless transitions between monetization model
 
 \section{Summary of Key Design Patterns}
 
-{\small
-\setlength{\tabcolsep}{4pt}
-\begin{longtable}{>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5cm}>{\raggedright\arraybackslash}p{4cm}}
-\caption{Summary of Key Design Patterns} \\
+\begin{table}[H]
+\centering
+\caption{Summary of Key Design Patterns}
+\begin{tabularx}{\textwidth}{LLL}
 \toprule
-\multicolumn{1}{>{\centering\arraybackslash}p{4.5cm}}{\textbf{Pattern}} & \multicolumn{1}{>{\centering\arraybackslash}p{5cm}}{\textbf{Implementation}} & \multicolumn{1}{>{\centering\arraybackslash}p{4cm}}{\textbf{Thesis Concept Addressed}} \\
+\textbf{Pattern} & \textbf{Implementation} & \textbf{Thesis Concept Addressed} \\
 \midrule
-\endfirsthead
-
-\multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
-\toprule
-\multicolumn{1}{>{\centering\arraybackslash}p{4.5cm}}{\textbf{Pattern}} & \multicolumn{1}{>{\centering\arraybackslash}p{5cm}}{\textbf{Implementation}} & \multicolumn{1}{>{\centering\arraybackslash}p{4cm}}{\textbf{Thesis Concept Addressed}} \\
-\midrule
-\endhead
-
-\midrule
-\multicolumn{3}{r}{\textit{Continued on next page}} \\
-\endfoot
-
-\bottomrule
-\endlastfoot
-
 \textbf{Composable NFT Architecture} & RMRK 2.0 nested resources; subscription/PPV as children of Content NFT & \#1: Unified Rights Token \\
-\addlinespace
-
 \textbf{Counter-Based PPV} & Integer counter within View Pack resource; decrement per view & \#3: PPV as Counter, Not Token \\
-\addlinespace
-
 \textbf{Scheduled Cross-Chain Messaging} & XCM scheduler triggers renewal at specified block height & \#2: Recurring Cross-Chain Subscription \\
-\addlinespace
-
 \textbf{Metadata-Carrying Transfers} & XCM messages include rights metadata, royalty config, expiration & \#4: Metadata-Carrying Messages \\
-\addlinespace
-
 \textbf{Ownership-Subscription Unification} & Ownership NFT embeds perpetual subscription resource & \#5: Ownership = Subscription Upgrade \\
-\addlinespace
-
 \textbf{Cross-Chain Royalty Propagation} & Bridge notifications trigger on-chain royalty calculation and XCM distribution & \#6: Automatic Royalty Propagation \\
-\addlinespace
-
 \textbf{Bidirectional Bridging} & Lock/mint on transfer out; burn/unlock on return & Interoperability requirement \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\end{longtable}
+\bigskip\hrule\bigskip
+
+\section*{Implementation Notes (Phase 4--5)}
+
+The conceptual diagrams above represent the original design intent from Phase 2. During Phase 4 implementation, several architectural pivots were made in response to ecosystem changes and practical constraints. The diagrams remain valid as conceptual designs; the notes below document what changed and why.
+
+\subsection*{Architectural Pivots}
+
+\begin{table}[H]
+\centering
+\caption{Architectural Pivots --- Original vs Actual}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Diagram Element} & \textbf{Original Design} & \textbf{Actual Implementation} \\
+\midrule
+\textbf{RMRK 2.0 NFT Module} & All flows reference RMRK 2.0 as a participant & Replaced by \texttt{pallet-nfts} with attribute-based nesting \\
+\textbf{XCM Scheduler} & Auto-renewal via scheduled XCM at block height & \texttt{on\_initialize} hook with \texttt{AutoRenewIndex} storage map \\
+\textbf{Content Delivery Oracle} & PPV flow references an oracle for content streaming & Not implemented --- out of scope \\
+\textbf{Royalty Distribution} & Revenue split and cross-chain distribution after each payment & \texttt{pay\_with\_royalties} distributes to up to 10 collaborators per payment \\
+\textbf{Subscription Tiers} & Multiple tiers per content & Single subscription price per content \\
+\textbf{Cross-Chain NFT Transfer} & Lock/mint wrapped ERC-721 on Ethereum via Snowbridge & Snowbridge v1 bridges fungible tokens (ETH), not NFTs \\
+\textbf{Secondary Sale Royalties} & Bridge triggers royalty distribution on resale & Not implemented \\
+\bottomrule
+\end{tabularx}
 }
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Architectural Pivots --- Rationale}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LL}
+\toprule
+\textbf{Diagram Element} & \textbf{Rationale for Change} \\
+\midrule
+\textbf{RMRK 2.0 NFT Module} & RMRK 2.0 pallets were abandoned by the community (frozen at polkadot-v0.9.36, incompatible with current polkadot-sdk) \\
+\textbf{XCM Scheduler} & XCM v5 \texttt{Schedule} instruction is not production-ready; on-chain scheduler pattern achieves the same result \\
+\textbf{Content Delivery Oracle} & Content delivery is an off-chain concern; the pallet manages access rights only \\
+\textbf{Royalty Distribution} & Implemented for local collaborators; cross-chain royalty distribution via XCM is architecturally supported but not separately tested \\
+\textbf{Subscription Tiers} & Simplified for thesis scope; multiple tiers could be added via separate content registrations \\
+\textbf{Cross-Chain NFT Transfer} & NFT bridging requires Snowbridge v2 \texttt{Transact}; documented as future work \\
+\textbf{Secondary Sale Royalties} & Requires marketplace integration and event-driven bridge callbacks \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsection*{What Was Added Beyond the Original Design}
+
+\begin{itemize}
+    \item \textbf{\texttt{pallet-rights-verifier}} --- Merkle storage proof verification for trustless cross-chain rights checking (not in original diagrams)
+    \item \textbf{Custom pallet-revive precompile} --- Efficient contract-to-pallet bridge for \texttt{check\_access} (not in original diagrams)
+    \item \textbf{Full Snowbridge v1 E2E} --- Complete Ethereum $\rightarrow$ Bridge Hub $\rightarrow$ AssetHub token bridge with beacon light client, relayers, and proof verification (exceeded the original ``mock bridge'' scope)
+    \item \textbf{\texttt{RightsMetadata} struct} --- Rich metadata emitted via events for cross-chain consumption, addressing Concept \#4
+\end{itemize}
+
+\subsection*{State Diagram Accuracy}
+
+The Unified Rights Token State Diagram (Section 4) remains conceptually accurate. All states and transitions are implemented in \texttt{pallet-content-rights}:
+\begin{itemize}
+    \item ContentRegistered $\rightarrow$ SubscriptionActive/PPVAvailable/Owned: Complete
+    \item SubscriptionActive $\rightarrow$ SubscriptionExpired (with auto-renewal): Complete
+    \item PPVAvailable $\rightarrow$ PPVExhausted: Complete
+    \item Owned $\rightarrow$ OwnedBridged: Partially (token bridging only, not NFT bridging)
+\end{itemize}
 
 \end{document}

@@ -74,3 +74,29 @@ Blockchain technology, exemplified by Ethereum, surpasses centralized systems in
 #### Conclusion and Implications for Thesis
 
 Competing solutions reveal inherent trade-offs: Ethereum-based platforms facilitate innovative monetization strategies but face challenges with cross-chain scalability. Conversely, centralized solutions offer greater efficiency at the expense of decentralization. The proposed framework employs ink! contracts and XCM to bridge these gaps, aiming for a 99% success rate and a Herfindahl-Hirschman Index (HHI) below 1,500 to ensure balanced decentralization. Future evaluation, scheduled for Phase 4, should benchmark these solutions against Elacity (Ethereum) and Adobe (centralized) utilizing simulated load tests. This analysis further enhances the related work section, emphasizing the novelty of Polkadot's multi-chain framework for achieving economic efficiency in content management rights.
+
+---
+
+### Implementation Notes (Phase 4-5 Measured Results)
+
+The comparative table above was compiled during Phase 1 using theoretical estimates and published literature. Phase 4-5 implementation and testing produced measured results that should replace the theoretical projections in the thesis:
+
+| Metric | Phase 1 Estimate | Phase 5 Measured | Notes |
+|--------|-----------------|-----------------|-------|
+| **Polkadot TPS** | 500-1,000+ | **27 TPS sustained, 283 TPS theoretical** | Single parachain throughput is limited by relay chain slot allocation (~6s blocks). 27 TPS = 2.3M ops/day. Horizontal scaling occurs via additional parachains, not within a single chain. |
+| **XCM transfer latency** | <2 seconds | **18-32 seconds (3-5 parachain blocks)** | Theoretical estimate did not account for HRMP relay hops through the relay chain |
+| **Economic efficiency** | <5% fees, Monte Carlo 60% savings | **<1% blockchain fees; centralized comparison shows 270× performance cost for trustlessness** | Monte Carlo simulation not implemented; comparative analysis used a real centralized benchmark instead |
+| **Interoperability** | "Excellent, native XCM" | **XCM proven (100% success); Snowbridge E2E proven (2 ETH bridged)** | Confirmed — cross-chain and cross-ecosystem both demonstrated |
+| **Success rate target** | 99% success, HHI < 1,500 | **100% XCM success; 100% local extrinsic success (at tested concurrency)** | Exceeded the success rate target |
+
+#### Updated Comparative Table (with measured data)
+
+| Metric | Ethereum-Based | Centralized | **Polkadot (Measured)** |
+|--------|---------------|-------------|------------------------|
+| Scalability (TPS) | 15-100 TPS | 1,000-5,000 TPS | **27 TPS sustained; 283 TPS theoretical per parachain** |
+| Interoperability | EVM bridges (2-10s) | Ecosystem silos | **XCM: 18-32s; Snowbridge: ~1 min after finalization** |
+| Economic Efficiency | 95%+ creator retention | 50-70% creator share | **100% to creator (self-publishing); configurable royalty splits** |
+| Subscription | Tokenized; volatile | Seamless; opaque | **On-chain with auto-renewal via on_initialize hook** |
+| PPV/Purchase | NFT tokens; chain-bound | Session licenses; revocable | **Counter-based PPV; permanent ownership with cross-chain transfer** |
+| Trust Model | Trustless (single chain) | Trusted third party | **Trustless (relay chain consensus + Snowbridge light client)** |
+| Latency | 12-15s (Ethereum L1) | <200ms | **~6s (1 block), 12-18s finality** |

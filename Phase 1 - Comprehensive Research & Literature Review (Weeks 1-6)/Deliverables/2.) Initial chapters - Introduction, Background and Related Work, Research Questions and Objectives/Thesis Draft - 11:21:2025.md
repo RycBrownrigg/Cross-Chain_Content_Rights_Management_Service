@@ -192,6 +192,44 @@ These refined questions and objectives directly address the critical gaps identi
     
     Platform fee ranges (30–45 %) and delayed payouts.
 
-25. **Di Francesco, A., & Zoppi, S.** (2024). A survey on trustless cross-chain interoperability solutions. *DLT 2024 Proceedings*.  
-    
+25. **Di Francesco, A., & Zoppi, S.** (2024). A survey on trustless cross-chain interoperability solutions. *DLT 2024 Proceedings*.
+
     Comprehensive taxonomy including Polkadot strengths and remaining gaps.
+
+---
+
+## Implementation Notes (Phase 4-5)
+
+This thesis draft was written in November 2025 during Phase 1, before implementation. The following claims require revision in the final thesis to reflect measured results from Phase 4-5 testing:
+
+### Performance Claims Requiring Revision
+
+| Draft Claim | Measured Result | Revision Needed |
+|-------------|----------------|-----------------|
+| "sub-second finality in access verification" | ~6 seconds (one block time) | Replace with "deterministic ~6 second inclusion latency" |
+| "XCM extensions achieving <2s finality" (RO1) | 18-32 seconds (3-5 parachain blocks) | Replace with measured XCM latency range |
+| "access verification within one second" (RO2) | ~6 seconds | Replace with measured block time; note client-side caching as path to sub-second |
+| "transaction costs below one cent" | Achieved — on-chain fees are negligible | No revision needed |
+| "creator revenue retention exceeding 95%" | 100% in self-publishing model (configurable royalty splits) | Update to reflect self-publishing eliminates intermediary entirely |
+
+### Architecture Claims Requiring Revision
+
+| Draft Claim | Actual Implementation | Revision Needed |
+|-------------|----------------------|-----------------|
+| "ink! smart contracts deliver a unified rights token" | `pallet-content-rights` (FRAME pallet) is the primary logic; ink! contract provides API layer via pallet-revive precompile | Reframe: FRAME pallet as primary, ink! as external interface |
+| "XCM cross-consensus messaging" for rights transfers | Confirmed — 6 XCM extrinsics implemented, 100% success rate | No revision needed |
+| "zero-knowledge (ZK) compliance interfaces" | Not implemented | Move to Future Work section |
+| "quantify savings through Monte Carlo simulation" | Not implemented; replaced by direct centralized benchmark (270× TPS ratio) | Replace Monte Carlo with comparative analysis methodology |
+| "HHI remains below 1,500" | Not measured | Remove or move to Future Work |
+
+### What the Thesis Should Emphasise
+
+The final thesis should reframe the contribution around what was actually demonstrated:
+
+1. **Unified rights pallet** with subscription, PPV, and ownership in a single FRAME pallet (17 extrinsics, 56 unit tests)
+2. **Cross-chain operations** via XCM with paid execution (100% success, 18-32s latency)
+3. **Ethereum bridge** via full Snowbridge v1 E2E (2 ETH bridged with cryptographic proof verification)
+4. **Automatic royalty propagation** with configurable splits (up to 10 collaborators, basis-point precision)
+5. **On-chain auto-renewal** via `on_initialize` scheduler pattern
+6. **Performance trade-off analysis**: 270× slower than centralized but trustless, censorship-resistant, and self-publishing
+7. **Self-publishing model** that eliminates intermediaries entirely (vs traditional 15-30% platform fees)

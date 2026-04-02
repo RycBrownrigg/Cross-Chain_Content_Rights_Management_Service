@@ -15,10 +15,15 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{parskip}
+\usepackage[T1]{fontenc}
 \usepackage{times}
+\usepackage{float}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{tabularx}
+\usepackage{array}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
 \begin{document}
 
@@ -88,10 +93,10 @@ Centralized systems provide low latency (less than 200 milliseconds) and high re
 
 The table below presents a comparison among Ethereum-based, centralized, and the proposed Polkadot system across various thesis metrics. The data is derived from benchmarks, such as Ethereum's TPS from academic literature and centralized systems from providers like AWS and Netflix reports).
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Comparison of Ethereum-Based, Centralized, and Proposed Polkadot Framework}
-\begin{tabularx}{\textwidth}{lXXX}
+\begin{tabularx}{\textwidth}{lLLL}
 \toprule
 \textbf{Metric} & \textbf{Ethereum-Based (e.g., Elacity/UPV)} & \textbf{Centralized (e.g., Adobe/Netflix)} & \textbf{Proposed Polkadot Framework} \\
 \midrule
@@ -110,5 +115,45 @@ Blockchain technology, exemplified by Ethereum, surpasses centralized systems in
 \subsection*{Conclusion and Implications for Thesis}
 
 Competing solutions reveal inherent trade-offs: Ethereum-based platforms facilitate innovative monetization strategies but face challenges with cross-chain scalability. Conversely, centralized solutions offer greater efficiency at the expense of decentralization. The proposed framework employs ink! contracts and XCM to bridge these gaps, aiming for a 99\% success rate and a Herfindahl-Hirschman Index (HHI) below 1,500 to ensure balanced decentralization. Future evaluation, scheduled for Phase 4, should benchmark these solutions against Elacity (Ethereum) and Adobe (centralized) utilizing simulated load tests. This analysis further enhances the related work section, emphasizing the novelty of Polkadot's multi-chain framework for achieving economic efficiency in content management rights.
+
+\subsection*{Implementation Notes (Phase 4--5 Measured Results)}
+
+The comparative table above was compiled during Phase~1 using theoretical estimates and published literature. Phase~4--5 implementation and testing produced measured results that should replace the theoretical projections in the thesis:
+
+\begin{table}[H]
+\centering
+\caption{Phase 1 Estimates vs Phase 5 Measured Results}
+\begin{tabularx}{\textwidth}{lLLL}
+\toprule
+\textbf{Metric} & \textbf{Phase 1 Estimate} & \textbf{Phase 5 Measured} & \textbf{Notes} \\
+\midrule
+\textbf{Polkadot TPS} & 500--1,000+ & \textbf{27 TPS sustained, 283 TPS theoretical} & Single parachain throughput is limited by relay chain slot allocation (\textasciitilde6s blocks). 27 TPS = 2.3M ops/day. Horizontal scaling occurs via additional parachains, not within a single chain. \\
+\textbf{XCM transfer latency} & <2 seconds & \textbf{18--32 seconds (3--5 parachain blocks)} & Theoretical estimate did not account for HRMP relay hops through the relay chain \\
+\textbf{Economic efficiency} & <5\% fees, Monte Carlo 60\% savings & \textbf{<1\% blockchain fees; centralized comparison shows 270$\times$ performance cost for trustlessness} & Monte Carlo simulation not implemented; comparative analysis used a real centralized benchmark instead \\
+\textbf{Interoperability} & ``Excellent, native XCM'' & \textbf{XCM proven (100\% success); Snowbridge E2E proven (2 ETH bridged)} & Confirmed --- cross-chain and cross-ecosystem both demonstrated \\
+\textbf{Success rate target} & 99\% success, HHI < 1,500 & \textbf{100\% XCM success; 100\% local extrinsic success (at tested concurrency)} & Exceeded the success rate target \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection*{Updated Comparative Table (with measured data)}
+
+\begin{table}[H]
+\centering
+\caption{Updated Comparison with Measured Polkadot Results}
+\begin{tabularx}{\textwidth}{lLLL}
+\toprule
+\textbf{Metric} & \textbf{Ethereum-Based} & \textbf{Centralized} & \textbf{Polkadot (Measured)} \\
+\midrule
+Scalability (TPS) & 15--100 TPS & 1,000--5,000 TPS & \textbf{27 TPS sustained; 283 TPS theoretical per parachain} \\
+Interoperability & EVM bridges (2--10s) & Ecosystem silos & \textbf{XCM: 18--32s; Snowbridge: \textasciitilde1 min after finalization} \\
+Economic Efficiency & 95\%+ creator retention & 50--70\% creator share & \textbf{100\% to creator (self-publishing); configurable royalty splits} \\
+Subscription & Tokenized; volatile & Seamless; opaque & \textbf{On-chain with auto-renewal via on\_initialize hook} \\
+PPV/Purchase & NFT tokens; chain-bound & Session licenses; revocable & \textbf{Counter-based PPV; permanent ownership with cross-chain transfer} \\
+Trust Model & Trustless (single chain) & Trusted third party & \textbf{Trustless (relay chain consensus + Snowbridge light client)} \\
+Latency & 12--15s (Ethereum L1) & <200ms & \textbf{\textasciitilde6s (1 block), 12--18s finality} \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \end{document}

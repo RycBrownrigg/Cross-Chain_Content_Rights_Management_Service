@@ -1,0 +1,132 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Weeks 13--14: Contract Implementation Summary}
+
+\subsection*{Planned Deliverables (from thesis plan)}
+
+\begin{itemize}
+    \item Develop SubscriptionManager.rs (state management, payments, verification)
+    \item Implement PayPerView.rs (one-time access, tokens)
+    \item Create PurchaseVerification.rs (ownership transfers, resale)
+    \item Write unit tests (80\% coverage) and deploy to local testnet
+\end{itemize}
+
+\subsection*{What Was Actually Built}
+
+The original plan envisioned three separate ink! smart contracts. Based on Phase 3 architecture decisions (RMRK 2.0 pallets abandoned, pallet-nfts adopted instead), the implementation was refactored into a \textbf{FRAME pallet + ink! contract} architecture:
+
+\subsubsection*{1. pallet-content-rights (replaces all three planned contracts)}
+
+\textbf{Location:} pallets/content-rights/
+
+A unified FRAME pallet that handles all three access models through a single RightsType enum, backed by pallet-nfts for token storage:
+
+\begin{table}[H]
+\centering
+\caption{Planned Contracts vs Pallet Implementation}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Planned Contract} & \textbf{Pallet Implementation} & \textbf{Key Extrinsics} \\
+\midrule
+SubscriptionManager.rs & RightsType::Subscription & register\_content, subscribe, renew\_subscription, check\_access \\
+PayPerView.rs & RightsType::PayPerView & register\_content (with PPV price), pay\_per\_view, check\_access \\
+PurchaseVerification.rs & RightsType::Ownership & register\_content, subscribe (permanent), transfer\_ownership, transfer\_ownership\_cross\_chain \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\textbf{Relevant commits:}
+\begin{itemize}
+    \item 5d8ab9a --- Add pallet-nfts to runtime for content rights NFT layer
+    \item 8b532b5 --- Add pallet-content-rights with full rights management and 23 unit tests
+    \item 2a7962e --- Add ownership transfer extrinsics (local and cross-chain)
+\end{itemize}
+
+\subsubsection*{2. RightsManager ink! 6 Contract}
+
+\textbf{Location:} contracts/rights-manager/
+
+An ink! 6 smart contract that provides a higher-level API over the pallet, deployed on pallet-revive (PolkaVM):
+
+\begin{itemize}
+    \item mint\_content\_rights --- Creates a rights NFT for content
+    \item check\_access --- Verifies access via custom precompile
+\end{itemize}
+
+\textbf{Relevant commits:}
+\begin{itemize}
+    \item f4bc50c --- Scaffold RightsManager ink! 6 contract
+    \item 7bc9651 --- Add custom pallet-revive precompile for content rights read access
+\end{itemize}
+
+\subsubsection*{3. Unit Tests}
+
+\textbf{23 unit tests} in pallets/content-rights/src/tests.rs covering:
+\begin{itemize}
+    \item Content registration (all three types)
+    \item Subscription creation and renewal
+    \item Pay-per-view access and counter tracking
+    \item Ownership transfers (local and cross-chain)
+    \item Expiry and access checks
+    \item Error paths (unauthorized, not found, expired)
+\end{itemize}
+
+\textbf{Relevant commit:} 8b532b5
+
+\subsubsection*{4. Local Testnet Deployment}
+
+Deployed and verified on Zombienet local testnet:
+\begin{itemize}
+    \item 2-chain topology (Rococo relay + Content Rights parachain 100)
+    \item Verified via scripts/verify-runtime-has-contracts.sh
+\end{itemize}
+
+\subsection*{Deviations from Plan}
+
+\begin{table}[H]
+\centering
+\caption{Deviations from Plan}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Planned} & \textbf{Actual} & \textbf{Rationale} \\
+\midrule
+Three separate ink! contracts & One FRAME pallet + one ink! contract & FRAME pallets are more efficient for core state management; ink! provides the external API layer \\
+ink! on pallet-contracts (WASM) & ink! 6 on pallet-revive (PolkaVM) & pallet-revive is the current Polkadot SDK direction; pallet-contracts is legacy \\
+RMRK 2.0 for NFT nesting & pallet-nfts with attribute-based semantics & RMRK pallets abandoned and incompatible with current polkadot-sdk \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\end{document}

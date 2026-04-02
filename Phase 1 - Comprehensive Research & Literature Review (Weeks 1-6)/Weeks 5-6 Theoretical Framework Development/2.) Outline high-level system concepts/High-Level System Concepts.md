@@ -16,3 +16,21 @@ These concepts constitute the fundamental intellectual foundations of the system
 | **9. Creator-First Economic Flywheel** | The same rights token incorporates an integrated Monte Carlo pricing simulator, which creators may query on-chain to evaluate subscription pricing, pay-per-view (PPV) pricing, and outright sale options prior to launch. | No literature precedent – moves from reactive analytics to predictive economics. | Higher creator earnings through data-driven pricing. |
 
 These nine concepts collectively constitute the foundational theoretical framework of the system. They are intentionally designed to be technology-agnostic at this stage; however, they are sufficiently detailed to inform every architectural decision.
+
+---
+
+### Implementation Status (Phase 4-5)
+
+The following table documents how each concept was realised during implementation, including architectural pivots and features deferred to future work. A detailed alignment analysis is available in `Phase 5/Week 20/Phase 1-3 Document Alignment Review.md`.
+
+| # | Concept | Status | Implementation Notes |
+|---|---------|--------|---------------------|
+| 1 | Unified Rights Token | **Implemented** | Realised as `pallet-content-rights` with a `RightsType` enum (Subscription/PayPerView/Ownership). Uses `pallet-nfts` for child NFTs rather than RMRK 2.0 equipped resources (RMRK pallets were abandoned by the community at polkadot-v0.9.36). The unified model is achieved through storage maps and a single pallet, not a single NFT object. |
+| 2 | Recurring Cross-Chain Subscription | **Implemented** | On-chain auto-renewal via `on_initialize` hook processes expired subscriptions with `auto_renew = true` each block. Cross-chain renewal uses XCM `Transact`. The original concept of scheduled XCM messages was replaced by an on-chain scheduler pattern — XCM v5's `Schedule` instruction is not yet production-ready. |
+| 3 | PPV as Counter | **Implemented** | `ViewPack` storage with `views_remaining` counter. Decrement per view, no new tokens minted. Matches concept exactly. |
+| 4 | Metadata-Carrying XCM | **Implemented** | `query_rights_metadata` extrinsic emits a `RightsMetadata` struct containing the complete rights policy (pricing, royalty config, content details). This can be called via XCM `Transact` from any chain. The metadata is emitted as an event rather than embedded in the XCM payload itself, due to XCM payload size constraints (~4KB). |
+| 5 | Ownership = Subscription Upgrade | **Implemented** | `check_access` returns true for owners (permanent access). Ownership is a separate storage entry that takes priority in the access check hierarchy. |
+| 6 | Automatic Royalty Propagation | **Implemented** | `set_royalty_splits` allows creators to configure up to 10 collaborators with basis-point precision. All payment operations (subscribe, renew, PPV, ownership) distribute revenue automatically. Creator receives the remainder after all splits. |
+| 7 | Sub-Second Access Verification | **Not achieved** | Access verification takes ~6 seconds (one block time). Sub-second verification would require off-chain indexing or client-side caching. Discussed in the thesis as a performance trade-off inherent to on-chain verification. |
+| 8 | Privacy Layer (ZKP) | **Future work** | Not implemented. Documented as a future research direction for regulatory compliance. |
+| 9 | Monte Carlo Pricing | **Future work** | Not implemented. On-chain simulation would require significant computation; better suited to an off-chain oracle pattern. |

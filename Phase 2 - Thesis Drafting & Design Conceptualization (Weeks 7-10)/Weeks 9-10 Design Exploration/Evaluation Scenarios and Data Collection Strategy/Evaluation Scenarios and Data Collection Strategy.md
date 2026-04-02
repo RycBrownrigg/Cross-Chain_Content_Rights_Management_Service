@@ -683,3 +683,32 @@ The measurement-focused approach ensures that regardless of specific outcomes, t
 ---
 
 *This document satisfies the Phase 2 Week 9-10 deliverable: "Design evaluation scenarios and data collection strategy." It is prepared for integration into the thesis Methodology and Evaluation chapters.*
+
+---
+
+## Phase 5 Evaluation Mapping
+
+The following table maps the planned evaluation scenarios to the actual testing performed in Phase 5 (Weeks 17-20).
+
+| Scenario | Planned | Actual Test | Coverage |
+|----------|---------|-------------|----------|
+| ES-01: XCM Transfer Success Rate | 100 transfers, 3 payload sizes | `xcm-latency.mjs`: 9 cross-chain operations, 100% success | Partially covered — fewer iterations but all succeeded |
+| ES-02: Scheduled XCM Renewal | 50 scheduled renewals | Unit tests: `auto_renew_processes_expired_subscription` validates on-chain scheduler. XCM scheduled renewal not tested (replaced by on_initialize pattern) | Covered differently |
+| ES-03: Bridge Latency | Snowbridge round-trip | Snowbridge E2E: 2 ETH bridged Ethereum → AssetHub via full relay pipeline | Covered — exceeded plan with full v1 bridge |
+| ES-04: Access Verification Latency | <1 second target | `local-throughput.mjs`: measured at ~6,000ms (1 block). Documented as performance trade-off | Covered — target not met, documented in thesis |
+| ES-05-06: Rights Token Operations | RMRK-based operations | `local-throughput.mjs` + `stress-test.mjs`: all 6 extrinsic types benchmarked at batch 1-1000 | Fully covered |
+| ES-07-08: Composable Rights | Feasibility | 56 unit tests + XCM simulator + Zombienet E2E validate unified rights model | Fully covered |
+| ES-09-11: Benchmark vs Alternatives | Ethereum L2, centralized DRM | `centralized-drm-benchmark/`: Express+SQLite comparison (270× TPS ratio). Ethereum L2 comparison via published data | Partially covered — centralized benchmark built, no Ethereum L2 benchmark |
+| ES-12: Zero-Knowledge Proof Hooks | Implementation feasibility | Not implemented — documented as future work | Not covered |
+| ES-13: Monte Carlo Simulation | Creator savings | Not implemented — documented as future work | Not covered |
+
+### Actual Deliverables Produced (vs Planned)
+
+| Planned | Actual |
+|---------|--------|
+| Performance metrics across all KPIs |  11 KPIs measured, 10/11 targets met (Chapter 6 Table 6.2) |
+| Comparative analysis vs alternatives |  Centralized benchmark: 270× TPS, 67,000× latency ratios |
+| ZK proof feasibility |  Deferred to future work |
+| Monte-Carlo simulation |  Deferred to future work |
+| Usability scores |  Not in scope (no user study conducted) |
+| Expert validation |  Not Complete |

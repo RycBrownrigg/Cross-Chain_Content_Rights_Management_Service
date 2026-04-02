@@ -1,0 +1,715 @@
+	\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Evaluation Scenarios and Data Collection Strategy}
+\subsection*{Cross-Chain Content Rights Management Service}
+
+This document delineates the evaluation scenarios and data collection strategy for the CCRMS framework, aligning with the measurement-focused research objectives (RO1--RO6) and the Key Performance Indicators (KPIs) established in the Methodology chapter. The evaluation is structured to document attainable outcomes across technical, economic, and user-centric dimensions rather than to assess against predetermined benchmarks.
+
+\bigskip\hrule\bigskip
+
+\section{Evaluation Framework Overview}
+
+\subsection{Evaluation Philosophy}
+
+The evaluation adopts an \textbf{exploratory, measurement-focused approach} wherein the primary objective is to:
+
+\begin{enumerate}
+    \item \textbf{Document} what levels of performance, efficiency, and usability the CCRMS framework achieves
+    \item \textbf{Compare} measured results against established baselines (Ethereum L2s, centralised DRM, bridge-based solutions)
+    \item \textbf{Analyse} trade-offs between competing objectives (e.g., decentralisation vs. latency)
+    \item \textbf{Identify} limitations, bottlenecks, and areas for future improvement
+\end{enumerate}
+
+This method ensures a valid academic contribution, irrespective of particular results achieved.
+
+\subsection{Mapping to Research Objectives}
+
+\begin{table}[H]
+\centering
+\caption{Evaluation Scenarios Mapped to Research Objectives}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Research Objective} & \textbf{Evaluation Focus} & \textbf{Primary Scenarios} \\
+\midrule
+RO1: XCM extensions for recurring transfers & Atomic success rates, cross-chain finality times & ES-01, ES-02, ES-03 \\
+RO2: Unified ink! rights token & Access verification latency & ES-04, ES-05, ES-06 \\
+RO3: Composable rights pallet & Feasibility and trade-offs of unification & ES-07, ES-08 \\
+RO4: Benchmark against alternatives & TPS, costs, revenue retention comparison & ES-09, ES-10, ES-11 \\
+RO5: Zero-knowledge proof hooks & Implementation feasibility & ES-12 \\
+RO6: Creator savings quantification & Monte-Carlo simulation results & ES-13 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\bigskip\hrule\bigskip
+
+\section{Evaluation Scenarios}
+
+\subsection{Category A: Cross-Chain Functionality (RO1)}
+
+\subsubsection{ES-01: Basic XCM Transfer Success Rate}
+
+\textbf{Objective:} Assess the success rate and finality duration of XCM messages that transmit rights metadata between parachains.
+
+\textbf{Scenario Description:}
+\begin{itemize}
+    \item Initiate 100 XCM transfers from CCRMS parachain to Asset Hub
+    \item Each transfer carries a simulated rights token with metadata (expiration, royalty config)
+    \item Vary payload sizes: minimal (256 bytes), standard (1 KB), maximum (4 KB)
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{ES-01 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Number of transfers & 100 per payload size (300 total) \\
+Payload sizes & 256 B, 1 KB, 4 KB \\
+Network conditions & Normal, congested (simulated) \\
+Repetitions & 3 runs per configuration \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Success/failure status for each transfer; time from send to confirmation (finality time); error types for failed transfers; gas/weight consumed per transfer.
+
+\textbf{Expected Outputs:} Success rate percentage per configuration; mean, median, and standard deviation of finality times; failure mode classification.
+
+\subsubsection{ES-02: Scheduled XCM Renewal Accuracy}
+
+\textbf{Objective:} Evaluate the reliability and timing accuracy of scheduled XCM messages for subscription auto-renewal.
+
+\textbf{Scenario Description:}
+\begin{itemize}
+    \item Schedule 50 subscription renewals at specific future block heights
+    \item Block height intervals: 10 blocks, 100 blocks, 1000 blocks ahead
+    \item Measure actual execution time vs. scheduled time
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{ES-02 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Number of scheduled renewals & 50 per interval (150 total) \\
+Scheduling intervals & 10, 100, 1000 blocks \\
+Pre-authorised balance states & Sufficient, insufficient, exact \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Scheduled block height vs. actual execution block; timing deviation (blocks early/late); success rate based on balance availability; behaviour during chain congestion.
+
+\textbf{Expected Outputs:} Scheduling accuracy metrics (deviation distribution); renewal success rate by balance state; identified edge cases and failure modes.
+
+\subsubsection{ES-03: Cross-Chain Royalty Distribution}
+
+\textbf{Objective:} Measure the reliability and latency of multi-recipient royalty distributions across chains.
+
+\textbf{Scenario Description:}
+\begin{itemize}
+    \item Simulate secondary sale triggering royalty distribution
+    \item Recipients distributed across: CCRMS parachain (2), Asset Hub (2), external chain simulation (1)
+    \item Vary royalty split complexity: 2, 5, 10 recipients
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{ES-03 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Number of test sales & 30 per split configuration (90 total) \\
+Recipient counts & 2, 5, 10 \\
+Recipient locations & Mixed (local + cross-chain) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Time from sale to all royalties received; per-recipient delivery success/failure; total gas cost for distribution; partial failure handling behaviour.
+
+\textbf{Expected Outputs:} End-to-end royalty distribution time by complexity; success rate per recipient location type; cost scaling analysis.
+
+\subsection{Category B: Access Verification Performance (RO2)}
+
+\subsubsection{ES-04: Subscription Access Verification Latency}
+
+\textbf{Objective:} Measure end-to-end latency for subscription-based access verification under varying conditions.
+
+\begin{table}[H]
+\centering
+\caption{ES-04 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Number of requests & 500 per state (1500 total) \\
+Subscription states & Active (>7 days), Near-expiry (<24 hours), Expired \\
+Concurrent requests & 1, 10, 50, 100 simultaneous \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Request-to-response latency (milliseconds); breakdown: network, on-chain query, response formatting; throughput under concurrent load; error rates under load.
+
+\textbf{Expected Outputs:} Latency distribution by subscription state; latency vs. concurrency curves; maximum sustainable concurrent requests.
+
+\subsubsection{ES-05: PPV Counter Verification and Decrement}
+
+\textbf{Objective:} Measure latency and accuracy of PPV counter operations (check + decrement).
+
+\begin{table}[H]
+\centering
+\caption{ES-05 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Number of view requests & 200 per counter state (600 total) \\
+Counter states & Full (10), Partial (5), Final (1), Exhausted (0) \\
+Request patterns & Sequential, burst (10 rapid requests) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Verification + decrement latency; counter accuracy (no double-spend, no over-decrement); behaviour at boundary (counter = 1 $\rightarrow$ 0); race condition handling under burst.
+
+\textbf{Expected Outputs:} Latency distribution for PPV operations; counter integrity verification results; concurrent access handling analysis.
+
+\subsubsection{ES-06: Ownership Verification with Perpetual Subscription}
+
+\textbf{Objective:} Verify that ownership check correctly returns perpetual subscription status without separate queries.
+
+\begin{table}[H]
+\centering
+\caption{ES-06 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Number of verifications & 300 \\
+Ownership states & Owner, non-owner, bridged owner \\
+Query methods & Unified query, separate queries (for comparison) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Expected Outputs:} Latency comparison: unified vs. separate approach; storage efficiency metrics; validation of unified rights token concept.
+
+\subsection{Category C: Monetisation Model Integration (RO3)}
+
+\subsubsection{ES-07: Model Transition Scenarios}
+
+\textbf{Objective:} Evaluate the feasibility and user experience of transitioning between monetisation models.
+
+\begin{table}[H]
+\centering
+\caption{ES-07 Expected Transition Behaviours}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Transition} & \textbf{Expected Behaviour} \\
+\midrule
+PPV $\rightarrow$ Subscription & Retain remaining views + add subscription \\
+Subscription $\rightarrow$ Ownership & Convert to perpetual, cancel scheduled renewals \\
+Expired Subscription $\rightarrow$ PPV & Issue View Pack, retain expired sub record \\
+PPV $\rightarrow$ Ownership & Retain remaining views + add perpetual access \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Transaction success/failure for each transition; state consistency before/after transition; user-facing latency for upgrade operations; edge case handling (e.g., mid-renewal upgrade).
+
+\subsubsection{ES-08: Bundled Access Verification}
+
+\textbf{Objective:} Test scenarios where users hold multiple access types simultaneously.
+
+\begin{table}[H]
+\centering
+\caption{ES-08 Access Resolution Test Cases}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Content Requested} & \textbf{User Rights} & \textbf{Expected Resolution} \\
+\midrule
+Content A & Subscription (active) & Grant via subscription \\
+Content B & PPV (5 views) & Grant via PPV, decrement \\
+Content C & Ownership & Grant via perpetual \\
+Content D & None & Deny access \\
+Content A & Subscription (expired) + PPV available & Prompt renewal or use PPV \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Expected Outputs:} Access resolution accuracy rate; priority handling documentation; complex state management analysis.
+
+\subsection{Category D: Scalability and Performance (RO4)}
+
+\subsubsection{ES-09: Transaction Throughput Under Load}
+
+\textbf{Objective:} Measure maximum sustainable TPS for core operations on the CCRMS parachain.
+
+\begin{table}[H]
+\centering
+\caption{ES-09 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+Load levels (TPS target) & 10, 50, 100, 200, 500, 1000 \\
+Test duration per level & 5 minutes sustained \\
+Operation mix & 60\% access verifications, 25\% PPV purchases, 10\% subscriptions, 5\% ownership transfers \\
+Node configurations & 5, 10, 20, 50 validator nodes \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Expected Outputs:} TPS capacity curve by node configuration; latency degradation analysis; bottleneck identification; optimal operating parameters.
+
+\subsubsection{ES-10: Comparative Benchmark: Ethereum L2}
+
+\textbf{Objective:} Compare CCRMS performance against equivalent operations on Ethereum L2 (e.g., Arbitrum, Optimism).
+
+\begin{table}[H]
+\centering
+\caption{ES-10 Comparison Metrics}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Metric} & \textbf{CCRMS Measurement} & \textbf{Ethereum L2 Measurement} \\
+\midrule
+TPS (PPV operations) & From ES-09 & Equivalent test \\
+Transaction cost & DOT/KSM equivalent & ETH gas cost \\
+Finality time & Block confirmation & L2 + L1 finality \\
+Cross-chain transfer time & XCM to Asset Hub & Bridge to L1/other L2 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Expected Outputs:} Comparative performance table; cost efficiency analysis; trade-off discussion for thesis.
+
+\subsubsection{ES-11: Comparative Benchmark: Centralised DRM}
+
+\textbf{Objective:} Compare CCRMS latency and costs against centralised DRM baseline.
+
+\begin{table}[H]
+\centering
+\caption{ES-11 Comparison Metrics}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Metric} & \textbf{CCRMS} & \textbf{Centralised Baseline} \\
+\midrule
+Access verification latency & Measured & Lambda cold/warm start \\
+Throughput capacity & Measured TPS & Lambda concurrent executions \\
+Cost per 1000 operations & DOT/KSM fees & AWS pricing \\
+Decentralisation (HHI) & Calculated & N/A (centralised) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Expected Outputs:} Latency comparison analysis; total cost of ownership comparison; trade-off matrix (decentralisation vs. performance).
+
+\subsection{Category E: Security and Reliability (RO4 continued)}
+
+\subsubsection{ES-12: Zero-Knowledge Proof Feasibility (RO5)}
+
+\textbf{Objective:} Assess the feasibility of integrating ZK proof hooks for selective regulatory disclosure.
+
+\begin{table}[H]
+\centering
+\caption{ES-12 Test Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\
+\midrule
+ZK framework & RISC Zero or zkMega (based on availability) \\
+Proof types & Subscription validity, purchase ownership, revenue threshold \\
+Hardware & Standard development machine (baseline) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data to Collect:} Proof generation time; proof verification time (on-chain); proof size (bytes); integration effort estimate (developer hours).
+
+\textbf{Expected Outputs:} Feasibility assessment (viable/not viable/conditionally viable); performance characteristics documentation; recommendations for future implementation.
+
+\subsection{Category F: Economic Analysis (RO6)}
+
+\subsubsection{ES-13: Monte-Carlo Creator Revenue Simulation}
+
+\textbf{Objective:} Quantify potential creator savings using the CCRMS framework compared to alternatives.
+
+\begin{table}[H]
+\centering
+\caption{ES-13 Simulation Parameters}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Parameter} & \textbf{Distribution} \\
+\midrule
+Audience size & Log-normal ($\mu$=1000, $\sigma$=2) \\
+Content price & Uniform (\$1--\$50) \\
+Subscription rate & Beta ($\alpha$=2, $\beta$=5) \\
+PPV conversion & Beta ($\alpha$=1, $\beta$=10) \\
+Secondary sale probability & Exponential ($\lambda$=0.1) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Platform Fee Structures}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Platform Type} & \textbf{Creator Retention} \\
+\midrule
+Centralised (YouTube, Spotify) & 55--70\% \\
+Existing Web3 (OpenSea, etc.) & 85--92.5\% \\
+Bridge-based solutions & 85--92\% \\
+CCRMS (estimated) & 95--99\% (to be measured) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Expected Outputs:} Expected creator savings distribution; confidence intervals for savings estimates; scenario analysis (best/worst/typical cases).
+
+\bigskip\hrule\bigskip
+
+\section{Data Collection Strategy}
+
+\subsection{Quantitative Data Collection}
+
+\subsubsection{On-Chain Metrics}
+
+\textbf{Collection Method:} Substrate telemetry + custom event logging
+
+\textbf{Tools:}
+\begin{itemize}
+    \item Prometheus for metrics aggregation
+    \item Grafana for visualisation and alerting
+    \item SubQuery for historical event indexing
+    \item Custom Rust scripts using subxt for transaction submission
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{On-Chain Metrics Collection}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Metric Category} & \textbf{Specific Metrics} & \textbf{Collection Frequency} \\
+\midrule
+Transaction Performance & TPS, latency, gas used & Per-block \\
+XCM Operations & Success rate, finality time, payload size & Per-message \\
+State Changes & NFT mints, transfers, burns, counter updates & Per-event \\
+Resource Utilisation & Block weight, storage growth & Per-block \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Data Schema:}
+\begin{verbatim}
+{
+  "timestamp": "ISO-8601",
+  "block_number": integer,
+  "event_type": string,
+  "operation": string,
+  "latency_ms": float,
+  "gas_used": integer,
+  "success": boolean,
+  "error_code": string | null,
+  "metadata": object
+}
+\end{verbatim}
+
+\subsubsection{Off-Chain Metrics}
+
+\textbf{Collection Method:} Application-level instrumentation
+
+\begin{table}[H]
+\centering
+\caption{Off-Chain Metrics Collection}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Metric Category} & \textbf{Specific Metrics} & \textbf{Collection Frequency} \\
+\midrule
+API Performance & Request latency, throughput & Per-request \\
+User Sessions & Session duration, actions per session & Per-session \\
+Error Rates & Error types, frequency, recovery time & Per-error \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Comparative Baseline Data}
+
+\textbf{Ethereum L2 Data:}
+\begin{itemize}
+    \item Deploy equivalent contracts to Arbitrum Sepolia / Optimism Goerli
+    \item Use Hardhat for deployment and testing
+    \item Etherscan API for transaction data
+\end{itemize}
+
+\textbf{Centralised Baseline Data:}
+\begin{itemize}
+    \item AWS CloudWatch metrics
+    \item Lambda execution logs
+    \item DynamoDB consumed capacity units
+\end{itemize}
+
+\subsection{Qualitative Data Collection}
+
+\subsubsection{Expert Interviews}
+
+\textbf{Participants:} 5--10 blockchain developers/researchers with Polkadot/Kusama experience
+
+\textbf{Recruitment:} Polkadot forums, academic networks, Web3 developer communities
+
+\textbf{Interview Protocol:}
+\begin{itemize}
+    \item Semi-structured format (45--60 minutes)
+    \item Topics: Architecture review, feasibility assessment, improvement suggestions
+    \item Recording: Audio with consent, transcribed for analysis
+\end{itemize}
+
+\textbf{Sample Questions:}
+\begin{enumerate}
+    \item How does the RMRK 2.0 + scheduled XCM approach compare to alternatives you've seen?
+    \item What potential issues do you foresee with the unified rights token model?
+    \item How would you assess the production-readiness of this architecture?
+\end{enumerate}
+
+\subsubsection{User Testing Sessions}
+
+\textbf{Participants:} 20--30 users (mix of content creators and consumers)
+
+\textbf{Session Structure:}
+\begin{enumerate}
+    \item Pre-test questionnaire (demographics, Web3 experience)
+    \item Guided task completion (subscribe, PPV purchase, ownership transfer)
+    \item Think-aloud protocol during tasks
+    \item Post-test questionnaire (usability, satisfaction)
+    \item Semi-structured debrief interview
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{User Testing Tasks}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Task ID} & \textbf{Description} & \textbf{Monetisation Model} \\
+\midrule
+UT-01 & Subscribe to content for 30 days & Subscription \\
+UT-02 & Purchase 5-view pack and consume 2 views & PPV \\
+UT-03 & Buy content permanently & Purchase \\
+UT-04 & Transfer owned content to different wallet & Ownership transfer \\
+UT-05 & Upgrade from subscription to ownership & Model transition \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Usability Questionnaires}
+
+\textbf{Instrument:} System Usability Scale (SUS) + custom questions
+
+\textbf{SUS Questions:} Standard 10-item scale, scored 0--100, industry benchmark \textasciitilde{}68.
+
+\textbf{Custom Questions (5-point Likert scale):}
+\begin{enumerate}
+    \item The process of subscribing to content was straightforward.
+    \item I understood how my PPV views were being tracked.
+    \item I felt confident that my ownership rights were secure.
+    \item The cross-chain transfer process was clear.
+    \item I would use this system for real content purchases.
+\end{enumerate}
+
+\subsection{Data Collection Timeline}
+
+\begin{table}[H]
+\centering
+\caption{Data Collection Timeline}
+\begin{tabularx}{\textwidth}{lLL}
+\toprule
+\textbf{Week} & \textbf{Activities} & \textbf{Data Types} \\
+\midrule
+17 & Testnet setup, baseline configuration, ES-01 to ES-03; centralised baseline deployment & On-chain XCM metrics; comparative baseline data \\
+18 & ES-04 to ES-08, user recruitment; user testing sessions (n=10) & Access verification metrics; qualitative usability data \\
+19 & ES-09 to ES-11, expert interviews; user testing sessions (n=10--20) & Scalability metrics; qualitative expert feedback; additional usability data \\
+20 & ES-12, ES-13, data consolidation; data analysis and preliminary findings & ZK feasibility; simulation results; all data types \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Data Storage and Management}
+
+\textbf{Storage Infrastructure:}
+\begin{itemize}
+    \item Raw data: Encrypted cloud storage (institutional account)
+    \item Processed data: Local analysis environment
+    \item Code and scripts: GitHub repository (public, MIT license)
+\end{itemize}
+
+\textbf{Data Retention:}
+\begin{itemize}
+    \item Quantitative data: Retained indefinitely for reproducibility
+    \item Qualitative data: Anonymised transcripts retained; audio deleted after transcription
+    \item User data: Anonymised within 30 days of collection
+\end{itemize}
+
+\bigskip\hrule\bigskip
+
+\section{Analysis Approach}
+
+\subsection{Quantitative Analysis}
+
+\textbf{Descriptive Statistics:} Central tendency (mean, median, mode) for all metrics; dispersion (standard deviation, IQR, range); distribution visualisation (histograms, box plots).
+
+\textbf{Comparative Analysis:} Paired comparisons (CCRMS vs. Ethereum L2, CCRMS vs. centralised); statistical significance testing where appropriate (t-tests, Mann-Whitney U); effect size calculation (Cohen's d).
+
+\textbf{Performance Modelling:} Regression analysis for latency vs. load relationships; capacity modelling using queuing theory; cost projection models.
+
+\subsection{Qualitative Analysis}
+
+\textbf{Thematic Analysis:} Open coding of interview transcripts; axial coding to identify relationships; selective coding for core themes.
+
+\textbf{Usability Analysis:} SUS score calculation and benchmarking; task completion rate analysis; error classification and frequency.
+
+\subsection{Mixed-Methods Integration}
+
+\begin{table}[H]
+\centering
+\caption{Mixed-Methods Integration Points}
+\begin{tabularx}{\textwidth}{LL}
+\toprule
+\textbf{Quantitative Finding} & \textbf{Qualitative Validation} \\
+\midrule
+Access latency measurements & User perception of responsiveness \\
+XCM success rates & Expert assessment of reliability \\
+Cost metrics & Creator willingness to adopt \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\bigskip\hrule\bigskip
+
+\section{Ethical Considerations}
+
+\subsection{Participant Protection}
+
+\begin{itemize}
+    \item Informed consent obtained from all interview and testing participants
+    \item Right to withdraw at any time without consequence
+    \item No collection of personally identifiable information beyond demographics
+    \item Data anonymisation before analysis
+\end{itemize}
+
+\subsection{Research Integrity}
+
+\begin{itemize}
+    \item All test scenarios documented and reproducible
+    \item Raw data preserved for verification
+    \item Negative or unexpected results reported transparently
+    \item Limitations explicitly acknowledged
+\end{itemize}
+
+\subsection{Institutional Compliance}
+
+\begin{itemize}
+    \item Ethics approval obtained from University of Malta (if required)
+    \item GDPR compliance for any EU participant data
+    \item Open-source code release for community verification
+\end{itemize}
+
+\bigskip\hrule\bigskip
+
+\section{Summary}
+
+This evaluation strategy provides a comprehensive framework for measuring the CCRMS framework's performance, usability, and economic viability. The 13 evaluation scenarios cover all six research objectives, while the mixed-methods data collection strategy ensures both rigorous quantitative measurement and rich qualitative insight.
+
+\textbf{Key Deliverables from Evaluation:}
+\begin{enumerate}
+    \item Performance metrics across all KPI categories
+    \item Comparative analysis against Ethereum L2 and centralised alternatives
+    \item Feasibility assessment for ZK proof integration
+    \item Monte-Carlo simulation results for creator savings
+    \item Usability scores and user feedback synthesis
+    \item Expert validation of architectural decisions
+\end{enumerate}
+
+The measurement-focused approach ensures that regardless of specific outcomes, the evaluation produces meaningful academic contribution through documented findings, comparative analysis, and actionable recommendations.
+
+\textit{This document satisfies the Phase 2 Week 9--10 deliverable: ``Design evaluation scenarios and data collection strategy.'' It is prepared for integration into the thesis Methodology and Evaluation chapters.}
+
+\bigskip\hrule\bigskip
+
+\section*{Phase 5 Evaluation Mapping}
+
+The following table maps the planned evaluation scenarios to the actual testing performed in Phase 5 (Weeks 17--20).
+
+\begin{table}[H]
+\centering
+\caption{Planned vs Actual Evaluation Coverage}
+\begin{tabularx}{\textwidth}{lLLL}
+\toprule
+\textbf{Scenario} & \textbf{Planned} & \textbf{Actual Test} & \textbf{Coverage} \\
+\midrule
+ES-01: XCM Transfer Success Rate & 100 transfers, 3 payload sizes & \texttt{xcm-latency.mjs}: 9 cross-chain operations, 100\% success & Partially covered --- fewer iterations but all succeeded \\
+ES-02: Scheduled XCM Renewal & 50 scheduled renewals & Unit tests: \texttt{auto\_renew\_processes\_expired\_subscription} validates on-chain scheduler. XCM scheduled renewal not tested (replaced by on\_initialize pattern) & Covered differently \\
+ES-03: Bridge Latency & Snowbridge round-trip & Snowbridge E2E: 2 ETH bridged Ethereum $\rightarrow$ AssetHub via full relay pipeline & Covered --- exceeded plan with full v1 bridge \\
+ES-04: Access Verification Latency & <1 second target & \texttt{local-throughput.mjs}: measured at \textasciitilde{}6,000ms (1 block). Documented as performance trade-off & Covered --- target not met, documented in thesis \\
+ES-05--06: Rights Token Operations & RMRK-based operations & \texttt{local-throughput.mjs} + \texttt{stress-test.mjs}: all 6 extrinsic types benchmarked at batch 1--1000 & Fully covered \\
+ES-07--08: Composable Rights & Feasibility & 56 unit tests + XCM simulator + Zombienet E2E validate unified rights model & Fully covered \\
+ES-09--11: Benchmark vs Alternatives & Ethereum L2, centralized DRM & \texttt{centralized-drm-benchmark/}: Express+SQLite comparison (270$\times$ TPS ratio). Ethereum L2 comparison via published data & Partially covered --- centralized benchmark built, no Ethereum L2 benchmark \\
+ES-12: Zero-Knowledge Proof Hooks & Implementation feasibility & Not implemented --- documented as future work & Not covered \\
+ES-13: Monte Carlo Simulation & Creator savings & Not implemented --- documented as future work & Not covered \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Actual Deliverables Produced (vs Planned)}
+
+\begin{table}[H]
+\centering
+\caption{Planned vs Actual Deliverables}
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Planned} & \textbf{Actual} \\
+\midrule
+Performance metrics across all KPIs & 11 KPIs measured, 10/11 targets met (Chapter 6 Table 6.2) \\
+Comparative analysis vs alternatives & Centralized benchmark: 270$\times$ TPS, 67,000$\times$ latency ratios \\
+ZK proof feasibility & Deferred to future work \\
+Monte-Carlo simulation & Deferred to future work \\
+Usability scores & Not in scope (no user study conducted) \\
+Expert validation & Not Complete\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}

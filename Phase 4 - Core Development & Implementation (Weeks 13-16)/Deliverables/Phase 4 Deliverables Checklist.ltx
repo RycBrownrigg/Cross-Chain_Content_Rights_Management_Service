@@ -1,0 +1,154 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Phase 4 Deliverables Checklist}
+
+\subsection*{Planned Deliverables $\rightarrow$ Status}
+
+\subsubsection*{1. Three Functional Smart Contracts $\rightarrow$ DELIVERED (adapted)}
+
+The original plan called for three ink! contracts. The implementation uses a unified architecture:
+
+\begin{table}[H]
+\centering
+\caption{Smart Contract Deliverables}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LlL}
+\toprule
+\textbf{Deliverable} & \textbf{Status} & \textbf{Location} \\
+\midrule
+SubscriptionManager (subscription logic) & Delivered & pallets/content-rights/ \\
+PayPerView (one-time access) & Delivered & pallets/content-rights/ \\
+PurchaseVerification (ownership) & Delivered & pallets/content-rights/ \\
+RightsManager ink! 6 contract & Additional & contracts/rights-manager/ \\
+pallet-rights-verifier & Additional & pallets/rights-verifier/ \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsubsection*{2. Integrated Local Testnet Deployment $\rightarrow$ DELIVERED}
+
+\begin{table}[H]
+\centering
+\caption{Testnet Deployment Status}
+{\footnotesize
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Component} & \textbf{Status} & \textbf{Details} \\
+\midrule
+4-chain Zombienet & Passing & Relay + Bridge Hub + AssetHub + Content Rights \\
+Ethereum local network & Passing & Geth + Lodestar + Gateway contracts \\
+HRMP channels & Passing & BH$\leftrightarrow$AH, AH$\leftrightarrow$CR \\
+Snowbridge beacon client & Passing & Initialized on Bridge Hub \\
+Relayers & Passing & Beacon relay + Ethereum relay running \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsubsection*{3. XCM Implementation $\rightarrow$ DELIVERED}
+
+\begin{table}[H]
+\centering
+\caption{XCM Implementation Status}
+{\footnotesize
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Component} & \textbf{Status} & \textbf{Details} \\
+\midrule
+Cross-chain subscription renewal & Passing & renew\_subscription\_cross\_chain extrinsic \\
+Cross-chain PPV access & Passing & pay\_per\_view\_cross\_chain extrinsic \\
+Cross-chain ownership transfer & Passing & transfer\_ownership\_cross\_chain extrinsic \\
+Ethereum bridge (Snowbridge) & Passing & Full v1 local setup with relayers \\
+XCM paid execution & Passing & WithdrawAsset + BuyExecution pattern \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsubsection*{4. Unit Test Suite (80\%+ coverage) $\rightarrow$ DELIVERED}
+
+\begin{table}[H]
+\centering
+\caption{Test Suite Status}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lll}
+\toprule
+\textbf{Test Layer} & \textbf{Count} & \textbf{Status} \\
+\midrule
+Unit tests (pallet) & 23 & Passing \\
+XCM simulator tests (Layer 2) & Multiple & Passing \\
+Zombienet E2E tests (Layer 3) & Multiple & Passing \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsubsection*{5. Initial Implementation Documentation $\rightarrow$ DELIVERED}
+
+\begin{table}[H]
+\centering
+\caption{Implementation Documentation}
+{\footnotesize
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Document} & \textbf{Location} \\
+\midrule
+Snowbridge setup plan & content-rights-parachain/docs/SNOWBRIDGE\_SETUP.md \\
+Snowbridge session log + lessons & content-rights-parachain/docs/SNOWBRIDGE\_SESSION\_LOG.md \\
+Deploy \& call guide & content-rights-parachain/docs/DEPLOY\_AND\_CALL.md \\
+Implementation decisions & See Current status.md in project root \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsection*{Additional Deliverables (Beyond Plan)}
+
+These were not in the original plan but were needed for the thesis:
+
+\begin{itemize}
+    \item \textbf{pallet-rights-verifier} --- Cross-chain Merkle storage proof verification
+    \item \textbf{Custom pallet-revive precompile} --- Efficient contract$\rightarrow$pallet calls
+    \item \textbf{snowbridge-full-setup.sh} --- Automated Ethereum bridge setup script
+    \item \textbf{3-layer test architecture} --- Unit + XCM simulator + Zombienet E2E
+    \item \textbf{Full Snowbridge E2E bridge} --- 2 ETH successfully bridged from Ethereum to AssetHub via Gateway $\rightarrow$ relay $\rightarrow$ Bridge Hub $\rightarrow$ AssetHub (verified 2026-03-23)
+    \item \textbf{Automatic royalty propagation} --- set\_royalty\_splits extrinsic + pay\_with\_royalties distributes payments to up to 10 collaborators with basis-point precision
+    \item \textbf{Scheduled auto-renewal} --- on\_initialize hook + enable\_auto\_renew/disable\_auto\_renew extrinsics process expired subscriptions automatically each block
+    \item \textbf{Metadata-carrying XCM} --- query\_rights\_metadata emits complete RightsMetadata struct (pricing, royalty config, content details) for cross-chain consumers
+    \item \textbf{56 unit tests} (23 original + 10 security + 5 royalty + 5 auto-renewal + 2 metadata + 11 XCM)
+\end{itemize}
+
+\subsection*{Phase 5}
+
+For Phase 5 testing results (Weeks 17--20), see \textit{Phase 5 --- Testing, Evaluation, \& Thesis Integration}.
+
+\end{document}

@@ -35,11 +35,19 @@ This report documents the security and reliability testing conducted on the cros
 
 **Analysis:** All 8 vulnerabilities are in **transitive dependencies** inherited from `polkadot-sdk`, not in the thesis code. None affect the content-rights pallet runtime logic directly. The `wasmtime` advisories affect the WASM executor but are mitigated by Polkadot's sandboxed execution environment. These would be resolved by updating `polkadot-sdk` to a newer release.
 
-**Thesis discussion point:** Dependency vulnerability scanning identified 8 advisories, all in transitive dependencies inherited from the Polkadot SDK framework. None affect the content rights pallet's runtime logic directly — they impact the networking layer (`quinn-proto`, `ring`), logging (`tracing-subscriber`), and WASM execution environment (`wasmtime`). These are mitigated by Polkadot's sandboxed execution model and would be resolved by the upstream SDK team in subsequent stable releases. This finding illustrates a practical reality of building on large frameworks: the application developer inherits the framework's supply chain risk but cannot independently remediate it without a full framework upgrade. The content-rights pallet itself — the thesis contribution — introduces no new dependency vulnerabilities.
+**Thesis discussion point:** Dependency vulnerability scanning identified eight advisories, all originating from transitive dependencies inherited via the Polkadot SDK. None of these directly impact the content-rights pallet’s runtime logic; they are limited to supportive components such as networking (quinn-proto, ring), observability (tracing-subscriber), and the WebAssembly execution engine (Wasmtime).
+
+The potential impact of these vulnerabilities is alleviated in practice by Polkadot’s sandboxed execution model, which isolates runtime code and constrains the effect of faults within the WASM executor. Resolution of the identified issues relies on upgrading to a newer, patched version of the SDK, since implementing direct fixes at the application level would necessitate forking or diverging from the framework, which is impractical in this context.
+
+This finding exemplifies a broader characteristic of contemporary software development: applications constructed upon extensive frameworks inherit upstream supply chain risks. Within this limitation, the content-rights pallet itself—serving as the primary contribution of this thesis—introduces no new dependency vulnerabilities.
 
 ---
 
 ## 3. Access Control Matrix
+
+The access control matrix systematically maps each extrinsic to its authorization model. All 17 extrinsics employ `ensure_signed` (any account with a valid signature may submit), rendering the security boundary the **business logic check** within each extrinsic — verifying that the caller possesses the appropriate rights to execute the requested action.
+
+Extrinsics 0–6 (local operations) are intrinsically safe because the caller is the affected party: you subscribe yourself, consume your own views, and verify your own access. Extrinsics 7–12 (XCM operations) introduce a **payer/beneficiary split** where one account (typically a sovereign account representing a remote parachain) covers expenses on behalf of another. This arrangement reflects the intended cross-chain model but expands the scope of authorization. Finding A (Low) indicates that these can also be invoked locally as "gift" transactions — since the payer always incurs the cost, this is economically neutral. Finding B (Medium, now addressed) identified the one instance where this split created a genuine vulnerability: `xcm_transfer_ownership` permitted any caller to transfer ownership of others without consent. Extrinsics 13–16 (royalty splits, auto-renewal, metadata query) are correctly authorized through the creator or subscriber checks.
 
 ### Table 1: Extrinsic Authorization
 
@@ -58,6 +66,10 @@ This report documents the security and reliability testing conducted on the cros
 | 10 | `xcm_purchase_ownership` | `ensure_signed` | Payer pays, beneficiary gets ownership | Low | **Finding A** |
 | 11 | `transfer_ownership` | `ensure_signed` | Caller must own content (storage check) | — | OK |
 | 12 | `xcm_transfer_ownership` | `ensure_signed` | **Any account can transfer FROM anyone** | **Medium** | **Finding B** |
+| 13 | `set_royalty_splits` | `ensure_signed` | Creator-only (storage check) | — | OK |
+| 14 | `enable_auto_renew` | `ensure_signed` | Caller must have subscription | — | OK |
+| 15 | `disable_auto_renew` | `ensure_signed` | Caller must have auto-renew enabled | — | OK |
+| 16 | `query_rights_metadata` | `ensure_signed` | Any signed account (read-only) | — | OK |
 
 ---
 
@@ -67,23 +79,21 @@ This report documents the security and reliability testing conducted on the cros
 
 **Affected:** `xcm_subscribe`, `xcm_renew_subscription`, `xcm_purchase_views`, `xcm_purchase_ownership` (call indices 7-10)
 
-**Description:** These extrinsics use `ensure_signed` and accept a `beneficiary` parameter. In the intended XCM flow, `SovereignSignedViaLocation` converts the XCM origin to a `Signed` origin with the sovereign account. However, these extrinsics can also be called locally by any signed account — functioning as "gift" transactions where the caller pays for someone else's access.
+**Description:** These extrinsics use `ensure_signed` and accept a `beneficiary` parameter. In the intended XCM flow, `SovereignSignedViaLocation` converts the XCM origin to a `Signed` origin with the sovereign account. However, these extrinsics can also be called locally by any signed account, functioning as "gift" transactions where the caller pays for someone else's access.
 
-**Impact:** Low. The payer always pays — there is no theft or unauthorized access. The worst case is a user paying for someone else's subscription, which is economically neutral.
+**Impact:** Low. The payer always pays; there is no theft or unauthorized access. The worst case is a user paying for someone else's subscription, which is economically neutral.
 
-**Recommendation:** Document as an intentional design feature (gift subscriptions). For production, optionally restrict to sovereign-derived origins by checking the caller against known sovereign account patterns.
+**Recommendation:** Document as an intentional design feature (gift subscriptions). For production, optionally restrict to sovereign-derived origins by checking the caller against known patterns of sovereign accounts.
 
-### Finding B: Authorization gap in xcm_transfer_ownership (Medium)
+### Finding B: Authorization gap in xcm_transfer_ownership (Medium — Fixed)
 
 **Affected:** `xcm_transfer_ownership` (call index 12)
 
-**Description:** Any signed account can call `xcm_transfer_ownership(content_id, from, to)` and transfer ownership from `from` to `to` without verifying that the caller has any relationship to `from`. A local attacker calling `xcm_transfer_ownership(0, alice, eve)` can steal Alice's ownership and give it to Eve.
+**Description:** The initial implementation allowed any signed account to call `xcm_transfer_ownership(content_id, from, to)` and transfer ownership from `from` to `to` without verifying that the caller had any relationship to `from`. A local attacker could steal ownership by specifying an arbitrary `from` account.
 
-**Impact:** Medium. Allows unauthorized ownership transfers. In the XCM flow, only sovereign accounts would typically call this, but nothing enforces that restriction.
+**Impact:** Medium. Would allow unauthorized ownership transfers if left unaddressed.
 
-**Proof:** Test `security_xcm_transfer_ownership_any_account_can_steal` demonstrates the exploit (passes, confirming the vulnerability).
-
-**Recommendation:** Add an authorization check: either require the caller to be the `from` account, or restrict to known sovereign origins. For production: `ensure!(authorizer == from || is_sovereign(authorizer), Error::<T>::Unauthorized)`.
+**Resolution:** Added `ensure!(authorizer == from, Error::<T>::Unauthorized)` to `xcm_transfer_ownership`. The caller must now be the `from` account, preventing third-party transfers. In the cross-chain XCM flow, the sovereign account submits the transaction on behalf of the remote user, who must be the owner. Test `security_xcm_transfer_ownership_any_account_can_steal` verifies the exploit is blocked (returns `Unauthorized` error).
 
 ### Finding C: SafeCallFilter allows any RuntimeCall via XCM (Low — Configuration)
 
@@ -101,19 +111,19 @@ This report documents the security and reliability testing conducted on the cros
 
 **Impact:** Low. Content creators intentionally setting price to 0 is a valid use case (free content). No theft possible.
 
-### Finding E: View pack overwrites on re-purchase (Low — Inconsistency)
+### Finding E: View pack overwrites on re-purchase (Low — Fixed)
 
-**Description:** Calling `purchase_views` when a view pack already exists **overwrites** the remaining views rather than adding. A user with 10 remaining views who purchases 5 more ends up with 5, not 15.
+**Description:** The initial implementation of `purchase_views` overwrote the remaining view count when a pack already existed. A user with 10 remaining views who purchased 5 more would end up with 5, not 15.
 
-**Impact:** Low. Users lose pre-purchased views. The economic impact is borne by the user, not other parties.
+**Impact:** Low. Users would lose pre-purchased views. The economic impact is borne by the user, not other parties.
 
-**Recommendation:** Change to additive behavior: `pack.views_remaining = pack.views_remaining.saturating_add(num_views)`.
+**Resolution:** Changed `purchase_views` to check for an existing view pack and add views additively (`views_remaining.saturating_add(num_views)`) instead of overwriting. A new pack and child NFT are only minted if no pack exists. Test `security_purchase_views_overwrites_existing_pack` verifies additive behavior (10 + 5 = 15).
 
 ---
 
 ## 5. Security Unit Tests
 
-### Test Suite: 44 tests total (23 original + 10 security + 11 XCM)
+### Test Suite: 56 tests total (23 original + 10 security + 11 XCM + 5 royalty + 5 auto-renewal + 2 metadata)
 
 | Test | What It Validates | Result |
 |------|-------------------|--------|
@@ -151,11 +161,11 @@ This report documents the security and reliability testing conducted on the cros
 
 ### Barrier Configuration
 
-The XCM barrier (`AllowTopLevelPaidExecutionFrom<Everything>`) allows any origin to send paid XCM messages. Fee payment is the primary gatekeeper — this is the standard configuration for Polkadot parachains and is appropriate for the thesis.
+The XCM barrier (`AllowTopLevelPaidExecutionFrom<Everything>`) allows any origin to send paid XCM messages. Fee payment is the primary gatekeeper; this is the standard configuration for Polkadot parachains and is appropriate for the thesis.
 
 ### Sovereign Account Isolation
 
-Each parachain's sovereign account is deterministically derived from its ParaID. The XCM simulator tests verify that ParaB's sovereign account pays for operations on ParaA. Cross-sovereign spending is prevented by the deterministic derivation.
+Each parachain's sovereign account is deterministically derived from its ParaID. The XCM simulator tests verify that ParaB's sovereign account pays for operations on ParaA. The deterministic derivation prevents cross-sovereign spending.
 
 ### XCM Replay Protection
 
@@ -167,24 +177,26 @@ XCM messages are inherently replay-protected by the XCMP transport layer (messag
 
 | ID | Finding | Severity | Status |
 |----|---------|----------|--------|
-| A | XCM extrinsics callable locally | Low | Documented as design choice |
-| B | `xcm_transfer_ownership` auth gap | **Medium** | Exploit confirmed in tests |
-| C | SafeCallFilter allows all calls | Low | Configuration for prototype |
-| D | Zero-price content allowed | Low | Intentional feature |
-| E | View pack overwrite on re-purchase | Low | Inconsistency documented |
+| A | XCM extrinsics callable locally | Low | Acknowledged — design choice |
+| B | `xcm_transfer_ownership` auth gap | Medium | Fixed — `ensure!(authorizer == from)` added |
+| C | SafeCallFilter allows all calls | Low | Acknowledged — prototype configuration |
+| D | Zero-price content allowed | Low | Acknowledged — intentional feature |
+| E | View pack overwrite on re-purchase | Low | Fixed — additive behavior implemented |
 
-**0 Critical, 1 Medium, 4 Low** — appropriate for a research prototype. Finding B would require remediation before production deployment.
+**0 Critical, 0 unresolved Medium, 3 Low acknowledged.** Findings B and E were identified and corrected during the security testing phase. The remaining Low findings are documented design decisions appropriate for a research prototype. All 56 unit tests pass.
 
 ---
 
 ## 8. Recommendations for Production
 
-1. **Fix Finding B:** Add `ensure!(authorizer == from, Error::<T>::Unauthorized)` to `xcm_transfer_ownership`, or use a dedicated XCM origin type
-2. **Fix Finding E:** Change view pack re-purchase to additive behavior
-3. **Restrict SafeCallFilter:** Limit XCM `Transact` to `ContentRights` and `Balances` calls only
-4. **Add minimum price validation:** Optionally require non-zero prices for paid content
-5. **Update polkadot-sdk:** Resolve transitive dependency vulnerabilities
-6. **Formal audit:** Commission a third-party security audit before mainnet deployment
+The following recommendations address findings identified during the security audit. Items 1 and 2 were resolved during the testing phase; items 3–6 are documented for future production hardening.
+
+1. **Finding B (Fixed):** Authorization check added to `xcm_transfer_ownership` — caller must be the `from` account.
+2. **Finding E (Fixed):** View pack re-purchase changed to additive behavior.
+3. **Restrict SafeCallFilter:** For production, limit XCM `Transact` to `ContentRights` and `Balances` calls only. The current `Everything` filter is appropriate for the prototype but overly permissive for a production deployment.
+4. **Minimum price validation:** Zero-price content is an intentional feature (free content distribution). No change required, but production deployments may wish to add optional minimum price enforcement.
+5. **Update polkadot-sdk:** Resolve transitive dependency vulnerabilities by upgrading to a patched SDK release.
+6. **Formal audit:** Commission a third-party security audit before mainnet deployment.
 
 ---
 
@@ -217,7 +229,7 @@ XCM messages are inherently replay-protected by the XCMP transport layer (messag
 
 ### Finding F: MTTR of ~15-20 seconds after collator crash
 
-When the collator process is killed with SIGTERM, it restarts and resumes block production within **~20 seconds**. The RPC endpoint becomes available at ~15 seconds. This is fast enough for practical purposes — users would experience a brief interruption of one block cycle.
+When the collator process is killed with SIGTERM, it restarts and resumes block production within **~20 seconds**. The RPC endpoint becomes available at ~15 seconds. This is fast enough for practical purposes; users would experience a brief interruption of one block cycle.
 
 **Context:** In a production Polkadot deployment with multiple collators, a single collator crash would have zero impact on users because backup collators would continue producing blocks. The MTTR measured here is for the worst case of a single-collator parachain.
 
@@ -225,7 +237,7 @@ When the collator process is killed with SIGTERM, it restarts and resumes block 
 
 All on-chain state (content registrations, subscriptions, view packs, ownership records) survives the collator restart intact. The RocksDB database on disk preserves all state. New transactions succeed immediately after restart.
 
-**Implication:** The system provides crash consistency — no data is lost during an unexpected shutdown. This is a fundamental property of the Substrate framework's storage layer.
+**Implication:** The system provides crash consistency; no data is lost during an unexpected shutdown. This is a fundamental property of the Substrate framework's storage layer.
 
 ### Finding H: Block production rate is identical before and after restart
 
@@ -240,16 +252,16 @@ Both baseline and recovery phases showed 18 blocks in 120 seconds (~6.67s block 
 | Test Category | Key Finding | Severity |
 |--------------|-------------|----------|
 | Dependency audit | 8 advisories in polkadot-sdk transitive deps, 0 in thesis code | Informational |
-| Access control | 12/13 extrinsics correctly authorized | — |
-| Authorization gap | `xcm_transfer_ownership` allows unauthorized transfers | **Medium** |
+| Access control | 16/17 extrinsics correctly authorized | — |
+| Authorization gap | `xcm_transfer_ownership` auth gap — fixed | Medium (resolved) |
 | XCM extrinsics local-callable | Design tradeoff, payer always pays | Low |
 | SafeCallFilter = Everything | Prototype configuration | Low |
 | Zero-price content | Allowed — intentional feature | Low |
-| View pack overwrite | Re-purchase overwrites views, doesn't add | Low |
+| View pack overwrite | Re-purchase overwrite — fixed (now additive) | Low (resolved) |
 | Uptime | 90% block production rate (18/20 blocks per 2 min) | — |
 | MTTR | ~15-20 seconds to full recovery | — |
 | State persistence | 100% — all data survives crash restart | — |
-| Unit test coverage | 44 tests, 12/15 error variants covered | — |
+| Unit test coverage | 56 tests, 14/17 error variants covered | — |
 
 ---
 
@@ -262,5 +274,5 @@ SKIP_WASM_BUILD=1 cargo test -p pallet-content-rights
 # Run cargo audit
 cargo audit
 
-# Expected: 44 tests pass, 8 audit advisories (all in transitive deps)
+# Expected: 56 tests pass, 8 audit advisories (all in transitive deps)
 ```

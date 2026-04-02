@@ -1,0 +1,85 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Phase 4: Core Development \& Implementation (Weeks 13--16)}
+
+\subsection*{Objectives}
+
+\begin{itemize}
+    \item Implement smart contracts and integrate cross-chain functionality.
+    \item Deploy to local testnet.
+    \item Address any redesigns identified from earlier research.
+\end{itemize}
+
+\subsection*{Development Tasks}
+
+\begin{itemize}
+    \item \textbf{Weeks 13--14:} Contract Implementation
+    \begin{itemize}
+        \item Develop SubscriptionManager.rs (state management, payments, verification).
+        \item Implement PayPerView.rs (one-time access, tokens).
+        \item Create PurchaseVerification.rs (ownership transfers, resale).
+        \item Write unit tests (80\% coverage) and deploy to local testnet.
+    \end{itemize}
+
+    \item \textbf{Week 15:} XCM \& Integration
+    \begin{itemize}
+        \item Implement cross-chain message handlers and parachain transfers.
+        \item Integrate Ethereum bridge.
+        \item Develop chain extensions for efficiency.
+        \item Test initial integrations.
+    \end{itemize}
+
+    \item \textbf{Week 16:} Full System Integration
+    \begin{itemize}
+        \item Integrate all contracts.
+        \item Create end-to-end test scenarios.
+        \item Deploy the complete system to the local testnet.
+        \item Begin preliminary performance logging.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Writing Tasks (Target: 1,500 words)}
+
+\begin{itemize}
+    \item Implementation details section draft (1,500 words).
+\end{itemize}
+
+\subsection*{Deliverables}
+
+\begin{itemize}
+    \item Three functional smart contracts.
+    \item Integrated local testnet deployment.
+    \item XCM implementation.
+    \item Unit test suite (80\%+ coverage).
+    \item Initial implementation documentation.
+\end{itemize}
+
+\end{document}

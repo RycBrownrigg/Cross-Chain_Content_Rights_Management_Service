@@ -60,9 +60,11 @@ These were not in the original plan but were needed for the thesis:
 - **`snowbridge-full-setup.sh`** — Automated Ethereum bridge setup script
 - **3-layer test architecture** — Unit + XCM simulator + Zombienet E2E
 - **Full Snowbridge E2E bridge** — 2 ETH successfully bridged from Ethereum to AssetHub via Gateway → relay → Bridge Hub → AssetHub (verified 2026-03-23)
+- **Automatic royalty propagation** — `set_royalty_splits` extrinsic + `pay_with_royalties` distributes payments to up to 10 collaborators with basis-point precision
+- **Scheduled auto-renewal** — `on_initialize` hook + `enable_auto_renew`/`disable_auto_renew` extrinsics process expired subscriptions automatically each block
+- **Metadata-carrying XCM** — `query_rights_metadata` emits complete `RightsMetadata` struct (pricing, royalty config, content details) for cross-chain consumers
+- **56 unit tests** (23 original + 10 security + 5 royalty + 5 auto-renewal + 2 metadata + 11 XCM)
 
-## What Remains for Phase 5
+## Phase 5
 
-- Performance and scalability testing (load tests, TPS, latency)
-- Security analysis
-- Implementation chapter writing (1,500 words)
+For Phase 5 testing results (Weeks 17–20), see *Phase 5 — Testing, Evaluation, & Thesis Integration*.

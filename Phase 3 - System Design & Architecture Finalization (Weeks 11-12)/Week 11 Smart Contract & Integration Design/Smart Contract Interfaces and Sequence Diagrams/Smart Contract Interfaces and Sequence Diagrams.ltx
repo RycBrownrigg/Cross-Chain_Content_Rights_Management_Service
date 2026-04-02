@@ -1,0 +1,283 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\usepackage{graphicx}
+\graphicspath{{assets/}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\section*{Smart Contract Interfaces and Sequence Diagrams}
+
+\textbf{Implementation stack:} These contractual agreements are executed utilizing \textbf{ink! 6} and deployed on the \textbf{content-rights-parachain} runtime through \textbf{pallet-revive} (PolkaVM). Deployment is conducted via \texttt{revive::uploadCode} / \texttt{revive::instantiate} or the Contracts User Interface (ui.use.ink); chain extensions should be employed to facilitate interactions with RMRK (or content-rights) pallet.
+
+\bigskip\hrule\bigskip
+
+This document consolidates the designs for the subscription, pay-per-view (PPV), and purchase verification contract interfaces, along with an explanation of how these designs work together. It also includes UML sequence diagrams. The designs are based on RMRK 2.0 + scheduled XCM, ensuring a unified rights token with minimal custom code.
+
+\subsection*{Design Principles}
+\begin{itemize}
+    \item \textbf{Unified Rights Token}: One RMRK 2.0 NFT per content piece, with equipped resources for access tiers (subscription expiry, PPV view pack, permanent ownership flag).
+    \item \textbf{ink! Contracts}: Lightweight wrappers around RMRK for monetization enforcement.
+    \item \textbf{Cross-Chain Integration}: XCM for intra-Polkadot flows; bridges (e.g., Snowbridge) for external chains.
+    \item \textbf{Economic Efficiency}: Low weight/gas; scheduled XCM for recurring actions.
+    \item \textbf{Security}: Leverage audited RMRK primitives; custom ink! limited to verification.
+\end{itemize}
+
+\subsection*{How These Designs Work Together}
+
+These designs constitute a \textbf{layered, synergistic architecture} utilizing RMRK 2.0 (a composable NFT standard) as the core token, ink! contracts for monetization enforcement and XCM for cross-chain interoperability. The \textbf{RightsManager} oversees all processes, while specialized handlers such as SubscriptionHandler, PayPerViewHandler, and PurchaseVerifier manage specific operational models. All components interact with the RMRK pallet for state management (e.g., equipping resources).
+
+\begin{itemize}
+    \item \textbf{RMRK 2.0 Foundation}: The base NFT holds ownership; equipped resources represent tiers (e.g., subscription child NFT with expiry).
+    \item \textbf{ink! Layer}: Contracts enforce payments, updates, and royalties; query RMRK for state.
+    \item \textbf{XCM/Bridges}: Propagate changes across chains (e.g., scheduled renewals).
+    \item \textbf{Unified Flow}: Mint via RightsManager $\rightarrow$ equip tiers $\rightarrow$ handlers update resources $\rightarrow$ XCM transfers preserve state.
+\end{itemize}
+
+This accomplishes hybrid monetization (G7 gap) with fees below 5\%, sub-second verification, and cross-chain portability.
+
+\subsection*{Core Data Structures (Storage Patterns)}
+
+\begin{verbatim}
+#[ink(storage)]
+pub struct RightsManager {
+    collection_id: u32,  // RMRK collection ID
+    content_to_nft: Mapping<ContentId, u64>,  // Content ID -> NFT ID
+    nft_access_state: Mapping<u64, AccessState>,  // Quick flags
+    royalty_config: Mapping<u64, Vec<RoyaltyShare>>,  // Splits
+    treasury: AccountId,  // Fee collector
+}
+
+pub struct AccessState {
+    is_permanent: bool,
+    last_access: u64,
+    ppv_remaining: Option<u32>,
+}
+
+pub struct RoyaltyShare {
+    recipient: AccountId,
+    percentage: u16,  // Basis points
+}
+\end{verbatim}
+
+\subsection*{Contract Interfaces}
+
+\subsubsection*{RightsManager (Main Entry Point)}
+
+\begin{verbatim}
+#[ink(message)]
+pub fn mint_content_rights(
+    &mut self,
+    content_id: ContentId,
+    initial_tier: AccessTier,
+    metadata_uri: String,
+    royalty_shares: Vec<RoyaltyShare>,
+) -> Result<u64, Error> {
+    // Mint RMRK NFT + equip initial resource
+    // Store royalty + return NFT ID
+}
+
+#[ink(message)]
+pub fn check_access(
+    &self, nft_id: u64, caller: AccountId
+) -> Result<AccessGrant, Error> {
+    // Query RMRK ownership + equipped resources + flags
+    // Return: FullAccess, SubscriptionActive(expiry),
+    //         PPVRemaining(views), Denied
+}
+\end{verbatim}
+
+\subsubsection*{SubscriptionHandler}
+
+\begin{verbatim}
+#[ink(message)]
+pub fn renew_subscription(
+    &mut self, nft_id: u64, payment_amount: Balance
+) -> Result<(), Error> {
+    // Verify payment
+    // Extend equipped subscription resource expiry
+    // Distribute royalties via XCM
+    // Schedule next renewal (XCM v5+)
+}
+\end{verbatim}
+
+\subsubsection*{PayPerViewHandler}
+
+\begin{verbatim}
+#[ink(message)]
+pub fn consume_view(
+    &mut self, nft_id: u64, proof_of_view: Proof
+) -> Result<(), Error> {
+    // Verify ownership/delegation
+    // Decrement/burn equipped PPV resource
+    // Distribute royalties
+}
+\end{verbatim}
+
+\subsubsection*{PurchaseVerifier}
+
+\begin{verbatim}
+#[ink(message)]
+pub fn upgrade_to_permanent(
+    &mut self, nft_id: u64, payment: Balance
+) -> Result<(), Error> {
+    // Verify payment
+    // Set is_permanent flag
+    // Remove subscription/PPV resources
+}
+\end{verbatim}
+
+\subsection*{XCM Message Formats (Conceptual)}
+
+For cross-chain (e.g., renewal on sibling parachain):
+
+\begin{verbatim}
+XCM Message:
+- WithdrawAsset (payment)
+- BuyExecution (weight)
+- Transact (call handler)
+- DepositAsset (royalties)
+- Schedule (next renewal)
+\end{verbatim}
+
+Payload: NFT ID, expiry, royalty vector (hashed if large).
+
+\subsection*{UML Sequence Diagrams}
+
+\subsubsection*{Diagram 1: Mint + Initial Tier Equip}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Mint + Initial Tier Equip.png}
+\caption{Mint + Initial Tier Equip}
+\end{figure}
+
+\subsubsection*{Diagram 2: Subscription Renewal (Intra-Parachain + Scheduled)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Subscription Renewal (Intra-Parachain + Scheduled).png}
+\caption{Subscription Renewal (Intra-Parachain + Scheduled)}
+\end{figure}
+
+\subsubsection*{Diagram 3: PPV Consumption}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{PPV Consumption.png}
+\caption{PPV Consumption}
+\end{figure}
+
+\subsubsection*{Diagram 4: Permanent Upgrade}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Permanent Upgrade.png}
+\caption{Permanent Upgrade}
+\end{figure}
+
+\subsubsection*{Diagram 5: Cross-Chain Transfer Example (e.g., to Ethereum via Bridge)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Cross-Chain Transfer Example (e.g., to Ethereum via Bridge).png}
+\caption{Cross-Chain Transfer Example (e.g., to Ethereum via Bridge)}
+\end{figure}
+
+\bigskip\hrule\bigskip
+
+\section*{Implementation Notes (Phase 4--5)}
+
+\subsection*{Architectural Pivot: ink! Contracts $\rightarrow$ FRAME Pallet}
+
+The original design positioned ink! contracts (RightsManager, SubscriptionHandler, PayPerViewHandler, PurchaseVerifier) as the primary logic layer. During implementation, this was restructured:
+
+\begin{table}[H]
+\centering
+\caption{Architectural Pivot --- ink! to FRAME}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Original} & \textbf{Actual} & \textbf{Rationale} \\
+\midrule
+\textbf{ink! contracts} as primary logic & \textbf{\texttt{pallet-content-rights}} (FRAME pallet) as primary logic & Direct storage access, native weight system, no contract call overhead \\
+\textbf{RightsManager} as orchestrator & Scaffolded but thin API layer & Pallet handles all state; contract provides external interface via pallet-revive precompile \\
+\textbf{3 handler contracts} (Subscription, PPV, Purchase) & All logic in single pallet with \texttt{RightsType} enum & Simpler, more efficient, avoids cross-contract calls \\
+\textbf{RMRK 2.0} for NFT state & \textbf{\texttt{pallet-nfts}} with attribute-based nesting & RMRK pallets abandoned; pallet-nfts is maintained and compatible \\
+\textbf{Chain extensions} for contract$\rightarrow$pallet & \textbf{Custom pallet-revive precompile} at \texttt{0x0000...0400} & Precompiles are the PolkaVM equivalent of chain extensions \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsection*{Extrinsic Mapping (Design $\rightarrow$ Implementation)}
+
+\begin{table}[H]
+\centering
+\caption{Extrinsic Mapping}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LLl}
+\toprule
+\textbf{Designed Interface} & \textbf{Implemented Extrinsic} & \textbf{Call Index} \\
+\midrule
+RightsManager:: mint\_content\_rights & register\_content & 0 \\
+SubscriptionHandler:: subscribe & subscribe & 1 \\
+SubscriptionHandler:: renew & renew\_subscription & 2 \\
+PayPerViewHandler:: purchase\_views & purchase\_views & 3 \\
+PayPerViewHandler:: consume\_view & consume\_view & 4 \\
+PurchaseVerifier:: purchase\_ownership & purchase\_ownership & 5 \\
+RightsManager:: check\_access & check\_access & 6 \\
+(not designed) & xcm\_subscribe, xcm\_renew\_subscription, xcm\_purchase\_views, xcm\_purchase\_ownership & 7--10 \\
+(not designed) & transfer\_ownership, xcm\_transfer\_ownership & 11--12 \\
+(not designed) & set\_royalty\_splits & 13 \\
+(not designed) & enable\_auto\_renew, disable\_auto\_renew & 14--15 \\
+(not designed) & query\_rights\_metadata & 16 \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\subsection*{Data Structures: Design vs Implementation}
+
+\begin{table}[H]
+\centering
+\caption{Data Structures --- Design vs Implementation}
+{\footnotesize
+\begin{tabularx}{\textwidth}{LL}
+\toprule
+\textbf{Designed} & \textbf{Implemented} \\
+\midrule
+\texttt{RightsManager \{ collection\_id, content\_to\_nft, nft\_access\_state, royalty\_config, treasury \}} & \texttt{ContentMetadata<T> \{ creator, metadata\_hash, collection\_id, content\_item\_id, title, subscription\_price, ppv\_price, ownership\_price, period\_length \}} \\
+\texttt{AccessState \{ is\_permanent, last\_access, ppv\_remaining \}} & Separate storage maps: \texttt{Subscriptions}, \texttt{ViewPacks}, \texttt{Ownership} \\
+\texttt{RoyaltyShare \{ recipient, percentage \}} & \texttt{RoyaltySplit \{ recipient: [u8; 32], basis\_points: u16 \}} \\
+(not designed) & \texttt{RightsMetadata \{ content\_id, rights\_type, metadata\_hash, title, prices, royalty\_total\_basis\_points, num\_collaborators \}} \\
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\end{document}

@@ -9,7 +9,7 @@ This report presents a side-by-side comparison of the blockchain-based cross-cha
 **Blockchain system:** Polkadot parachain with `pallet-content-rights`, measured in Weeks 17-18
 **Centralized system:** Express.js + SQLite (in-memory), measured in Week 19
 
-The centralized benchmark represents the **best-case centralized performance** — local server, in-memory database, no network latency. This provides a generous baseline, ensuring the comparison is fair to the centralized approach.
+The centralized benchmark represents the **best-case centralized performance**; local server, in-memory database, no network latency. This provides a generous baseline, ensuring the comparison is fair to the centralized approach.
 
 ---
 
@@ -87,30 +87,30 @@ The centralized benchmark represents the **best-case centralized performance** �
 
 ### Finding 1: Centralized is 270× faster but requires full trust
 
-The centralized system sustains 7,305 TPS with zero failures vs the blockchain's 27 TPS. However, the centralized operator has full control over all data — they can modify subscriptions, revoke ownership, or delete content without user consent. The blockchain system makes this impossible by design.
+The centralized system supports 7,305 transactions per second (TPS) with zero failures, in comparison to the blockchain's 27 TPS. However, the centralized operator possesses complete authority over all data; they have the capability to modify subscriptions, revoke ownership, or delete content without obtaining user consent. Conversely, the blockchain system renders such actions impossible by design.
 
 ### Finding 2: The blockchain's 27 TPS is sufficient for the use case
 
-At 27 TPS, the blockchain processes **~2.3 million operations per day**. For a content rights management platform where the most frequent operation is subscription creation (not high-frequency trading), this throughput is more than adequate. Spotify has ~250 million subscribers total — the system could onboard all of them in ~108 days at sustained load, or handle daily churn of millions easily.
+At 27 TPS, the blockchain executes approximately 2.3 million operations daily. For a content rights management platform where the predominant operation is subscription creation (rather than high-frequency trading), this throughput is more than sufficient. Spotify has approximately 250 million subscribers; the system could onboard all of them within approximately 108 days under sustained load, or easily accommodate millions of daily churns.
 
 ### Finding 3: Latency is the meaningful cost, not throughput
 
-The real user-facing cost is the **6-second latency** per operation vs sub-millisecond centralized latency. For content rights operations (subscribing, purchasing, checking access), this is acceptable:
-- **Subscribing** happens once, 6 seconds is negligible
+The real user-facing cost is the **6-second latency** per operation, compared with sub-millisecond centralized latency. For content rights operations (subscribing, purchasing, checking access), this is acceptable:
+- **Subscribing** happens once; 6 seconds is negligible
 - **Purchasing views** happens infrequently, 6 seconds is acceptable
-- **Checking access** at 6 seconds is the weakest point — but can be cached client-side after first verification
+- **Checking access** at 6 seconds is the weakest point, but can be cached client-side after the first verification
 
 ### Finding 4: Storage costs are comparable
 
-Both systems show similar per-item storage costs (192 vs ~100-150 bytes per content item). The blockchain's slight overhead comes from SCALE encoding and NFT metadata. At scale, storage is not a differentiating factor.
+Both systems exhibit comparable per-item storage costs, with 192 bytes versus approximately 100-150 bytes per content item. The marginal overhead associated with the blockchain results from SCALE encoding and NFT metadata. When scaled, storage capacity does not constitute a distinguishing factor.
 
 ### Finding 5: The blockchain's stress test broke the RPC, not the chain
 
-The blockchain stress test showed 6.6% success rate — but this was due to the RPC WebSocket subscription limit (1024), not the chain itself. The chain processed 181 transactions per block at only 13% weight utilisation. With production RPC infrastructure (load balancing, fire-and-forget submission), the blockchain would sustain much higher throughput.
+The blockchain stress test revealed a success rate of 6.6%, primarily due to the RPC WebSocket subscription limit (1024) rather than the chain's capabilities. The blockchain processed 181 transactions per block with only 13% of the weight utilized. With production-grade RPC infrastructure, including load balancing and fire-and-forget submission, the blockchain would be able to sustain significantly higher throughput.
 
 ### Finding 6: Cross-chain is the blockchain's unique capability
 
-The centralized system has no equivalent to cross-chain operations. Inter-service HTTP calls (5-50ms) are the closest analogy, but they require trust between services. The blockchain's XCM (18-32 seconds) provides **trustless inter-chain operations** — a capability that simply does not exist in centralized architectures.
+The centralized system lacks a counterpart for cross-chain operations. Inter-service HTTP calls (5-50ms) serve as the nearest analogy; however, they necessitate mutual trust between services. In contrast, the blockchain's XCM (18-32 seconds) offers **trustless inter-chain operations**, a capability that is absent in centralized systems architectures.
 
 ---
 
@@ -123,7 +123,7 @@ The comparative analysis demonstrates that the blockchain-based content rights m
 3. **Cross-chain interoperability:** Rights are portable across heterogeneous blockchains via XCM and Snowbridge
 4. **Auditability:** Every state transition is publicly verifiable
 
-For the content rights management domain — where operations are infrequent (subscriptions, purchases) and trust is paramount (creators must trust the platform with their revenue) — the 270× performance cost is an acceptable trade-off for eliminating the trusted intermediary.
+In the domain of content rights management, where operations such as subscriptions and purchases are infrequent, and trust is of utmost importance, given that creators must entrust the platform with their revenue, the performance cost at 270× is considered an acceptable compromise to eliminate the need for a trust intermediary.
 
 This aligns with the self-publishing model: creators register content, set prices, and receive payments directly, without publishers, PROs, or platform operators taking commissions or controlling access. The blockchain replaces the intermediary with a trustless protocol.
 
@@ -133,11 +133,11 @@ This aligns with the self-publishing model: creators register content, set price
 
 ### Fairness of Comparison
 
-The centralized benchmark uses an **in-memory SQLite database** on a **local Express server** — the absolute best case for centralized performance. A production deployment on AWS would show higher latency (network hops, cold starts) and lower throughput (shared infrastructure). By benchmarking against the best case, any blockchain advantages identified are robust and not artifacts of a slow centralized implementation.
+The centralized benchmark utilizes an **in-memory SQLite database** hosted on a **local Express server**, representing the optimal scenario for centralized performance. Deployment in a production environment on AWS would likely result in increased latency (due to network hops and cold starts) and reduced throughput (due to shared infrastructure). By benchmarking against this best-case scenario, any advantages associated with blockchain technology are shown to be resilient rather than merely artifacts of a slow centralized system implementation.
 
 ### What's Not Compared
 
-- **Economic cost:** Parachain slot costs (~$1000/month on Kusama) vs AWS hosting (~$10-50/month). The blockchain is more expensive to operate, but eliminates the intermediary's commission (typically 15-30% of revenue).
+- **Economic cost:** Parachain slot costs (~$1000/month on Kusama) vs AWS hosting (~$10-50/month). The blockchain is more expensive to operate, but it eliminates the intermediary's commission (typically 15-30% of revenue).
 - **Scalability beyond single-chain:** Polkadot's horizontal scaling (100+ parachains) means aggregate network throughput scales linearly. A centralized system requires manual sharding and load balancing.
 - **Regulatory compliance:** Blockchain provides inherent compliance for audit trails. Centralized systems require additional compliance infrastructure.
 

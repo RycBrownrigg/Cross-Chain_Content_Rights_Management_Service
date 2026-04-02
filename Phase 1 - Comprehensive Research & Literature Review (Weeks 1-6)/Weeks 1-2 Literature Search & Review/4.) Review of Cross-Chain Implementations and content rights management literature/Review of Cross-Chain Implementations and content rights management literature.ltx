@@ -1,48 +1,34 @@
-\documentclass[12pt,a4paper]{article}
-
-% Packages
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
+\geometry{a4paper, margin=1in}
 \usepackage{hyperref}
-\usepackage{url}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{graphicx}
-\usepackage{enumitem}
-\usepackage{parskip}
-\usepackage{float}
-
-% Page geometry
-\geometry{left=1in, right=1in, top=1in, bottom=1in}
-
-% Hyperref settings
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=blue,
-    breaklinks=true,
+    filecolor=magenta,
+    urlcolor=blue,
 }
-
-% URL line breaking
-\Urlmuskip=0mu plus 1mu
-\def\UrlBreaks{\do\/\do-\do.\do=\do?\do\&}
-\urlstyle{same}
-
-\title{Review of Cross-Chain Implementations and Content Rights Management Literature}
-\author{}
-\date{}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
 \begin{document}
 
-\sloppy
-
-\maketitle
-
-\section{Review of Cross-Chain Implementations}
+\section*{Review of Cross-Chain Implementations}
 
 Cross-chain implementations facilitate interoperability among diverse blockchain networks, enabling seamless asset transfers, data sharing, and smart contract execution. Recent scholarly works highlight advancements in protocols, standards, and applications, especially in 2025, with an emphasis on security, scalability, and the adoption of practical applications.
 
@@ -50,11 +36,11 @@ Key protocols encompass \textbf{bridges}, \textbf{cross-chain messaging}, and \t
 
 Standards such as \textbf{IEEE Std 3221.01-2025} establish frameworks for cross-chain transactions, encompassing principles, applications, and performance metrics, thereby fostering interoperability between public and private blockchains. Surveys conducted in 2025, including those focusing on Bitcoin cross-chain bridges, offer taxonomies that classify implementations based on mechanisms such as relays and sidechains, as well as their potential for integration with artificial intelligence. Additionally, a comprehensive survey evaluates various cross-chain solutions, highlighting challenges such as atomicity and security, and notes that projects like Polkadot's relay chain serve as exemplary instances of dynamic virtual interoperability networks.
 
-Applications extend beyond finance: within supply chains, blockchain technology enhances transparency through cross-chain data sharing; in intellectual property trade, it addresses barriers to cross-border enforcement, such as scalability; and in payments, it transforms global transactions by reducing fees. Trends projected for 2025-2030 emphasize hybrid models, the integration of artificial intelligence, and intent-based systems (e.g., Across Protocol) to facilitate user-friendly multi-chain experiences. Challenges include vulnerabilities (e.g., bridge hacks) and the necessity for layered security.
+Applications extend beyond finance: within supply chains, blockchain technology enhances transparency through cross-chain data sharing; in intellectual property trade, it addresses barriers to cross-border enforcement, such as scalability; and in payments, it transforms global transactions by reducing fees. Trends projected for 2025--2030 emphasize hybrid models, the integration of artificial intelligence, and intent-based systems (e.g., Across Protocol) to facilitate user-friendly multi-chain experiences. Challenges include vulnerabilities (e.g., bridge hacks) and the necessity for layered security.
 
 Ethereum-based bridging architectures exemplify practical implementations that interconnect various chains to facilitate seamless operations, though they also underscore scalability trade-offs.
 
-\section{Review of Content Rights Management Literature}
+\section*{Review of Content Rights Management Literature}
 
 Content rights management (CRM), particularly blockchain-based digital rights management (DRM), focuses on safeguarding intellectual property through secure, transparent mechanisms. Recent literature reviews from 2025 highlight decentralization, integration with artificial intelligence, and market growth.
 
@@ -66,100 +52,126 @@ Legal perspectives examine the role of blockchain in copyright enforcement, util
 
 Cross-chain specific literature, such as a 2024 scheme for digital resource copyright, employs sidechain/relay mechanisms for registration, transactions, modifications, and enforcement, thereby enhancing efficiency compared to single-chain approaches.
 
-\section{How These Pertain to the Project}
+\section*{How These Pertain to the Project}
 
 The project's cross-chain Customer Relationship Management (CRM) service for decentralized subscription, Pay-Per-View (PPV), and purchase models directly builds upon these implementations. Cross-chain protocols such as XCM (native to Polkadot) are aligned with CCIP and IBC to facilitate seamless rights transfers. This alignment enables the integration of the XCM methodology for low-latency transactions across parachains and bridges, including those to Ethereum. The IEEE standards and relevant surveys inform the evaluation of interoperability metrics---such as success rates and latency---addressing challenges such as atomicity in PPV and purchase verification. Shared security models relevant to the project's deployment on Polkadot contribute to enhanced scalability, achieving over 500 transactions per second (TPS) compared to Ethereum-based competitors, as documented in the intellectual property trade barriers.
 
-The existing literature on Customer Relationship Management (CRM) emphasizes prioritizing monetization over mere protection. Reviews of blockchain Digital Rights Management (DRM) confirm the effectiveness of ink! contracts to facilitate automated subscriptions and ownership transfers, thereby addressing gaps in transparent revenue sharing, with fees typically below 5\%. Cross-chain copyright schemes directly inform the framework's processes, such as registration via sidechains, thereby overcoming the limitations inherent in single-chain systems and improving real-world applicability. Hybrids of artificial intelligence and blockchain technology offer potential enhancements to the project's evaluation, including the use of fuzzing techniques for security assessments. Market growth projections highlight the importance of economic efficiency, and Monte Carlo simulations within the project quantify cost savings of approximately 60\% compared to alternative centralized methods.
+The existing literature on Customer Relationship Management (CRM) emphasizes prioritizing monetization over mere protection. Reviews of blockchain Digital Rights Management (DRM) confirm the effectiveness of ink! contracts to facilitate automated subscriptions and ownership transfers, thereby addressing gaps in transparent revenue sharing, with fees typically below 5\%. Cross-chain copyright schemes directly inform the framework's processes, such as registration via sidechains, thereby overcoming the limitations inherent in single-chain systems and improving real-world applicability. Hybrids of artificial intelligence and blockchain technology offer potential enhancements to the project's evaluation, including the use of fuzzing techniques for security assessments. Market growth projections highlight the importance of economic efficiency.
+
+\bigskip\hrule\bigskip
+
+\subsection*{Implementation Notes (Phase 4--5 Measured Results)}
+
+The section above was written during Phase~1 using theoretical projections. Phase~4--5 implementation produced the following measured results that contextualise the literature predictions:
+
+\begin{table}[H]
+\centering
+\caption{Literature Claims vs Measured Results}
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Literature Claim} & \textbf{Measured Result} & \textbf{Assessment} \\
+\midrule
+Polkadot enables ``500+ TPS via parachains'' & 27 TPS sustained per parachain (283 TPS theoretical) & Single-parachain throughput is lower than aggregate network predictions. Polkadot's scaling model is horizontal (more parachains), not vertical (faster single chain). \\
+``Monte Carlo simulations quantify cost savings of approximately 60\%'' & Monte Carlo not implemented; centralized benchmark built instead & Comparative analysis shows 270$\times$ performance cost for trustlessness. The self-publishing model eliminates intermediary commissions (typically 15--30\%) entirely. \\
+ink! contracts for automated subscriptions & Implemented as FRAME pallet + ink! API layer & Architecture pivoted from pure ink! to FRAME pallet for performance. ink! contract provides external interface via pallet-revive precompile. \\
+Cross-chain copyright schemes inform registration & XCM cross-chain operations proven (subscribe, renew, PPV, ownership) & 100\% success rate, 18--32 second latency via HRMP relay \\
+Snowbridge for Ethereum interoperability & Full Snowbridge v1 E2E demonstrated & 2 ETH bridged from local Ethereum $\rightarrow$ Bridge Hub $\rightarrow$ AssetHub with cryptographic proof verification \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 Overall, these developments advance the research question by establishing benchmarks for scalability and interoperability. Meanwhile, the project introduces innovations in Polkadot-specific monetization, thereby bridging gaps in creator empowerment and cross-network collaboration efficiency.
 
-\section{Annotated Bibliography}
+\section*{Annotated Bibliography}
 
 This annotated bibliography lists 23 references from the cross-chain implementation and content rights management literature, supporting the thesis for a cross-chain CRM service for decentralized subscription, PPV, and purchase models. The entries are organized thematically around cross-chain interoperability and blockchain-based DRM solutions.
 
-\subsection{Cross-Chain Implementations}
+\subsection*{Cross-Chain Implementations}
 
 \begin{enumerate}
-    \item \textbf{Chainlink. (2021)}. Introducing the Cross-Chain Interoperability Protocol (CCIP) for Decentralized Inter-Chain Messaging and Token Movements. \url{https://blog.chain.link/introducing-the-cross-chain-interoperability-protocol-ccip/#post-title}
-    
-    \textbf{Annotation}: The paper explains the rationale behind Chainlink's optimization as a generalized cross-chain communication protocol within the blockchain industry. It further details the integration of CCIP within a multilayered technological framework and discusses how CCIP will enable diverse services to advance cross-chain hybrid smart contracts.
-    
-    \item \textbf{Sevim, H.S. (2024)}. A Survey on Trustless Cross-chain Interoperability Solutions in On-chain Finance. \textit{DLT 2024 Proceedings}. \url{https://dlt2024.di.unito.it/wp-content/uploads/2024/05/DLT2024_paper_14.pdf}
-    
-    \textbf{Annotation}: This document analyzes fundamental principles, current advancements, and innovative examples of cross-chain interoperability protocols. It compares leading trustless protocols---LayerZero, Wormhole, Chainlink, Circle, Polkadot, and Cosmos---focusing on their design, mechanisms, consensus, and limitations.
-    
-    \item Mao, H., et al. (2022). A Survey on Cross-Chain Technology: Challenges, Development, and Prospect. \textit{ResearchGate}. \url{https://www.researchgate.net/publication/366226788_A_Survey_on_Cross-Chain_Technology_Challenges_Development_and_Prospect}
-    
-    \textbf{Annotation}: This paper reviews cross-chain methods from a technical, security, and limitations perspective, assessing their applicability. It discusses challenges faced by public and consortium blockchains and introduces the main approaches used. The review covers eight key projects and their applications, ending with future research directions.
-    
-    \item \textbf{Tang, G., et al. (2025)}. Bitcoin Cross-Chain Bridge: A Taxonomy and Its Promise in Artificial Intelligence of Things. \textit{arXiv}. \url{https://arxiv.org/abs/2509.10413}
-    
-    \textbf{Annotation}: Classifies cross-chain bridges, relevant to the project's bridge design for external chains such as Ethereum. Suggests AI integration for future extensions but focuses on Bitcoin, limiting direct applicability to Polkadot-based content rights.
-    
-    \item \textbf{Valaštín, V., et al. (2024)}. Protocol for unifying cross-chain liquidity on Polkadot. \url{https://pdfs.semanticscholar.org/5152/064e23fb989674640caaa438495dbb83a88c.pdf}
-    
-    \textbf{Annotation}: Describes a protocol for cross-chain liquidity, applicable to Polkadot-based asset transfers. Supports the project's XCM-driven rights-transfer mechanisms, with a focus on event validation. Limited to liquidity focus, requiring adaptation for content rights.
-    
-    \item \textbf{Yin, Z., et al. (2022)}. Bool Network: An open, distributed, secure cross-chain notary platform. \textit{IACR ePrint Archive}. \url{https://eprint.iacr.org/2022/1290.pdf}
-    
-    \textbf{Annotation}: Proposes a cross-chain notary protocol with distributed key management. Relevant for secure rights transfers in the project, particularly for purchase verification. Limited by its focus on notarization over monetization models.
-    
-    \item \textbf{Kuongho, C., et al. (2023)}. A trusted reputation management scheme for cross-chain transactions. \textit{Sensors, 23}(12), 6033. \url{https://orbit.dtu.dk/files/330353284/sensors_23_06033.pdf}
-    
-    \textbf{Annotation}: Introduces a reputation scheme to ensure cross-chain security and prevent misbehavior. Supports the project's security evaluation, particularly for trustless PPV transactions. Limited to reputation systems, lacking direct monetization insights.
-    
-    \item \textbf{Li, L., et al. (2024)}. Why Blockchain-Based Digital Assets Are Owned on Decentralized Metaverse Platforms? \textit{ScholarSpace}. \url{https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/da7d3ba9-379e-48a8-98e8-18b2bc293b1f/content}
-    
-    \textbf{Annotation}: Explores decentralized ownership in metaverse contexts, which are relevant to the project's NFT-based purchase model. Supports Web3 principles but focuses on virtual assets, limiting its applicability to media-specific applications.
+
+\item \textbf{Chainlink. (2021)}. Introducing the Cross-Chain Interoperability Protocol (CCIP) for Decentralized Inter-Chain Messaging and Token Movements. \url{https://blog.chain.link/introducing-the-cross-chain-interoperability-protocol-ccip/}
+
+\textbf{Annotation}: The paper explains the rationale behind Chainlink's optimization as a generalized cross-chain communication protocol within the blockchain industry. It further details the integration of CCIP within a multilayered technological framework and discusses how CCIP will enable diverse services to advance cross-chain hybrid smart contracts.
+
+\item \textbf{Sevim, H.S. (2024)}. A Survey on Trustless Cross-chain Interoperability Solutions in On-chain Finance. \textit{DLT 2024 Proceedings}. \url{https://dlt2024.di.unito.it/wp-content/uploads/2024/05/DLT2024_paper_14.pdf}
+
+\textbf{Annotation}: This document analyzes fundamental principles, current advancements, and innovative examples of cross-chain interoperability protocols. It compares leading trustless protocols---LayerZero, Wormhole, Chainlink, Circle, Polkadot, and Cosmos---focusing on their design, mechanisms, consensus, and limitations.
+
+\item Mao, H., et al. (2022). A Survey on Cross-Chain Technology: Challenges, Development, and Prospect. \textit{ResearchGate}. \url{https://www.researchgate.net/publication/366226788}
+
+\textbf{Annotation}: This paper reviews cross-chain methods from a technical, security, and limitations perspective, assessing their applicability. It discusses challenges faced by public and consortium blockchains and introduces the main approaches used. The review covers eight key projects and their applications, ending with future research directions.
+
+\item \textbf{Tang, G., et al. (2025)}. Bitcoin Cross-Chain Bridge: A Taxonomy and Its Promise in Artificial Intelligence of Things. \textit{arXiv}. \url{https://arxiv.org/abs/2509.10413}
+
+\textbf{Annotation}: Classifies cross-chain bridges, relevant to the project's bridge design for external chains such as Ethereum. Suggests AI integration for future extensions but focuses on Bitcoin, limiting direct applicability to Polkadot-based content rights.
+
+\item \textbf{Vala\v{s}t\'{i}n, V., et al. (2024)}. Protocol for unifying cross-chain liquidity on Polkadot. \url{https://pdfs.semanticscholar.org/5152/064e23fb989674640caaa438495dbb83a88c.pdf}
+
+\textbf{Annotation}: Describes a protocol for cross-chain liquidity, applicable to Polkadot-based asset transfers. Supports the project's XCM-driven rights-transfer mechanisms, with a focus on event validation. Limited to liquidity focus, requiring adaptation for content rights.
+
+\item \textbf{Yin, Z., et al. (2022)}. Bool Network: An open, distributed, secure cross-chain notary platform. \textit{IACR ePrint Archive}. \url{https://eprint.iacr.org/2022/1290.pdf}
+
+\textbf{Annotation}: Proposes a cross-chain notary protocol with distributed key management. Relevant for secure rights transfers in the project, particularly for purchase verification. Limited by its focus on notarization over monetization models.
+
+\item \textbf{Kuongho, C., et al. (2023)}. A trusted reputation management scheme for cross-chain transactions. \textit{Sensors, 23}(12), 6033. \url{https://orbit.dtu.dk/files/330353284/sensors_23_06033.pdf}
+
+\textbf{Annotation}: Introduces a reputation scheme to ensure cross-chain security and prevent misbehavior. Supports the project's security evaluation, particularly for trustless PPV transactions. Limited to reputation systems, lacking direct monetization insights.
+
+\item \textbf{Li, L., et al. (2024)}. Why Blockchain-Based Digital Assets Are Owned on Decentralized Metaverse Platforms? \textit{ScholarSpace}. \url{https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/da7d3ba9-379e-48a8-98e8-18b2bc293b1f/content}
+
+\textbf{Annotation}: Explores decentralized ownership in metaverse contexts, which are relevant to the project's NFT-based purchase model. Supports Web3 principles but focuses on virtual assets, limiting its applicability to media-specific applications.
+
 \end{enumerate}
 
-\subsection{Content Rights Management Literature}
+\subsection*{Content Rights Management Literature}
 
 \begin{enumerate}[resume]
-    \item \textbf{Wamugo, G.. (2024)}. Content monetization: non-fungible tokens as a new revenue stream for the media sector in Kenya. stream for the media sector in Kenya. \textit{Theses and Dissertations}. \url{https://ecommons.aku.edu/cgi/viewcontent.cgi?article=3232&context=theses_dissertations}
-    
-    \textbf{Annotation}: Examines NFTs for media monetization, directly supporting the project's purchase verification model. Demonstrates revenue potential for creators but is limited to a Kenyan case study, requiring broader validation.
-    
-    \item \textbf{Garba, A., et al. (2021)}. A digital rights management system based on a scalable blockchain. \textit{Peer-to-Peer Networking and Applications, 14}(5), 2665--2677. \url{https://research-api.cbs.dk/ws/portalfiles/portal/93314574/abba_garba_et_al_a_digital_rights_management_system_based_on_a_scalable_blockchain_publishersversion.pdf}
-    
-    \textbf{Annotation}: Proposes a scalable blockchain DRM with watermarking for media transactions. Relevant for the project's scalability goals in subscription and PPV models. Limited by its single-chain focus, it lacks cross-chain perspectives.
-    
-    \item \textbf{Mareckova, D. (2024)}. Blockchain and Collective Rights Management of Copyright and Related Rights at the Global Level The Case of the Music Industry. \textit{OAPEN Library}. \url{https://library.oapen.org/bitstream/handle/20.500.12657/94575/oa_pdf-057-1731486746.pdf}
-    
-    \textbf{Annotation}: Explores blockchain for collective rights management, which is relevant to transparent revenue sharing in the project. Highlights creator empowerment but focuses on collective rights, limiting insights into individual monetization.
-    
-    \item \textbf{Moncada, R., et al. (2021)}. DLT-enabled Platforms: Distribution and Management of Media Content. \url{https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}
-    
-    \textbf{Annotation}: Discusses blockchain platforms for content distribution and royalties. Supports the project's PPV and subscription models with pay-per-use frameworks. Limited to European media, requiring global adaptation.
-    
-    \item \textbf{Orero, P., et al. (2024)}. The visible subtitler: Blockchain technology towards right management and minting. \url{https://open-research-europe.ec.europa.eu/articles/3-26/pdf}
-    
-    \textbf{Annotation}: Focuses on blockchain for rights claiming and minting, supporting the project's purchase model with NFT-based ownership. Emphasizes scalability but lacks cross-chain specifics.
-    
-    \item \textbf{Patil, S., \& Dandge, P. (2022)}. Blockchain-based multimedia content protection using encryption. \textit{International Journal of Innovative Research and Technology}. \url{https://ijirt.org/publishedpaper/IJIRT156400_PAPER.pdf}
-    
-    \textbf{Annotation}: Describes blockchain DRM for multimedia with encryption. Supports the project's security requirements for content access control. Limited by its focus on protection over monetization or cross-chain functionality.
-    
-    \item \textbf{Buzu, I. (2021)}. Blockchain, Smart Contracts and Copyright Management Disruption. \textit{SSRN Electronic Journal}. \url{https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3759260_code3591422.pdf}
-    
-    \textbf{Annotation}: Examines smart contracts for automated copyright management. Supports the project's ink! contract design for subscription automation. Limited to copyright, lacking PPV/purchase focus.
-    
-    \item \textbf{Steem. (2025)}. Steem, An incentivized, blockchain-based, public content platform. \url{https://steem.com/SteemWhitePaper.pdf}
-    
-    \textbf{Annotation}: Describes a blockchain platform rewarding content creators. Relevant for the project's economic efficiency, demonstrating low-barrier monetization. Limited by its single-chain architecture.
-    
-    \item \textbf{USPTO/USCO}. (2024). Non-Fungible Tokens and Intellectual Property - A Report to Congress. \url{https://www.copyright.gov/policy/nft-study/Joint-USPTO-USCO-Report-on-NFTs-and-Intellectual-Property.pdf}
-    
-    \textbf{Annotation}: Examines NFTs for IP management, including licensing and ownership. Directly supports the project's purchase verification model, addressing legal implications. Limited to policy, not technical implementation.
-    
-    \item Xie, R., \& Zhang, W. (2022). Research on Copyright Protection of Digital Works Based on Multi-blockchain. \textit{Recent Advances in Computer Science and Communications, 15}(8), 1126-1134. \url{https://doi.org/10.2174/2666255815666220204092947}
-    
-    \textbf{Annotation}: Proposes a multi-blockchain framework for copyright protection, reducing block creation times. Provides benchmarks for the project's scalability evaluation. Limited by its focus on protection over monetization.
-    
-    \item Xie, R., Tang, M. (2024). A digital resource copyright protection scheme based on blockchain cross-chain technology. \textit{Heliyon, 10}(16), e34781. \url{https://doi.org/10.1016/j.heliyon.2024.e34781}
-    
-    \textbf{Annotation}: Details a cross-chain copyright scheme for registration and enforcement. Directly relevant for the project's rights transfer processes, improving single-chain limitations. Limited to protection-focused workflows.
+
+\item \textbf{Wamugo, G. (2024)}. Content monetization: non-fungible tokens as a new revenue stream for the media sector in Kenya. \textit{Theses and Dissertations}. \url{https://ecommons.aku.edu/cgi/viewcontent.cgi?article=3232&context=theses_dissertations}
+
+\textbf{Annotation}: Examines NFTs for media monetization, directly supporting the project's purchase verification model. Demonstrates revenue potential for creators but is limited to a Kenyan case study, requiring broader validation.
+
+\item \textbf{Garba, A., et al. (2021)}. A digital rights management system based on a scalable blockchain. \textit{Peer-to-Peer Networking and Applications, 14}(5), 2665--2677. \url{https://research-api.cbs.dk/ws/portalfiles/portal/93314574/}
+
+\textbf{Annotation}: Proposes a scalable blockchain DRM with watermarking for media transactions. Relevant for the project's scalability goals in subscription and PPV models. Limited by its single-chain focus, it lacks cross-chain perspectives.
+
+\item \textbf{Mareckova, D. (2024)}. Blockchain and Collective Rights Management of Copyright and Related Rights at the Global Level The Case of the Music Industry. \textit{OAPEN Library}. \url{https://library.oapen.org/bitstream/handle/20.500.12657/94575/oa_pdf-057-1731486746.pdf}
+
+\textbf{Annotation}: Explores blockchain for collective rights management, which is relevant to transparent revenue sharing in the project. Highlights creator empowerment but focuses on collective rights, limiting insights into individual monetization.
+
+\item \textbf{Moncada, R., et al. (2021)}. DLT-enabled Platforms: Distribution and Management of Media Content. \url{https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}
+
+\textbf{Annotation}: Discusses blockchain platforms for content distribution and royalties. Supports the project's PPV and subscription models with pay-per-use frameworks. Limited to European media, requiring global adaptation.
+
+\item \textbf{Orero, P., et al. (2024)}. The visible subtitler: Blockchain technology towards right management and minting. \url{https://open-research-europe.ec.europa.eu/articles/3-26/pdf}
+
+\textbf{Annotation}: Focuses on blockchain for rights claiming and minting, supporting the project's purchase model with NFT-based ownership. Emphasizes scalability but lacks cross-chain specifics.
+
+\item \textbf{Patil, S., \& Dandge, P. (2022)}. Blockchain-based multimedia content protection using encryption. \textit{International Journal of Innovative Research and Technology}. \url{https://ijirt.org/publishedpaper/IJIRT156400_PAPER.pdf}
+
+\textbf{Annotation}: Describes blockchain DRM for multimedia with encryption. Supports the project's security requirements for content access control. Limited by its focus on protection over monetization or cross-chain functionality.
+
+\item \textbf{Buzu, I. (2021)}. Blockchain, Smart Contracts and Copyright Management Disruption. \textit{SSRN Electronic Journal}. \url{https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3759260_code3591422.pdf}
+
+\textbf{Annotation}: Examines smart contracts for automated copyright management. Supports the project's ink! contract design for subscription automation. Limited to copyright, lacking PPV/purchase focus.
+
+\item \textbf{Steem. (2025)}. Steem, An incentivized, blockchain-based, public content platform. \url{https://steem.com/SteemWhitePaper.pdf}
+
+\textbf{Annotation}: Describes a blockchain platform rewarding content creators. Relevant for the project's economic efficiency, demonstrating low-barrier monetization. Limited by its single-chain architecture.
+
+\item \textbf{USPTO/USCO}. (2024). Non-Fungible Tokens and Intellectual Property --- A Report to Congress. \url{https://www.copyright.gov/policy/nft-study/Joint-USPTO-USCO-Report-on-NFTs-and-Intellectual-Property.pdf}
+
+\textbf{Annotation}: Examines NFTs for IP management, including licensing and ownership. Directly supports the project's purchase verification model, addressing legal implications. Limited to policy, not technical implementation.
+
+\item Xie, R., \& Zhang, W. (2022). Research on Copyright Protection of Digital Works Based on Multi-blockchain. \textit{Recent Advances in Computer Science and Communications, 15}(8), 1126--1134. \url{https://doi.org/10.2174/2666255815666220204092947}
+
+\textbf{Annotation}: Proposes a multi-blockchain framework for copyright protection, reducing block creation times. Provides benchmarks for the project's scalability evaluation. Limited by its focus on protection over monetization.
+
+\item Xie, R., Tang, M. (2024). A digital resource copyright protection scheme based on blockchain cross-chain technology. \textit{Heliyon, 10}(16), e34781. \url{https://doi.org/10.1016/j.heliyon.2024.e34781}
+
+\textbf{Annotation}: Details a cross-chain copyright scheme for registration and enforcement. Directly relevant for the project's rights transfer processes, improving single-chain limitations. Limited to protection-focused workflows.
+
 \end{enumerate}
 
 \end{document}

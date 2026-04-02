@@ -1,55 +1,39 @@
-\documentclass[12pt,a4paper]{report}
-
-% Packages
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
+\geometry{a4paper, margin=1in}
 \usepackage{hyperref}
-\usepackage{url}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{graphicx}
-\usepackage{enumitem}
-\usepackage{parskip}
-\usepackage{float}
-\usepackage{setspace}
-
-% Page geometry
-\geometry{left=1in, right=1in, top=1in, bottom=1in}
-
-% Hyperref settings
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=blue,
-    breaklinks=true,
+    filecolor=magenta,
+    urlcolor=blue,
 }
-
-% URL line breaking
-\Urlmuskip=0mu plus 1mu
-\def\UrlBreaks{\do\/\do-\do.\do=\do?\do\&}
-\urlstyle{same}
-
-% Line spacing
-\onehalfspacing
-
-\title{Thesis Draft - 11/21/2025\\[1em]
-\Large Cross-Chain Content Rights Management Service:\\
-A Unified Framework for Decentralized Subscription,\\
-Pay-Per-View, and Purchase Models}
-\author{}
-\date{}
+\usepackage{enumitem}
+\usepackage{natbib}
+\bibliographystyle{plain}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{times}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xurl}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
 \begin{document}
 
-\sloppy
+\section*{Thesis Draft -- 11/21/2025}
+\subsection*{Cross-Chain Content Rights Management Service: A Unified Framework for Decentralized Subscription, Pay-Per-View, and Purchase Models}
 
-\maketitle
+% title handled by section* above
 
-\chapter{Introduction}
+\section*{Introduction}
 
 The digital content industry has emerged as one of the most rapidly expanding sectors within the global economy. In 2024, worldwide revenues from digital media and entertainment surpassed USD 550 billion, with forecasts predicting an increase to approximately USD 750 billion by 2028 (PwC Global Entertainment \& Media Outlook 2024--2028). Streaming platforms, digital publishing, online education, independent journalism, and marketplaces for user-generated content now serve as the primary channels whereby creators engage with audiences. Nevertheless, despite this remarkable expansion, creators continue to receive only a modest portion of the value they generate. On the predominant centralized platforms---such as YouTube, Spotify, Netflix, Substack, Patreon, and Apple---intermediaries routinely retain between 30\% and 45\% of gross revenue through platform fees, payment processor charges, and revenue-sharing agreements. Furthermore, creators face geographical restrictions, delayed payouts (often 60-90 days), arbitrary content demonetization, and a complete lack of portability for their audience relationships.
 
@@ -72,7 +56,7 @@ The research is driven by four converging macro-trends observed throughout 2025:
 
 The contribution is therefore both theoretical, providing a new reference framework for second-generation Web3 content monetization, and practical, including an open-source prototype that music labels, streaming services, educational platforms, journalists, and individual creators can deploy or fork without sacrificing user experience or decentralization.
 
-\chapter{Background and Related Work}
+\section*{Background and Related Work}
 
 \section{Evolution of Digital Rights Management}
 
@@ -114,7 +98,7 @@ No reviewed system (112 sources analysed) implements a single rights token capab
 
 Polkadot's shared-security model eliminates the need for individual parachains to bootstrap their validator sets, thereby significantly reducing the attack surface compared to sovereign layer 2 solutions (Crippa \& Polu 2022). The launch of Agile Coretime in 2025 introduced market-based resource allocation, while XCM v5 incorporated scheduled locations and barrier instructions---features that explicitly facilitate recurring cross-chain payments. The implementation of ink! v6 with PolkaVM offers execution speeds that are 5 to 10 times faster than Solidity for identical logic, and Rust's inherent memory safety features eliminate entire categories of reentrancy and overflow vulnerabilities, which have previously cost the Ethereum ecosystem billions (Parity Technologies 2025).
 
-\chapter{Research Questions and Objectives}
+\section*{Research Questions and Objectives}
 
 \section{Primary Research Question (Refined November 2025)}
 
@@ -144,7 +128,7 @@ $\rightarrow$ Consolidate subscription, pay-per-view (PPV), and purchase mechani
 
 These refined questions and objectives directly address the critical gaps identified in the literature (G1--G7) and provide clear, measurable success criteria for the remainder of the research.
 
-\chapter{Top 25 Annotated Bibliography}
+\section*{Top 25 Annotated Bibliography}
 
 \begin{enumerate}
     \item \textbf{IEEE} (2025). \textit{IEEE Std 3221.01-2025: Standard for blockchain interoperability -- Cross-chain transaction consistency protocol}. IEEE Standards Association.
@@ -246,6 +230,62 @@ These refined questions and objectives directly address the critical gaps identi
     \item \textbf{Di Francesco, A., \& Zoppi, S.} (2024). A survey on trustless cross-chain interoperability solutions. \textit{DLT 2024 Proceedings}.
     
     Comprehensive taxonomy including Polkadot strengths and remaining gaps.
+\end{enumerate}
+
+\bigskip\hrule\bigskip
+
+\section*{Implementation Notes (Phase 4--5)}
+
+This thesis draft was written in November 2025 during Phase~1, before implementation. The following claims require revision in the final thesis to reflect measured results from Phase~4--5 testing.
+
+\subsection*{Performance Claims Requiring Revision}
+
+\begin{table}[H]
+\centering
+\caption{Draft Claims vs Measured Results}
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Draft Claim} & \textbf{Measured Result} & \textbf{Revision Needed} \\
+\midrule
+``sub-second finality in access verification'' & \textasciitilde{}6 seconds (one block time) & Replace with ``deterministic \textasciitilde{}6 second inclusion latency'' \\
+``XCM extensions achieving \textless{}2s finality'' (RO1) & 18--32 seconds (3--5 parachain blocks) & Replace with measured XCM latency range \\
+``access verification within one second'' (RO2) & \textasciitilde{}6 seconds & Replace with measured block time; note client-side caching as path to sub-second \\
+``transaction costs below one cent'' & Achieved---on-chain fees are negligible & No revision needed \\
+``creator revenue retention exceeding 95\%'' & 100\% in self-publishing model (configurable royalty splits) & Update to reflect self-publishing eliminates intermediary entirely \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Architecture Claims Requiring Revision}
+
+\begin{table}[H]
+\centering
+\caption{Architecture: Draft vs Actual}
+\begin{tabularx}{\textwidth}{LLL}
+\toprule
+\textbf{Draft Claim} & \textbf{Actual Implementation} & \textbf{Revision Needed} \\
+\midrule
+``ink! smart contracts deliver a unified rights token'' & \texttt{pallet-content-rights} (FRAME pallet) is the primary logic; ink! provides API layer via pallet-revive precompile & Reframe: FRAME pallet as primary, ink! as external interface \\
+``XCM cross-consensus messaging'' for rights transfers & Confirmed---6 XCM extrinsics, 100\% success rate & No revision needed \\
+``zero-knowledge (ZK) compliance interfaces'' & Not implemented & Move to Future Work \\
+``quantify savings through Monte Carlo simulation'' & Not implemented; replaced by direct centralized benchmark (270$\times$ TPS ratio) & Replace Monte Carlo with comparative analysis methodology \\
+``HHI remains below 1,500'' & Not measured & Remove or move to Future Work \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{What the Thesis Should Emphasise}
+
+The final thesis should reframe the contribution around what was actually demonstrated:
+
+\begin{enumerate}
+    \item \textbf{Unified rights pallet} with subscription, PPV, and ownership in a single FRAME pallet (17 extrinsics, 56 unit tests)
+    \item \textbf{Cross-chain operations} via XCM with paid execution (100\% success, 18--32s latency)
+    \item \textbf{Ethereum bridge} via full Snowbridge v1 E2E (2 ETH bridged with cryptographic proof verification)
+    \item \textbf{Automatic royalty propagation} with configurable splits (up to 10 collaborators, basis-point precision)
+    \item \textbf{On-chain auto-renewal} via \texttt{on\_initialize} scheduler pattern
+    \item \textbf{Performance trade-off analysis}: 270$\times$ slower than centralized but trustless, censorship-resistant, and self-publishing
+    \item \textbf{Self-publishing model} that eliminates intermediaries entirely (vs traditional 15--30\% platform fees)
 \end{enumerate}
 
 \end{document}

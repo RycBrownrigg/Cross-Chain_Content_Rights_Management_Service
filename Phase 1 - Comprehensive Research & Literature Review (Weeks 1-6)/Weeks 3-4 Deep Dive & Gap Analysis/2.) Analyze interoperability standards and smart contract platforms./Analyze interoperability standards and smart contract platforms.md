@@ -8,13 +8,25 @@ In 2025, the interoperability market is projected to reach $2.55 billion by 2029
 
 Interoperability standards establish protocols for cross-chain communication, ensuring atomicity, consistency, and security in transactions. They are classified into notary-based systems (centralized verification), relay-based systems (trusted hubs), and hash-locking mechanisms (HTLC for swaps). The primary standards for 2025 concentrate on enterprise adoption, with IEEE spearheading formalization efforts.
 
-| Standard/Protocol | Description | Key Features | Applicability to Project | Pros | Cons |
-|-------------------|-------------|--------------|--------------------------|------|------|
-| **IEEE 3221.01-2025** | Cross-chain transaction consistency protocol for multiple technologies. | Notary/multi-sig verification; atomic swaps. | Rights transfers (e.g., PPV tokens across chains). | Standardized framework; reduces disputes. | Centralized elements in notary mode. |
-| **XCM (Polkadot)** | Cross-consensus messaging for parachains. | Instruction-based (e.g., WithdrawAsset); multi-hop. | Subscription activations via bridges. | Native to Polkadot; low latency (<2s). | Ecosystem-specific. |
-| **CCIP (Chainlink)** | Oracle-enabled cross-chain protocol. | Risk management; embedded instructions. | Secure PPV payments with oracles. | Modular security; 100+ chains. | Oracle dependency risks. |
-| **IBC (Cosmos)** | Inter-blockchain communication v2 (launched March 2025). | Packet-based messaging; sovereignty-preserving. | Purchase verifications in multi-chain ecosystems. | 115+ chains; trust-minimized. | Complex for non-Cosmos devs. |
-| **LayerZero** | Omnichain protocol for arbitrary data. | Endpoint-based; gas abstraction. | Hybrid subscription models. | Universal; developer-friendly. | Emerging; fewer audits. |
+**Table 1a: Interoperability Standards — Description and Features**
+
+| Standard/Protocol | Description | Key Features |
+|-------------------|-------------|--------------|
+| **IEEE 3221.01-2025** | Cross-chain transaction consistency protocol for multiple technologies. | Notary/multi-sig verification; atomic swaps. |
+| **XCM (Polkadot)** | Cross-consensus messaging for parachains. | Instruction-based (e.g., WithdrawAsset); multi-hop. |
+| **CCIP (Chainlink)** | Oracle-enabled cross-chain protocol. | Risk management; embedded instructions. |
+| **IBC (Cosmos)** | Inter-blockchain communication v2 (launched March 2025). | Packet-based messaging; sovereignty-preserving. |
+| **LayerZero** | Omnichain protocol for arbitrary data. | Endpoint-based; gas abstraction. |
+
+**Table 1b: Interoperability Standards — Project Applicability**
+
+| Standard/Protocol | Applicability to Project | Pros | Cons |
+|-------------------|--------------------------|------|------|
+| **IEEE 3221.01-2025** | Rights transfers (e.g., PPV tokens across chains). | Standardized framework; reduces disputes. | Centralized elements in notary mode. |
+| **XCM (Polkadot)** | Subscription activations via bridges. | Native to Polkadot; low latency (<2s). | Ecosystem-specific. |
+| **CCIP (Chainlink)** | Secure PPV payments with oracles. | Modular security; 100+ chains. | Oracle dependency risks. |
+| **IBC (Cosmos)** | Purchase verifications in multi-chain ecosystems. | 115+ chains; trust-minimized. | Complex for non-Cosmos devs. |
+| **LayerZero** | Hybrid subscription models. | Universal; developer-friendly. | Emerging; fewer audits. |
 
 #### 2. Deep Dive into Interoperability Standards
 
@@ -34,13 +46,25 @@ Trends: In 2025, enterprises anticipate the implementation of hybrid standards, 
 
 Smart contract platforms offer runtimes for deterministic code execution. Ethereum maintains a dominant position with a 60% market share, while Polkadot's ink! is gaining prominence for cross-chain applications. Comparative analyses in 2025 emphasize the trade-offs among speed, cost, and interoperability.
 
-| Platform | Language | TPS (2025 Avg.) | Cost/Tx | Interoperability | Applicability to Project | Pros | Cons |
-|----------|----------|-----------------|---------|------------------|--------------------------|------|------|
-| **Ethereum** | Solidity/Vyper | 15-100 (L2: 2K) | $0.01-0.10 | Bridges (e.g., CCIP) | PPV contracts; EVM bridges. | Mature ecosystem; audited tools. | Congestion; high fees. |
-| **Polkadot (ink!)** | Rust (ink!) | 500-1K+ (parachains) | <$0.01 | Native XCM | Subscription/Purchase; cross-chain. | Secure (Rust); scalable. | Steeper learning curve. |
-| **Solana** | Rust | 2K-65K | <$0.001 | Wormhole bridges | High-volume PPV. | Ultra-fast; low cost. | Centralization risks. |
-| **Binance Smart Chain (BSC)** | Solidity | 100-300 | <$0.01 | BSC Bridge | EVM-compatible subs. | Cheap; Ethereum-like. | Centralization; security incidents. |
-| **Cardano** | Haskell/Plutus | 250-1K | $0.10-0.50 | Sidechains | Formal verification for rights. | Secure; research-backed. | Slow development. |
+**Table 2a: Smart Contract Platforms — Technical Comparison**
+
+| Platform | Language | TPS (2025 Avg.) | Cost/Tx | Interoperability |
+|----------|----------|-----------------|---------|------------------|
+| **Ethereum** | Solidity/Vyper | 15-100 (L2: 2K) | $0.01-0.10 | Bridges (e.g., CCIP) |
+| **Polkadot (ink!)** | Rust (ink!) | 500-1K+ (parachains) | <$0.01 | Native XCM |
+| **Solana** | Rust | 2K-65K | <$0.001 | Wormhole bridges |
+| **BSC** | Solidity | 100-300 | <$0.01 | BSC Bridge |
+| **Cardano** | Haskell/Plutus | 250-1K | $0.10-0.50 | Sidechains |
+
+**Table 2b: Smart Contract Platforms — Project Applicability**
+
+| Platform | Applicability to Project | Pros | Cons |
+|----------|--------------------------|------|------|
+| **Ethereum** | PPV contracts; EVM bridges. | Mature ecosystem; audited tools. | Congestion; high fees. |
+| **Polkadot (ink!)** | Subscription/Purchase; cross-chain. | Secure (Rust); scalable. | Steeper learning curve. |
+| **Solana** | High-volume PPV. | Ultra-fast; low cost. | Centralization risks. |
+| **BSC** | EVM-compatible subs. | Cheap; Ethereum-like. | Centralization; security incidents. |
+| **Cardano** | Formal verification for rights. | Secure; research-backed. | Slow development. |
 
 #### 4. Deep Dive into Key Platforms
 
@@ -74,6 +98,20 @@ Key Gaps: The absence of unified standards for content-specific interoperability
 - **Evaluation Metrics**: Benchmarks for interop (99% success) and scalability (500 TPS) in Phase 4.
 - **Fills Gaps**: Native standards integration enables hybrid models, boosting economic efficiency vs. competitors.
 - **Contributions**: Advances multi-VM platforms for content rights, addressing $2.55B market needs.
+
+---
+
+#### Implementation Notes (Phase 4-5 Measured Results)
+
+The theoretical benchmarks cited above were from 2025 literature. Phase 5 testing produced measured results that contextualise these predictions:
+
+| Phase 1 Claim | Measured Result | Notes |
+|---------------|----------------|-------|
+| XCM latency "<2s" | **18-32 seconds** (3-5 parachain blocks) | HRMP relay through the relay chain adds latency not accounted for in the <2s theoretical estimate |
+| Polkadot TPS "500-1K+ (parachains)" | **27 TPS sustained per parachain; 283 TPS theoretical** | Literature conflates aggregate network capacity (100 parachains × 27 ≈ 2,700 TPS) with single-parachain throughput |
+| Cross-chain success "99%" | **100%** (9 XCM operations in testing) | Exceeded target, though with smaller sample size |
+| ink! for "secure, cost-effective execution" | **FRAME pallet** as primary logic; ink! as API layer | Architecture pivoted for performance; ink! still used via pallet-revive precompile |
+| Bridge latency "5-10s" | **Snowbridge E2E: ~1 minute** after beacon finalization | Full cryptographic proof verification adds latency vs simple bridge estimates |
 
 
 ### Bibliography

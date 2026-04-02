@@ -8,13 +8,13 @@ Compare the cross-chain content rights management system (blockchain) against a 
 
 ### Centralized Benchmark System
 
-A minimal Express.js + SQLite server implementing the same 6 content rights operations as the blockchain pallet. This represents the **best-case centralized performance** — no cloud overhead, no network latency — providing a generous baseline for comparison.
+A minimalistic server built with Express.js and SQLite, executing the six content rights operations identical to those of the blockchain pallet. This configuration exemplifies the **best-case centralized performance**, free from cloud overhead and network latency, thereby establishing a substantial baseline for evaluation.
 
 **Rationale for local over AWS:**
 - Measures the *architectural pattern* (centralized vs decentralized), not a specific cloud provider
 - Zero cost, fully reproducible (`npm start && npm test`)
 - Avoids AWS Lambda cold starts and network latency distorting measurements
-- A reviewer cannot argue the comparison is unfair — we gave centralized every advantage
+- A reviewer cannot argue that the comparison is unfair; we gave every advantage to the centralized system
 
 For the thesis: "A production centralized system would typically deploy on AWS/GCP with managed databases. Our local benchmark represents the best-case centralized performance (no network latency to cloud services), providing a generous baseline for comparison."
 
@@ -101,12 +101,3 @@ centralized-drm-benchmark/
 
 **Thesis argument:** The centralized system is 200-6,000× faster for raw operations, but sacrifices trustlessness, censorship resistance, auditability, and fault tolerance. The blockchain system's 27 TPS (1.4M ops/day) is sufficient for content rights management, making the performance cost acceptable for the trust guarantees gained.
 
-## Estimated Effort
-
-| Step | Time |
-|------|------|
-| Build server + database | 3 hours |
-| Build 3 benchmark scripts | 3 hours |
-| Run benchmarks | 30 minutes |
-| Write comparison report | 1.5 hours |
-| **Total** | **~8 hours** |

@@ -65,8 +65,8 @@ Rococo Relay Chain (alice, bob)
 | Cross-chain subscription renewal | Content Rights → Content Rights (via relay) | Passing |
 | Cross-chain PPV access | Content Rights → Content Rights (via relay) | Passing |
 | Cross-chain ownership transfer | Content Rights → Content Rights (via relay) | Passing |
-| Ethereum → Bridge Hub beacon relay | Ethereum → Bridge Hub | Running |
-| Ethereum → Content Rights token bridge | Ethereum → BH → AH → CR | In progress (E2E demo pending) |
+| Ethereum → Bridge Hub beacon relay | Ethereum → Bridge Hub | Passing |
+| Ethereum → AssetHub token bridge | Ethereum → BH → AH | Passing (2 ETH bridged, verified) |
 
 ### 4. Performance Logging
 
