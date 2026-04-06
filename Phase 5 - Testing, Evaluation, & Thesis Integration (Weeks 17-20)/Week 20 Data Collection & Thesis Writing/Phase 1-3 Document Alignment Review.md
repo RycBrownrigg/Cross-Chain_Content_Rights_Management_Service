@@ -11,7 +11,7 @@ Review of early-phase design documents against the actual Phase 4-5 implementati
 | # | Concept | Implemented? | Notes |
 |---|---------|-------------|-------|
 | 1 | **Unified Rights Token** | **Partially** | Implemented as `pallet-content-rights` with `RightsType` enum (Subscription/PayPerView/Ownership). However, it's a FRAME pallet, not an RMRK 2.0 NFT with equipped resources. Child NFTs via `pallet-nfts` represent access rights, but the "single object with three conditions" is storage maps, not a single token. |
-| 2 | **Recurring Cross-Chain Subscription** | **Yes** | Cross-chain subscription/renewal works via XCM `Transact`. Auto-renewal implemented via `on_initialize` hook with `AutoRenewIndex` storage map — processes expired subscriptions each block. XCM v5 `Schedule` instruction was replaced with this on-chain scheduler pattern. |
+| 2 | **Recurring Cross-Chain Subscription** | **Yes** | Cross-chain subscription/renewal works via XCM `Transact`. Auto-renewal implemented via `on_initialize` hook with `AutoRenewIndex` storage map;  processes expired subscriptions each block. XCM v5 `Schedule` instruction was replaced with this on-chain scheduler pattern. |
 | 3 | **PPV as Counter, Not a New Token** | **Yes** | `ViewPack` storage with `views_remaining` counter. Decrement per view, no new tokens minted per view. Matches concept exactly. |
 | 4 | **Metadata-Carrying Cross-Chain Messages** | **Yes (adapted)** | `query_rights_metadata` emits a `RightsMetadata` struct as an event containing content details, pricing, royalty configuration, and rights type. Cross-chain consumers query metadata via XCM `Transact`. XCM payload constraints (~4KB) make embedding full metadata in XCM payloads impractical; the event-based pattern is the practical equivalent. |
 | 5 | **Ownership = Subscription Upgrade** | **Partially** | Ownership gives permanent access (check_access returns true for owners). But it's a separate storage entry, not an "upgrade" of an existing subscription token. |
@@ -20,7 +20,7 @@ Review of early-phase design documents against the actual Phase 4-5 implementati
 | 8 | **Optional Privacy Layer (ZKP)** | **No** | Not implemented — documented as future work. |
 | 9 | **Creator-First Economic Flywheel (Monte Carlo)** | **No** | Not implemented — documented as future work. |
 
-**Proposed update:** Add an "Implementation Status" column to the document noting which concepts were fully implemented, partially implemented, and deferred to future work. This is honest and academically valuable — it shows the gap between theoretical design and practical implementation.
+**Proposed update:** Add an "Implementation Status" column to the document, noting which concepts were fully implemented, partially implemented, and deferred to future work. This is honest and academically valuable; it shows the gap between theoretical design and practical implementation.
 
 ---
 
@@ -40,7 +40,7 @@ Review of early-phase design documents against the actual Phase 4-5 implementati
 | **Cross-Chain Transfer (Ownership)** | Lock/mint/burn wrapped ERC-721 on Ethereum | Snowbridge sends tokens (ETH), not NFTs | **Major** — NFT bridging not implemented |
 | **Secondary Sale Royalties** | Bridge triggers royalty distribution on resale | Not implemented | **Major** |
 
-**Proposed update:** Add an "Implementation Notes" section at the end of the document acknowledging the deviations. Do NOT rewrite the original diagrams — they represent valid conceptual design work. The thesis should discuss the gap between concept and implementation in the Discussion chapter.
+**Proposed update:** Add an "Implementation Notes" section at the end of the document acknowledging the deviations. Do NOT rewrite the original diagrams; they represent valid conceptual design work. The Discussion chapter should discuss the gap between concept and implementation.
 
 ---
 
@@ -80,7 +80,7 @@ Review of early-phase design documents against the actual Phase 4-5 implementati
 | XCM cost "<$0.002/tx" | Theoretical claim | ~100B tokens per XCM operation (fee depends on token value) | **Needs context** |
 | Metadata-carrying XCM | Theoretical capability | Implemented via `query_rights_metadata` event pattern — XCM `Transact` triggers metadata emission | **Resolved differently** |
 
-**Proposed update:** Minor — this document is explicitly theoretical. No changes needed, but the thesis Discussion chapter should note where theoretical predictions differed from measured results.
+**Proposed update:** Minor — this document is explicitly theoretical. No changes needed, but the Discussion chapter of the thesis should note where theoretical predictions differed from measured results.
 
 ---
 
@@ -144,28 +144,22 @@ Review of early-phase design documents against the actual Phase 4-5 implementati
 
 ---
 
-## 8. Recommended Actions
+## 8. Actions Taken
 
-### Option A: Update Each Document (Comprehensive)
+**Option A (Comprehensive) was executed.** All 8 documents listed above now contain "Implementation Notes (Phase 4-5)" sections documenting deviations from the original design, what was actually built, and the rationale for changes. The original design content is preserved; the implementation notes are appended at the end of each document.
 
-Add an "Implementation Status" or "Phase 4-5 Alignment" section to each document noting deviations. This preserves the original design intent while documenting what changed.
+| # | Document | Implementation Notes Added |
+|---|----------|---------------------------|
+| 1 | High-Level System Concepts | Implementation Status table (9 concepts assessed) |
+| 2 | Conceptual Diagrams for Key Flows | Architectural Pivots table + What Was Added section |
+| 3 | Evaluation Scenarios and Data Collection Strategy | Phase 5 Evaluation Mapping (13 scenarios mapped) |
+| 4 | Theoretical Exploration of XCM/Bridges | Predictions vs Measured Results table |
+| 5 | Bridge Integration & Cross-Chain Flows | What Changed From Design table + Snowbridge challenges |
+| 6 | Smart Contract Interfaces and Sequence Diagrams | Architectural Pivot table + Extrinsic Mapping + Data Structures comparison |
+| 7 | Detailed Local Development Architecture | Actual topologies (2-chain and 4-chain) + Changes From Plan table |
+| 8 | Methodology Conceptualization | Methodology Pivots + System Architecture + Data Collection + Evaluation Results + HHI calculation + Limitations |
 
-**Effort:** ~3-4 hours
-**Benefit:** Documents are self-contained and accurate
-
-### Option B: Single Alignment Document (Efficient)
-
-Keep the original documents untouched and reference this alignment review from the thesis Discussion chapter. The original documents show the design intent; the thesis explains the evolution.
-
-**Effort:** Already done (this document)
-**Benefit:** Preserves design history; deviation analysis is in one place
-
-### Option C: Hybrid (Recommended)
-
-Add a brief "Implementation Note" (3-5 sentences) to each Phase 1-3 document linking to this alignment review, then discuss the design evolution in the thesis Discussion chapter.
-
-**Effort:** ~1 hour
-**Benefit:** Original documents acknowledge deviations without being rewritten; full analysis in one place
+All corresponding LaTeX (.ltx) files have also been updated to match.
 
 ---
 
@@ -175,12 +169,12 @@ The deviations identified above provide valuable Discussion chapter material:
 
 1. **RMRK 2.0 → pallet-nfts pivot:** RMRK pallets were abandoned by the community (frozen at polkadot-v0.9.36). This forced a pivot to `pallet-nfts`, which lacks RMRK's equipped-resource model but provides stable, maintained NFT functionality. The thesis should discuss how ecosystem maturity affects architectural decisions.
 
-2. **ink! contracts → FRAME pallet pivot:** The original design used ink! contracts as the primary logic layer. In practice, a FRAME pallet provides better performance, direct storage access, and native weight system integration. The ink! contract remains as a thin API layer demonstrating the contract-to-pallet bridge pattern.
+2. **ink! contracts → FRAME pallet pivot:** The original design used ink! contracts as the primary logic layer. In practice, a FRAME pallet provides better performance, direct access to storage, and native weight-system integration. The ink! contract remains as a thin API layer demonstrating the contract-to-pallet bridge pattern.
 
-3. **Scheduled XCM replaced with on-chain scheduler:** The auto-renewal concept originally required XCM v5+ `Schedule` instruction, which is not yet production-ready. Instead, an `on_initialize` hook with `AutoRenewIndex` storage map processes expired subscriptions each block — achieving the same result through a different mechanism. This adaptation demonstrates pragmatic engineering in response to ecosystem constraints.
+3. **Scheduled XCM replaced with on-chain scheduler:** The auto-renewal concept originally required XCM v5+ `Schedule` instruction, which is not yet production-ready. Instead, an `on_initialize` hook with `AutoRenewIndex` storage map processes expired subscriptions each block,  achieving the same result through a different mechanism. This adaptation demonstrates pragmatic engineering in response to ecosystem constraints.
 
 4. **Snowbridge token bridging vs NFT bridging:** The original design envisioned bridging rights NFTs to Ethereum as ERC-721 tokens. The actual implementation bridges fungible tokens (ETH) via Snowbridge v1. NFT bridging would require Snowbridge v2's `Transact` capability, documented as future work.
 
 5. **Performance targets vs reality:** The theoretical prediction of "<2 second" XCM finality was measured at 18-32 seconds. The "<$0.002/tx" cost prediction requires context about the specific token economics. These gaps between theory and measurement are valuable academic findings.
 
-6. **Features deferred to future work:** Privacy layer (ZKP), Monte Carlo pricing simulator, and Cosmos bridge integration were conceptualised but not implemented. Automatic royalty propagation, scheduled auto-renewal, and metadata-carrying XCM were subsequently implemented as thesis-critical features. The thesis should explicitly list ZKP and Monte Carlo as future work contributions.
+6. **Features deferred to future work:** Privacy layer (ZKP), Monte Carlo pricing simulator, and Cosmos bridge integration were conceptualized but not implemented. Automatic royalty propagation, scheduled auto-renewal, and metadata-carrying XCM were subsequently implemented as thesis-critical features. The thesis should explicitly list ZKP and Monte Carlo as future work contributions.
