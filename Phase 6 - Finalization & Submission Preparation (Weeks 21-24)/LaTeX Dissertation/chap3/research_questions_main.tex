@@ -1,0 +1,159 @@
+%% ======================================================================
+%% chap3/research_questions_main.tex
+%%
+%% Chapter 3: Research Questions and Objectives
+%%
+%% States the primary research question, decomposes it into five
+%% sub-questions (SQ1-SQ5), defines the six research objectives (RO1-RO6)
+%% that implement the sub-questions, and maps each question to its
+%% objectives, evaluation methods, and reporting chapters.
+%%
+%% Sections:
+%%   3.1 Primary Research Question
+%%   3.2 Sub-Questions (Table 3.1)
+%%   3.3 Research Objectives (Table 3.2)
+%%   3.4 Mapping Questions to Objectives, Methods, and Chapters (Table 3.3)
+%%   3.5 Summary
+%%
+%% External labels referenced:
+%%   chap:background (Ch 2), chap:conclusion (Ch 9),
+%%   subsec:evaluation-philosophy (4.1.4), app:objectives (Appendix B),
+%%   sec:future-work (9.3),
+%%   sec:cross-chain-integration (5.3), sec:pallet-impl (5.2),
+%%   sec:economic-results (7.2), sec:challenges-solutions (5.4),
+%%   subsec:latency (7.1.2), subsec:snowbridge-bridge (7.1.6),
+%%   subsec:comparative-analysis (7.1.7),
+%%   subsec:decentralization-hhi (7.3.3),
+%%   subsec:security-audit (7.3.1)
+%%
+%% Citations: none (this chapter is structural, not literature-based).
+%% ======================================================================
+
+\chapter{Research Questions and Objectives}\label{chap:research-questions}
+
+This chapter states the research questions and objectives that underpin our study. We formulated them during Phase~1 and refined them in Phase~2 after the gap analysis of Chapter~\ref{chap:background}.
+
+\section{Primary Research Question}\label{sec:primary-research-question}
+
+The primary research question of our work is:
+
+\begin{quote}
+\textbf{How can a shared-security, multi-chain framework built on Polkadot's Cross-Consensus Messaging (XCM) and FRAME pallet primitives deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?}
+\end{quote}
+
+The question has two components: \textbf{design feasibility} (whether such a system can be built using the available Polkadot SDK primitives) and \textbf{measurement} (what operational properties it exhibits once built). We treat them as mutually constraining; a design that is feasible to construct yet demonstrates subpar performance is not a viable solution, nor is one that performs well in benchmarking but cannot be implemented in practice. The primary concern is framed as an \textbf{achievability} question rather than a hypothesis test, consistent with the measurement-focused evaluation philosophy established in Section~\ref{subsec:evaluation-philosophy}.
+
+\section{Sub-Questions}\label{sec:sub-questions}
+
+We decompose the primary research question into five sub-questions. Table~\ref{tab:sub-questions} presents each with its motivation and the literature gaps it addresses.
+
+\begin{longtable}{@{}L{0.04\linewidth} L{0.40\linewidth} L{0.07\linewidth} L{0.41\linewidth}@{}}
+\caption{Research Sub-Questions}\label{tab:sub-questions}\\
+\toprule
+\textbf{ID} & \textbf{Question} & \textbf{Gaps} & \textbf{Motivation} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:sub-questions} continued from previous page}}\\
+\toprule
+\textbf{ID} & \textbf{Question} & \textbf{Gaps} & \textbf{Motivation} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+SQ1 & To what extent can XCM carry recurring subscription renewal messages and rich rights metadata across Polkadot parachains and external networks, and what atomic success rates and cross-chain finality times are achievable? & G2, G3 & Existing cross-chain protocols lack native recurring payments and strip rights metadata. SQ1 asks whether existing XCM primitives suffice or whether custom extensions are needed. \\
+\addlinespace
+SQ2 & What design patterns can minimize access verification latency while maintaining decentralization, and how do the resulting metrics compare across varying validator configurations? & G5 & The decentralization-latency trade-off is poorly characterized quantitatively. SQ2 asks for a direct measurement on a working Polkadot parachain with explicit numerical comparisons against centralized alternatives. \\
+\addlinespace
+SQ3 & Can a single on-chain rights object simultaneously enforce subscription auto-renewal, pay-per-view consumption limits, and permanent ownership with automated royalty distribution across chains, and what are the resulting creator cost savings? & G7 & No existing system offers all three monetization models as first-class access modes of a single unified primitive. Story Protocol's PIL can be configured to approximate them but requires separate license-token types and does not natively model subscription renewal. SQ3 asks whether a unified primitive can be built and whether its economics justify the effort. \\
+\addlinespace
+SQ4 & What authorization model is appropriate for cross-chain rights operations that decouple the payer from the beneficiary, and how does it perform under adversarial conditions? & (added Phase~5) & Added in response to Finding~B from the security audit. Cross-chain extrinsics decoupling payer from beneficiary pose unique authorization concerns absent from local-only extrinsics. \\
+\addlinespace
+SQ5 & Under realistic creator audience distributions, does the CCRMS model produce demonstrably better creator outcomes than centralized, bridge-based, or marketplace alternatives, and under what conditions? & (added Phase~5) & Added during the Monte Carlo simulation. SQ5 clarifies that the economic question is conditional (``yes, for creators with these characteristics'') rather than a simple yes-or-no. \\
+\end{longtable}
+
+\section{Research Objectives}\label{sec:research-objectives}
+
+We pursue the five sub-questions through six research objectives. Table~\ref{tab:research-objectives} summarizes each; Appendix~\ref{app:objectives} provides the full statements, deliverables, and revision notes.
+
+\begin{longtable}{@{}L{0.12\linewidth} L{0.46\linewidth} L{0.15\linewidth} L{0.22\linewidth}@{}}
+\caption{Research Objectives Summary}\label{tab:research-objectives}\\
+\toprule
+\textbf{Objective} & \textbf{Focus} & \textbf{Sub-questions} & \textbf{Status} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:research-objectives} continued from previous page}}\\
+\toprule
+\textbf{Objective} & \textbf{Focus} & \textbf{Sub-questions} & \textbf{Status} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+RO1 & Design and prototype XCM extensions for recurring and metadata-rich rights transfers & SQ1, SQ2 & Achieved \\
+\addlinespace
+RO2 & Implement a unified rights token (originally ink!, revised to FRAME pallet) with access-verification latency measurement & SQ2, SQ3 & Achieved (off-chain indexer deferred) \\
+\addlinespace
+RO3 & Merge subscription, PPV, and purchase logic into one composable rights pallet & SQ3, SQ4 & Achieved \\
+\addlinespace
+RO4 & Benchmark scalability, interoperability, and economic efficiency against centralized and bridge-based alternatives & SQ2, SQ5 & Achieved (Ethereum L2 target substituted with Express.js + SQLite) \\
+\addlinespace
+RO5 & Incorporate optional zero-knowledge proof hooks for selective regulatory disclosure & Broader feasibility & \textbf{Not achieved} (underestimated complexity; restated as future work in Section~\ref{sec:future-work}) \\
+\addlinespace
+RO6 & Quantify creator savings via Monte Carlo simulation and comparative cost analysis & SQ5 & Achieved \\
+\end{longtable}
+
+\section[Mapping Questions to Objectives]{Mapping Questions to Objectives, Methods, and Chapters}\label{sec:mapping-questions}
+
+Table~\ref{tab:mapping} maps each sub-question to its research objectives, evaluation methods, and the sections where results are reported.
+
+\begin{longtable}{@{}L{0.19\linewidth} L{0.12\linewidth} L{0.12\linewidth} L{0.24\linewidth} L{0.26\linewidth}@{}}
+\caption{Mapping of Sub-Questions to Objectives, Methods, and Chapters}\label{tab:mapping}\\
+\toprule
+\textbf{Sub-Question} & \textbf{Primary Objective} & \textbf{Supporting Objective(s)} & \textbf{Primary Method} & \textbf{Reported In} \\
+\midrule
+\endfirsthead
+
+\multicolumn{5}{l}{\emph{Table~\ref{tab:mapping} continued from previous page}}\\
+\toprule
+\textbf{Sub-Question} & \textbf{Primary Objective} & \textbf{Supporting Objective(s)} & \textbf{Primary Method} & \textbf{Reported In} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+SQ1 (XCM rights operations) & RO1 & RO3 & XCM latency benchmark; end-to-end XCM test & Section~\ref{sec:cross-chain-integration}; Section~\ref{subsec:latency}; Section~\ref{subsec:snowbridge-bridge} \\
+\addlinespace
+SQ2 (Latency vs decentralization) & RO2, RO4 & -- & Throughput and latency benchmark; HHI calculation & Section~\ref{subsec:latency}; Section~\ref{subsec:decentralization-hhi} \\
+\addlinespace
+SQ3 (Unified rights token) & RO3 & RO2, RO6 & Unit tests; royalty propagation tests; Monte Carlo simulation & Section~\ref{sec:pallet-impl}; Section~\ref{sec:economic-results} \\
+\addlinespace
+SQ4 (Security and authorization) & (added Phase~5) & RO3 & Security audit; authorization unit tests & Section~\ref{sec:challenges-solutions}; Section~\ref{subsec:security-audit} \\
+\addlinespace
+SQ5 (Economic viability) & RO6 & RO4 & Monte Carlo simulation; comparative benchmark & Section~\ref{sec:economic-results}; Section~\ref{subsec:comparative-analysis} \\
+\end{longtable}
+
+Two cells in the table need acknowledgment. The ``Primary Objective'' for SQ4 is marked ``(added Phase~5)'' because of a sub-question added after the original objectives were finalized. There is no direct Phase~2 link; however, RO3 (unified rights pallet) provided context for the security finding. RO5 (zero-knowledge proof hooks) is not in the table because it was not implemented, but it is kept in Section~\ref{sec:research-objectives} (RO5) as an unachieved future objective and reiterated in Chapter~\ref{chap:conclusion}.
+
+\section{Summary}\label{sec:chapter-3-summary}
+
+This chapter has presented the primary research question, its five sub-questions, and the six research objectives aligned with them. The questions are founded upon the gaps identified in Chapter~\ref{chap:background}. Table~\ref{tab:sub-questions} provides an explicit mapping from each subsidiary question to the objectives it aims to address, the methodologies used to gather evidence, and the chapters in which the work is documented.
+
+Two of the sub-questions (SQ4 on security and authorization, and SQ5 on economic viability) were incorporated during Phase~5 in response to findings from implementation and evaluation. This is consistent with the iterative prototyping methodology and exemplifies the principle of design science research, whereby the search process itself generates knowledge that may modify the initial framing of the work.

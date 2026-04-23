@@ -1,0 +1,79 @@
+%% ======================================================================
+%% appC/appendix_c_main.tex
+%%
+%% Appendix C: Code Listings
+%%
+%% Reference code listings for implementation details that would
+%% interrupt the flow of the main text. Contains the Solidity interface
+%% exposed by the ContentRightsPrecompile (read-only access to pallet
+%% storage from EVM/Solidity clients) and the canonical three-instruction
+%% XCM message structure used by every xcm_* rights extrinsic.
+%%
+%% Sections:
+%%   C.1 Solidity Interface: ContentRightsPrecompile (lstlisting)
+%%   C.2 Canonical XCM Message for Cross-Chain Rights Operations
+%%       (lstlisting, JavaScript form as submitted via @polkadot/api)
+%%
+%% External labels referenced:
+%%   subsec:ink-contract (5.2.4), subsec:xcm-flows (5.3.1)
+%%
+%% Citations: none.
+%% ======================================================================
+
+\chapter{Code Listings}\label{app:code}
+
+\section{Solidity Interface: \texttt{ContentRightsPrecompile}}\label{sec:solidity-interface}
+
+The EVM precompile described in Section~\ref{subsec:ink-contract} exposes the following Solidity interface. Solidity contracts deployed on \texttt{pallet-revive} can call these methods to read CCRMS rights state without crossing the EVM/Substrate boundary at write time.
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=left,numberstyle=\tiny\color{gray}]
+interface IContentRights {
+    function checkAccess(uint32 contentId, address who)
+        external view returns (uint8 rightsType);
+
+    function getContent(uint32 contentId) external view returns (
+        address creator,
+        bytes32 metadataHash,
+        uint128 subscriptionPrice,
+        uint128 ppvPrice,
+        uint128 ownershipPrice,
+        uint32 periodLength
+    );
+
+    function isOwner(uint32 contentId, address who)
+        external view returns (bool owned);
+
+    function getSubscription(uint32 contentId, address subscriber)
+        external view returns (bool exists, uint32 expiryBlock);
+
+    function getViewPack(uint32 contentId, address viewer)
+        external view returns (bool exists, uint32 viewsRemaining);
+}
+\end{lstlisting}
+
+\section[Canonical XCM Message]{Canonical XCM Message for Cross-Chain Rights Operations}\label{sec:xcm-message-structure}
+
+The canonical XCM message constructed by the \texttt{xcm\_*} extrinsics (Section~\ref{subsec:xcm-flows}) follows the three-instruction \texttt{WithdrawAsset} $\to$ \texttt{BuyExecution} $\to$ \texttt{Transact} pattern. The JavaScript form below illustrates the structure as submitted via \texttt{@polkadot/api}.
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=left,numberstyle=\tiny\color{gray}]
+const xcmMessage = {
+  V3: [
+    { WithdrawAsset: [{
+        id: { Concrete: { parents: 1, interior: 'Here' } },
+        fun: { Fungible: 100_000_000_000 }
+    }] },
+    { BuyExecution: {
+        fees: {
+            id: { Concrete: { parents: 1, interior: 'Here' } },
+            fun: { Fungible: 100_000_000_000 }
+        },
+        weightLimit: 'Unlimited'
+    } },
+    { Transact: {
+        originKind: 'SovereignAccount',
+        requireWeightAtMost: { refTime: 1_000_000_000, proofSize: 100_000 },
+        call: { encoded: encodedCall }
+    } }
+  ]
+};
+\end{lstlisting}

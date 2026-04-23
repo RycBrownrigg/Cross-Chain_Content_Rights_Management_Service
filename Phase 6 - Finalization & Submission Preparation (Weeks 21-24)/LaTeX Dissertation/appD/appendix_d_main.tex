@@ -1,0 +1,105 @@
+%% ======================================================================
+%% appD/appendix_d_main.tex
+%%
+%% Appendix D: Security and Coverage Findings
+%%
+%% Expanded narratives and reference tables supporting Chapter 7's
+%% security and user-centric results. Covers the two remediated security
+%% vulnerabilities (Finding B authorization gap, Finding E view-pack
+%% overwrite), the three accepted design properties (Findings A, C, D),
+%% the full error-variant test coverage matrix, and the breakdown of
+%% cargo audit advisories from the transitive Polkadot SDK dependencies.
+%%
+%% Sections:
+%%   D.1 Security Audit Finding B: Authorization Gap
+%%       in xcm_transfer_ownership
+%%   D.2 Security Audit Finding E: View Pack Overwrite
+%%   D.3 Accepted Design Findings (A, C, D)
+%%   D.4 Error Variant Coverage (Table: 19 error variants, 16 tested)
+%%   D.5 Static Analysis Advisory Breakdown (Table: 8 advisories)
+%%
+%% External labels referenced: none (self-contained appendix).
+%%
+%% Citations: none.
+%% ======================================================================
+
+\chapter{Security and Coverage Findings}\label{app:security}
+
+\section[Finding B: Authorization Gap]{Security Audit Finding B:\texorpdfstring{\\}{ }Authorization Gap in \texttt{xcm\_transfer\_ownership}}\label{sec:d-finding-b}
+
+The original implementation performed only \texttt{ensure\_signed(origin)} and then looked up \texttt{Ownership[content\_id, from]}, burned the seller's NFT, and minted a new one for \texttt{to}. No check confirmed that the dispatch caller had any relationship to the \texttt{from} account, so any signed account could call the extrinsic with arbitrary \texttt{from} and \texttt{to} arguments and transfer ownership from any user to itself. We rated the vulnerability Medium severity. Our remediation was \texttt{ensure!(authorizer == from,\allowbreak\ Error::<T>::Unauthorized)}, committed alongside unit test \texttt{security\_xcm\_transfer\_\allowbreak ownership\_\allowbreak any\_account\_\allowbreak can\_steal}.
+
+\section{Security Audit Finding E: View Pack Overwrite}\label{sec:d-finding-e}
+
+The original \texttt{purchase\_views} always overwrote \texttt{ViewPacks[content\_id, buyer]} with a new \texttt{ViewPackInfo}, so a user holding 10 unused views who purchased 5 more would end up with 5, not 15. Our remediation made purchases additive: if a view pack already exists, new views are added to the existing balance.
+
+\section{Accepted Design Findings (A, C, D)}\label{sec:d-accepted}
+
+\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; production should restrict to an explicit allowlist. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
+
+\section{Error Variant Coverage}\label{sec:d-coverage}
+
+\begin{longtable}{@{}L{0.34\linewidth} L{0.12\linewidth} L{0.34\linewidth} L{0.16\linewidth}@{}}
+\caption{Error Variant Coverage}\label{tab:error-coverage}\\
+\toprule
+\textbf{Error Variant} & \textbf{Tested} & \textbf{Error Variant} & \textbf{Tested} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:error-coverage} continued from previous page}}\\
+\toprule
+\textbf{Error Variant} & \textbf{Tested} & \textbf{Error Variant} & \textbf{Tested} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\texttt{ContentNotFound} & Yes & \texttt{MaxChildrenReached} & Yes \\
+\texttt{NotContentCreator} & Yes & \texttt{ContentIdOverflow} & Yes \\
+\texttt{SubscriptionAlreadyExists} & Yes & \texttt{ItemIdOverflow} & No \\
+\texttt{SubscriptionNotFound} & Yes & \texttt{OwnershipNotFound} & Yes \\
+\texttt{SubscriptionNotExpired} & Yes & \texttt{InvalidRoyaltySplits} & Yes \\
+\texttt{ViewPackNotFound} & Yes & \texttt{AutoRenewAlreadyEnabled} & Yes \\
+\texttt{NoViewsRemaining} & Yes & \texttt{AutoRenewNotEnabled} & Yes \\
+\texttt{AlreadyOwned} & Yes & \texttt{Unauthorized} & Yes \\
+\texttt{InsufficientPayment} & Yes & \texttt{NftOperationFailed} & No \\
+                                &     & \texttt{ChildAlreadyNested} & No (unreachable) \\
+\end{longtable}
+
+\section{Static Analysis Advisory Breakdown}\label{sec:d-static-analysis}
+
+\begin{longtable}{@{}L{0.18\linewidth} L{0.24\linewidth} L{0.22\linewidth} L{0.30\linewidth}@{}}
+\caption{Static Analysis Advisory Breakdown}\label{tab:advisories}\\
+\toprule
+\textbf{Category} & \textbf{Package} & \textbf{Risk} & \textbf{Mitigation} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:advisories} continued from previous page}}\\
+\toprule
+\textbf{Category} & \textbf{Package} & \textbf{Risk} & \textbf{Mitigation} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Networking (2) & \texttt{quinn-proto}, \texttt{ring} & DoS, panic & Relay/p2p layer only; no runtime impact \\
+\addlinespace
+WASM executor (4) & \texttt{wasmtime} & Resource exhaustion, panics, f64 segfault & Sandboxed WASM execution model \\
+\addlinespace
+TLS (1) & \texttt{rustls-webpki} & CRL bypass & Node-side only \\
+\addlinespace
+Logging (1) & \texttt{tracing-subscriber} & Log injection & Observer layer only \\
+\end{longtable}
+
+All 8 advisories are mitigated by the architectural separation between the WASM-sandboxed runtime and the node binary. None are in code we authored.

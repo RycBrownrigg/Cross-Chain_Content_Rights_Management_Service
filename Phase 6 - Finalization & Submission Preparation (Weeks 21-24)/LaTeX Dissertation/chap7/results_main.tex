@@ -1,0 +1,552 @@
+%% ======================================================================
+%% chap7/results_main.tex
+%%
+%% Chapter 7: Results
+%%
+%% Reports the measured results from all evaluation activities. Technical
+%% results cover throughput, latency, block weight utilisation, storage
+%% growth, reliability, the Snowbridge end-to-end bridge demonstration,
+%% and the comparative analysis against a centralized Express.js + SQLite
+%% baseline. Economic results present the Monte Carlo creator revenue
+%% simulation, the audience-size crossover finding, and the fee analysis.
+%% Security and user-centric results cover the security audit, test
+%% coverage, decentralization (HHI) assessment, and static analysis.
+%% Interpretation is deferred to Chapter 8.
+%%
+%% Sections:
+%%   7.1 Technical Results (7 subsections, Tables 7.1-7.7)
+%%   7.2 Economic Results (3 subsections, Tables 7.8-7.12)
+%%   7.3 Security and User-Centric Results (4 subsections, Tables 7.13-7.14)
+%%   7.4 Summary
+%%
+%% Tables (14 total): all use longtable with L{} and R{} fixed-width
+%% columns to stay within the text block on both page sides.
+%%
+%% External labels referenced:
+%%   chap:discussion (Ch 8), sec:limitations (8.5),
+%%   sec:test-scenarios (6.4),
+%%   app:challenges (Appendix A), app:security (Appendix D)
+%%
+%% Citations: none (empirical results chapter; sources are our own
+%% measurements and the Monte Carlo simulation).
+%% ======================================================================
+
+\chapter{Results}\label{chap:results}
+
+This chapter reports the measured results. Section~\ref{sec:technical-results} covers technical results, Section~\ref{sec:economic-results} covers economic results, and Section~\ref{sec:security-user-results} covers security and user-centric results. We defer interpretation to Chapter~\ref{chap:discussion}.
+
+\section{Technical Results}\label{sec:technical-results}
+
+\subsection{Throughput}\label{subsec:throughput}
+
+We evaluated all 11 local extrinsic types across four batch sizes (1, 10, 50, 100). At a batch size of 100, extrinsics without nesting constraints achieved a throughput of 16.6 TPS, whereas those involving the minting of child NFTs (\texttt{subscribe}, \texttt{purchase\_ownership}, \texttt{enable\_auto\_renew}, \texttt{disable\_auto\_renew}, \texttt{transfer\_ownership}) were limited to 8.3 TPS due to the maximum children constraint (\texttt{MaxChildren=50}), rather than by block weight. The extrinsics in Phase~4 (\texttt{set\_royalty\_splits}, \texttt{enable\_auto\_renew}, \texttt{disable\_auto\_renew}, \texttt{query\_rights\_metadata}) achieved throughput comparable to that of the baseline extrinsics, confirming that the unified rights token model incurs no measurable performance overhead.
+
+\begin{longtable}{@{}L{0.28\linewidth} R{0.16\linewidth} R{0.16\linewidth} R{0.16\linewidth} R{0.18\linewidth}@{}}
+\caption{Single-Chain Throughput by Extrinsic Type and Batch Size}\label{tab:throughput}\\
+\toprule
+\textbf{Extrinsic} & \textbf{Batch=1 (TPS)} & \textbf{Batch=10 (TPS)} & \textbf{Batch=50 (TPS)} & \textbf{Batch=100 (TPS)} \\
+\midrule
+\endfirsthead
+
+\multicolumn{5}{l}{\emph{Table~\ref{tab:throughput} continued from previous page}}\\
+\toprule
+\textbf{Extrinsic} & \textbf{Batch=1 (TPS)} & \textbf{Batch=10 (TPS)} & \textbf{Batch=50 (TPS)} & \textbf{Batch=100 (TPS)} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\texttt{register\_content} & 0.17 & 1.66 & 8.31 & 16.62 \\
+\texttt{check\_access} & 0.17 & 1.66 & 8.31 & 16.62 \\
+\texttt{set\_royalty\_splits} & 0.17 & 1.66 & 8.31 & 16.62 \\
+\texttt{query\_rights\_metadata} & 0.17 & 1.66 & 8.31 & 16.62 \\
+\texttt{subscribe} & 0.17 & 1.66 & 8.31 & 8.31* \\
+\texttt{purchase\_ownership} & 0.17 & 1.66 & 8.31 & 8.31* \\
+\texttt{purchase\_views} & 0.17 & 1.66 & 8.31 & 16.62 \\
+\texttt{consume\_view} & 0.17 & 1.66 & 8.31 & 16.62 \\
+\texttt{enable\_auto\_renew} & 0.17 & 1.66 & 8.31 & 8.31* \\
+\texttt{disable\_auto\_renew} & 0.17 & 1.66 & 8.31 & 8.31* \\
+\texttt{transfer\_ownership} & 0.17 & 1.66 & 8.31 & 8.31* \\
+\end{longtable}
+
+{\footnotesize * Limited by \texttt{MaxChildren=50} constraint, not by block weight or block production.}
+
+TPS scales linearly with batch size, given a 6-second block time and one block per batch. During the sustained stress test, 200 concurrent accounts submitted \texttt{register\_content} transactions over 180 seconds, achieving a sustained throughput of \textbf{26.2 TPS} (corresponding to 174.6 transactions per block across 27 blocks). The utilization of block weight at 300 transactions was only \textbf{12.9\% of \texttt{ref\_time}} and \textbf{2.2\% of \texttt{proof\_size}}, indicating an estimated theoretical maximum of approximately \textbf{283 TPS} per parachain. The stress test experienced a transaction failure rate of 78\%, primarily due to RPC-layer nonce conflicts rather than parachain failures; all successfully included transactions were processed accurately. In a production environment, nonce contention would be mitigated by implementing a transaction sequencer or explicit nonce management.
+
+\subsection{Latency}\label{subsec:latency}
+
+Single-chain inclusion latency was consistently \textbf{$\sim$6,000 ms} (one parachain block, with a standard deviation $<$15 ms within a batch), confirming atomic same-block inclusion for concurrent transactions. Cross-chain XCM latencies are detailed in Table~\ref{tab:xcm-latency}, with averages computed over three separate executions.
+
+\begin{longtable}{@{}L{0.32\linewidth} R{0.18\linewidth} R{0.18\linewidth} R{0.24\linewidth}@{}}
+\caption{XCM Cross-Chain Latency by Operation}\label{tab:xcm-latency}\\
+\toprule
+\textbf{Operation} & \textbf{Mean Block Delta} & \textbf{Standard Deviation} & \textbf{Approximate Wall-Clock} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:xcm-latency} continued from previous page}}\\
+\toprule
+\textbf{Operation} & \textbf{Mean Block Delta} & \textbf{Standard Deviation} & \textbf{Approximate Wall-Clock} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\texttt{xcm\_subscribe} & 3.0 blocks & $\pm$2.0 blocks & $\sim$99.6 seconds \\
+\texttt{xcm\_purchase\_views} & 5.0 blocks & $\pm$1.0 blocks & $\sim$100 seconds \\
+\texttt{xcm\_purchase\_ownership} & 5.0 blocks & $\pm$2.0 blocks & $\sim$100 seconds \\
+\end{longtable}
+
+The approximately 100-second wall-clock latency is primarily attributable to the relay chain hop and Para~A's waiting period for its subsequent block slot. In a Polkadot~2.0 environment incorporating Async Backing, Agile Coretime, and Elastic Scaling, these durations would decrease significantly; the 100-second metric serves as an upper limit within the pre-2.0 testing environment.
+
+\subsection{Block Weight Utilization}\label{subsec:block-weight}
+
+\begin{longtable}{@{}R{0.16\linewidth} R{0.25\linewidth} R{0.25\linewidth} R{0.26\linewidth}@{}}
+\caption{Block Weight Utilization at Increasing Batch Sizes}\label{tab:block-weight}\\
+\toprule
+\textbf{Batch Size} & \textbf{\texttt{ref\_time} Consumed} & \textbf{\texttt{proof\_size} Consumed} & \textbf{Block Construction Time} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:block-weight} continued from previous page}}\\
+\toprule
+\textbf{Batch Size} & \textbf{\texttt{ref\_time} Consumed} & \textbf{\texttt{proof\_size} Consumed} & \textbf{Block Construction Time} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+50 & 2.2\% & 0.4\% & $\sim$10 ms \\
+100 & 4.3\% & 0.7\% & $\sim$21 ms \\
+150 & 6.5\% & 1.1\% & $\sim$31 ms \\
+200 & 8.6\% & 1.5\% & $\sim$42 ms \\
+250 & 10.7\% & 1.8\% & $\sim$52 ms \\
+300 & 12.9\% & 2.2\% & $\sim$62 ms \\
+\end{longtable}
+
+At 300 transactions, block weight constitutes 12.9\% of \texttt{ref\_time} and 2.2\% of \texttt{proof\_size}, with a construction time of approximately 62~milliseconds ($\sim$1\% of the 6-second block). The 6:1 \texttt{ref\_time}-to-\texttt{proof\_size} ratio illustrates the lightweight nature of NFT minting; operations that involve larger storage footprints would alter this ratio.
+
+\subsection{Storage Growth}\label{subsec:storage}
+
+\begin{longtable}{@{}L{0.34\linewidth} L{0.28\linewidth} R{0.30\linewidth}@{}}
+\caption{Per-Item Storage Costs (SCALE-encoded)}\label{tab:storage-costs}\\
+\toprule
+\textbf{Item Type} & \textbf{Storage Map} & \textbf{Bytes per Item} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:storage-costs} continued from previous page}}\\
+\toprule
+\textbf{Item Type} & \textbf{Storage Map} & \textbf{Bytes per Item} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Content registration & \texttt{Contents} & 191 \\
+Active subscription & \texttt{Subscriptions} & 112 \\
+View pack & \texttt{ViewPacks} & 111 \\
+Ownership record & \texttt{Ownership} & 36 \\
+Royalty splits (per collaborator) & \texttt{RoyaltySplits} & 34 \\
+Child NFT nesting record & \texttt{Children} & 8 (per child) \\
+\end{longtable}
+
+Growth was perfectly linear: the 50th item cost the same as the first, confirming \textbf{$O(1)$} \texttt{StorageMap} complexity. At a hypothetical production scale of one million content items and ten million subscribers, total state projects to approximately 1.3~GB, which is well within the parachain database limits and significantly exceeds the 500-byte Phase~2 target.
+
+\subsection{Reliability}\label{subsec:reliability}
+
+\begin{longtable}{@{}L{0.16\linewidth} L{0.42\linewidth} L{0.35\linewidth}@{}}
+\caption{Reliability Test Results}\label{tab:reliability}\\
+\toprule
+\textbf{Phase} & \textbf{Metric} & \textbf{Value} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:reliability} continued from previous page}}\\
+\toprule
+\textbf{Phase} & \textbf{Metric} & \textbf{Value} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Baseline & Blocks produced & 18 of 20 expected \\
+Baseline & Uptime & 90\% \\
+Baseline & Mean block time & 6.67 seconds \\
+Failure & Time to RPC ready (post-restart) & $\sim$15 seconds \\
+Failure & Time to first new block (post-restart) & $\sim$20 seconds \\
+Recovery & State integrity & 100\% preserved \\
+Recovery & Blocks produced & 18 of 20 expected \\
+Recovery & Uptime & 90\% (matches baseline) \\
+Recovery & Mean block time & 6.67 seconds (matches baseline) \\
+\end{longtable}
+
+A baseline uptime of 90\% reflects typical single-collator behavior (Finding F); production multi-collator topologies would mask individual failures. MTTR was approximately 15 seconds to RPC and approximately 20 seconds to the first new block, with 100\% state preservation across restart (validated at the RocksDB layer). Recovery-phase metrics were statistically indistinguishable from the baseline: 90\% uptime, a mean block time of 6.67 seconds, and no lingering degradation.
+
+\subsection{Snowbridge End-to-End Bridge}\label{subsec:snowbridge-bridge}
+
+We bridged two 1~ETH transactions from the local Ethereum network to the local AssetHub through the complete Snowbridge pipeline, which comprises four parachains, Geth, Lodestar, 16 Gateway contracts, and two relayers. Both transactions were successful; consequently, Alice possessed 22~ETH on AssetHub thereafter: 20 minted for testing purposes and 2 bridged. Table~\ref{tab:snowbridge-path} provides an overview of the message pathway.
+
+\begin{longtable}{@{}L{0.04\linewidth} L{0.20\linewidth} L{0.70\linewidth}@{}}
+\caption{Snowbridge End-to-End Message Path (Verified)}\label{tab:snowbridge-path}\\
+\toprule
+\textbf{Step} & \textbf{Component} & \textbf{Action} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:snowbridge-path} continued from previous page}}\\
+\toprule
+\textbf{Step} & \textbf{Component} & \textbf{Action} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+1 & Geth & Transaction \texttt{Gateway.sendToken(1 ETH, Alice)} included in block 5157 \\
+2 & Lodestar & Block finalized at epoch $\geq$ 162 \\
+3 & Beacon Relay & Generated inclusion proof, submitted beacon header update \\
+4 & Bridge Hub & \texttt{ethereumBeaconClient.submit(...)} verified BLS signatures, advanced \texttt{latestFinalizedBlockRoot} \\
+5 & Execution Relay & Generated receipt + execution + ancestry proof, submitted message bundle \\
+6 & Bridge Hub & \texttt{ethereumInboundQueue.submit(...)} verified the proof against the verified beacon state root \\
+7 & Bridge Hub $\to$ AssetHub & XCM message dispatched via HRMP \\
+8 & AssetHub & \texttt{foreignAssets.mint(Ether, Alice, 1 ETH)} succeeded \\
+\end{longtable}
+
+The CCRMS parachain functioned as a passive participant: the runtime XCM configuration was preconfigured to receive cross-consensus messages without modification, validating the \textbf{forward-compatibility} claim. We did not execute the final hop (bridged ETH paying for a CCRMS rights operation) end-to-end; this limitation is acknowledged in Section~\ref{sec:limitations}. The integration challenges (Lodestar version pinning, fork-version configuration, and beacon state cache timing) are documented in Appendix~\ref{app:challenges}.
+
+\subsection{Comparative Analysis vs.\ Centralized Baseline}\label{subsec:comparative-analysis}
+
+We benchmarked CCRMS against Express.js with SQL.js for the same six operations, using an identical methodology. Table~\ref{tab:comparative} presents the comparison.
+
+\begin{longtable}{@{}L{0.28\linewidth} L{0.22\linewidth} L{0.22\linewidth} L{0.20\linewidth}@{}}
+\caption{Comparative Analysis: CCRMS Parachain vs.\ Centralized (Express.js + SQLite)}\label{tab:comparative}\\
+\toprule
+\textbf{Metric} & \textbf{CCRMS Parachain} & \textbf{Centralized} & \textbf{Ratio} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:comparative} continued from previous page}}\\
+\toprule
+\textbf{Metric} & \textbf{CCRMS Parachain} & \textbf{Centralized} & \textbf{Ratio} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Sustained TPS & 26.2 & 7,305 & $270\times$ \\
+\addlinespace
+Operation latency (server-side) & $\sim$6,000 ms & 0.09 ms & $67{,}000\times$ \\
+\addlinespace
+Stress test success rate & 22\% (RPC nonce conflicts) & 100\% & -- \\
+\addlinespace
+Storage per content & 191 bytes & $\sim$100--150 bytes & $1.5\times$ \\
+\addlinespace
+MTTR & 15--20 seconds & 2--3 seconds & $7\times$ \\
+\addlinespace
+Cross-chain equivalent & 18--32 seconds & 5--50 ms (HTTP request) & $400$--$6{,}000\times$ \\
+\end{longtable}
+
+The centralized implementation outperforms CCRMS in all quantitative metrics ($270\times$ TPS, $67{,}000\times$ latency). These figures reaffirm the well-known performance cost associated with decentralization but do not serve as an argument against decentralization. The qualitative properties offered by CCRMS (no single point of failure, cross-chain support, provable rights state, and censorship resistance) are not reflected in the quantitative data, yet they are crucial for the specific use case. The 26.2 TPS equates to approximately 2.3 million operations occurring per day, significantly exceeding the transaction volumes of commercial content rights platforms. In Chapter~\ref{chap:discussion}, we contend that the appropriate framework should be characterized as \textbf{architectural fit for purpose}, rather than focusing solely on raw performance.
+
+\section{Economic Results}\label{sec:economic-results}
+
+\subsection{Monte Carlo Creator Revenue Simulation}\label{subsec:monte-carlo}
+
+The simulation models 1,000 creators across 10,000 iterations under four platform configurations, drawing creator parameters from realistic distributions and projecting one-year revenue based on platform-specific fees and dynamics (algorithmic discovery, organic growth, monthly churn). Table~\ref{tab:monte-carlo} summarizes the results.
+
+\begin{longtable}{@{}L{0.34\linewidth} L{0.14\linewidth} R{0.20\linewidth} L{0.24\linewidth}@{}}
+\caption{Monte Carlo Creator Revenue Simulation (Mean Annual Revenue Per Creator)}\label{tab:monte-carlo}\\
+\toprule
+\textbf{Platform Model} & \textbf{Fee Range} & \textbf{Mean Revenue} & \textbf{vs.\ CCRMS} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:monte-carlo} continued from previous page}}\\
+\toprule
+\textbf{Platform Model} & \textbf{Fee Range} & \textbf{Mean Revenue} & \textbf{vs.\ CCRMS} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Centralized (YouTube/Spotify-style) & 30--45\% & \$45,416 & CCRMS +16.8\% \\
+\addlinespace
+Web3 marketplace (OpenSea-style) & 5--10\% & \$48,711 & CCRMS +8.9\% \\
+\addlinespace
+Bridge-based cross-chain & 8--15\% & \$45,369 & CCRMS +16.9\% \\
+\addlinespace
+\textbf{CCRMS} & \textbf{1--5\%} & \textbf{\$53,053} & \textbf{Baseline} \\
+\end{longtable}
+
+The CCRMS configuration yields the highest average creator revenue, with an advantage ranging from 8.9\% (compared to the most competitive Web3 marketplace baseline) to 16.9\% (compared to the bridge-based cross-chain baseline). The advantage over centralized platforms is 16.8\%. These figures are consistent with the underlying fee differential, as the CCRMS fee range of 1--5\% is significantly lower than that of the alternatives. However, they are not directly proportional to the fee differential, as the simulation incorporates other platform-specific dynamics that influence creator revenue beyond fee structures.
+
+\subsection{Audience Size Dependency}\label{subsec:audience-dependency}
+
+The mean revenue figures presented in Table~\ref{tab:monte-carlo} obscure an important nuance: the advantage of CCRMS is not consistent across all creators. It is heavily dependent on \textbf{audience size}. Table~\ref{tab:audience-tiers} categorizes the simulation outcomes according to different tiers of creator audience size.
+
+\begin{longtable}{@{}L{0.12\linewidth} L{0.15\linewidth} R{0.22\linewidth} L{0.43\linewidth}@{}}
+\caption{CCRMS Advantage by Creator Audience Tier}\label{tab:audience-tiers}\\
+\toprule
+\textbf{Audience Tier} & \textbf{Followers} & \textbf{CCRMS Win Rate vs Centralized} & \textbf{Notes} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:audience-tiers} continued from previous page}}\\
+\toprule
+\textbf{Audience Tier} & \textbf{Followers} & \textbf{CCRMS Win Rate vs Centralized} & \textbf{Notes} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Tiny & $<$500 & 0\% & Centralized algorithmic discovery dominates \\
+\addlinespace
+Small & 500--2,000 & $<$5\% & Centralized still preferred \\
+\addlinespace
+Crossover & $\sim$2,000 & 6.6\% & Crossover point begins \\
+\addlinespace
+Mid-size & 10,000--100,000 & 99\%+ & CCRMS strongly preferred \\
+\addlinespace
+Large & 100,000+ & 99.9\% & CCRMS near-certain advantage \\
+\end{longtable}
+
+The crossover effect is notable. For creators with fewer than approximately 2,000 organic followers, centralized platforms are generally preferable because their algorithmic discovery provides an audience that would otherwise be inaccessible. This benefit significantly outweighs the higher fees. Conversely, for creators with 10,000 or more followers, the advantage of algorithmic discovery diminishes, and the fee differential becomes the primary consideration; CCRMS emerges as the preferred choice in over 99\% of simulated scenarios.
+
+This constitutes the most economically significant finding of the entire dissertation. It indicates that \textbf{CCRMS is not a universal substitute for centralized platforms}; rather, it is most advantageous for creators who already possess an audience and seek to retain a greater proportion of their earnings. Creators in the initial discovery phase are not the intended users. The implications for platform positioning are substantial; these are examined in Chapter~\ref{chap:discussion}.
+
+Table~\ref{tab:breakeven} reports the per-scenario break-even rates.
+
+\begin{longtable}{@{}L{0.55\linewidth} R{0.35\linewidth}@{}}
+\caption{Per-Scenario Break-Even Rates}\label{tab:breakeven}\\
+\toprule
+\textbf{Comparison} & \textbf{CCRMS Per-Scenario Win Rate} \\
+\midrule
+\endfirsthead
+
+\multicolumn{2}{l}{\emph{Table~\ref{tab:breakeven} continued from previous page}}\\
+\toprule
+\textbf{Comparison} & \textbf{CCRMS Per-Scenario Win Rate} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{2}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+CCRMS vs Centralized & 28.0\% \\
+CCRMS vs Web3 marketplace & 38.6\% \\
+CCRMS vs Bridge-based cross-chain & 66.5\% \\
+\end{longtable}
+
+The per-scenario win rates are lower than the mean revenue advantage suggests. CCRMS produces a higher overall mean revenue, but it loses in a substantial fraction of individual scenarios, typically those with small audiences. The 66.5\% win rate against bridge-based cross-chain is particularly informative: the only configuration in which CCRMS dominates is when it competes against an alternative that is also cross-chain and shares many of the same assumptions about audience access.
+
+Table~\ref{tab:ci} reports the 95\% confidence intervals for total simulated revenue across all 1,000 creators.
+
+\begin{longtable}{@{}L{0.40\linewidth} L{0.40\linewidth}@{}}
+\caption{95\% Confidence Intervals for Total Simulated Revenue (1,000 Creators)}\label{tab:ci}\\
+\toprule
+\textbf{Platform} & \textbf{Total Revenue Range} \\
+\midrule
+\endfirsthead
+
+\multicolumn{2}{l}{\emph{Table~\ref{tab:ci} continued from previous page}}\\
+\toprule
+\textbf{Platform} & \textbf{Total Revenue Range} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{2}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Centralized & \$30.9M--\$69.1M \\
+Web3 marketplace & \$35.1M--\$78.4M \\
+Bridge-based cross-chain & \$30.7M--\$69.4M \\
+\textbf{CCRMS} & \textbf{\$36.7M--\$84.1M} \\
+\end{longtable}
+
+CCRMS exhibits the broadest confidence interval, indicating greater variability around the mean. This observation aligns with the audience-dependent advantage presented in Table~\ref{tab:audience-tiers}: a CCRMS distribution includes both high-earning creators (large audiences who retain most of their revenue) and low-earning creators (small audiences without an algorithmic discovery boost). The wider distribution itself constitutes a research finding: it suggests that CCRMS is a \textbf{higher-variance, higher-mean} alternative to centralized platforms, with implications for risk-averse creators, as discussed in Chapter~\ref{chap:discussion}.
+
+\subsection{Comparative Fee Analysis}\label{subsec:fee-analysis}
+
+We drew the platform fee structures used in the Monte Carlo simulation, which were derived from publicly available data on representative platforms within each category. Table~\ref{tab:fees} delineates the assumed fee ranges and the corresponding data sources.
+
+\begin{longtable}{@{}L{0.22\linewidth} L{0.14\linewidth} L{0.56\linewidth}@{}}
+\caption{Assumed Fee Ranges for Each Platform Category}\label{tab:fees}\\
+\toprule
+\textbf{Category} & \textbf{Fee Range} & \textbf{Representative Platforms} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:fees} continued from previous page}}\\
+\toprule
+\textbf{Category} & \textbf{Fee Range} & \textbf{Representative Platforms} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Centralized & 30--45\% & YouTube (45\%), Spotify (30\%), Apple Music (30\%), Audible (40\%) \\
+\addlinespace
+Web3 marketplace & 5--10\% & OpenSea (2.5\% + 5\% creator), Magic Eden (2\%) \\
+\addlinespace
+Bridge-based cross-chain & 8--15\% & Wormhole, LayerZero, Multichain (typical bridge fees + DEX swap costs) \\
+\addlinespace
+CCRMS & 1--5\% & Polkadot transaction fees (target), conservative range \\
+\end{longtable}
+
+The fee ranges should be interpreted as \textbf{realistic envelopes} rather than definitive point estimates. During simulations, samples are drawn uniformly from each range at each iteration, thereby integrating fee uncertainty into the reported revenue figures rather than using a single fee value. The CCRMS fee range of 1--5\% reflects the minimal on-chain transaction cost (which varies with proof size rather than value) plus a hypothetical platform service fee for any value-added services; the lower end of this spectrum corresponds to pure protocol fees without additional service charges.
+
+A note on hidden costs: the simulation does not aim to represent the friction associated with self-custody for end users, the expenses of operating a CCRMS node, the costs of off-chain content delivery infrastructure, or the legal compliance costs borne by the platform operator. These expenses vary across platform models and, if included, might slightly diminish the advantage of CCRMS. They are acknowledged as limitations in Chapter~\ref{chap:discussion}.
+
+\section{Security and User-Centric Results}\label{sec:security-user-results}
+
+Having established the technical and economic results, we turn to security, test coverage, decentralization, and static-analysis findings. Each of these contributes to the system's overall trustworthiness.
+
+\subsection{Security Audit Findings}\label{subsec:security-audit}
+
+The security audit (Scenario 6, Section~\ref{sec:test-scenarios}) yielded eight findings labeled A through H. Table~\ref{tab:security-findings} summarizes the findings.
+
+\begin{longtable}{@{}L{0.04\linewidth} L{0.16\linewidth} L{0.50\linewidth} L{0.22\linewidth}@{}}
+\caption{Security Audit Findings}\label{tab:security-findings}\\
+\toprule
+\textbf{ID} & \textbf{Severity} & \textbf{Description} & \textbf{Status} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:security-findings} continued from previous page}}\\
+\toprule
+\textbf{ID} & \textbf{Severity} & \textbf{Description} & \textbf{Status} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+A & Low & XCM extrinsics callable locally as gift transactions (intentional) & Accepted design \\
+\addlinespace
+B & \textbf{Medium} & Authorization gap in \texttt{xcm\_transfer\_ownership} & \textbf{Fixed} (commit \texttt{9ceca57}) \\
+\addlinespace
+C & Low & Permissive \texttt{SafeCallFilter = Everything} configuration & Accepted prototype config \\
+\addlinespace
+D & Low & Zero-price content registration allowed & Accepted feature \\
+\addlinespace
+E & Low & View pack overwrite on re-purchase & \textbf{Fixed} (commit \texttt{9ceca57}) \\
+\addlinespace
+F & Informational & Single-collator MTTR $\sim$15--20 seconds & Test environment artifact \\
+\addlinespace
+G & Positive & 100\% state persistence across crash & Confirmed \\
+\addlinespace
+H & Positive & Block production rate unchanged after recovery & Confirmed \\
+\end{longtable}
+
+Among the eight findings, two (B and E) were identified as security vulnerabilities that we have remediated; three (A, C, D) are recognized as accepted design properties documented for production hardening; and the remaining three (F, G, H) constitute positive observations concerning reliability. \textbf{Finding B} (Medium severity, the \texttt{xcm\_transfer\_ownership} authorization gap) and \textbf{Finding E} (Low severity, the view-pack overwrite bug) have both been addressed in commit \texttt{9ceca57}. Appendix~\ref{app:security} offers the complete narrative for each finding.
+
+\subsection{Test Coverage}\label{subsec:test-coverage}
+
+Our unit test suite encompasses \textbf{16 of the 19 distinct error variants} defined in \texttt{pallet-content-rights}, achieving a coverage ratio of 84 percent, compared to the Phase~2 objective of 80 percent. Three variants remain untested: \texttt{ItemIdOverflow} (which is impractical to simulate through standard extrinsics), \texttt{NftOperationFailed} (implicitly verified during NFT minting processes), and \texttt{ChildAlreadyNested} (which is inaccessible via the public API). The comprehensive error variant table is provided in Appendix~\ref{app:security}.
+
+\subsection{Decentralization Assessment (HHI)}\label{subsec:decentralization-hhi}
+
+The Herfindahl-Hirschman Index (HHI) was calculated theoretically using the actual validator distribution of the Polkadot mainnet, accounting for the fact that a parachain adopts the relay chain's security model. Table~\ref{tab:hhi} presents the relevant comparison.
+
+\begin{longtable}{@{}L{0.28\linewidth} L{0.30\linewidth} R{0.15\linewidth} R{0.22\linewidth}@{}}
+\caption{Herfindahl-Hirschman Index (HHI) Comparison}\label{tab:hhi}\\
+\toprule
+\textbf{System} & \textbf{Validators / Entities} & \textbf{HHI (approx.)} & \textbf{Nakamoto Coefficient} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:hhi} continued from previous page}}\\
+\toprule
+\textbf{System} & \textbf{Validators / Entities} & \textbf{HHI (approx.)} & \textbf{Nakamoto Coefficient} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Polkadot mainnet (NPoS, $\sim$300 validators) & $\sim$300 (near-equal stake) & $\sim$33 & $\sim$80--100 \\
+\addlinespace
+Ethereum PoS & $\sim$900K validators (concentrated in $\sim$5 staking providers) & $\sim$1,200--2,000 & $\sim$5--7 \\
+\addlinespace
+Solana & $\sim$1,900 validators (top-heavy stake distribution) & $\sim$200--500 & $\sim$19--25 \\
+\addlinespace
+Centralized DRM (e.g., Spotify) & 1 entity & 10,000 & 1 \\
+\addlinespace
+US DOJ ``unconcentrated'' threshold & -- & $<$1,500 & -- \\
+\end{longtable}
+
+Polkadot's HHI of $\sim$33 is significantly below the US DOJ ``unconcentrated'' threshold of 1,500 and is orders of magnitude lower than a centralized monopoly at 10,000. The Nakamoto coefficient ($\sim$80--100 for Polkadot compared to approximately 5--7 for Ethereum Proof of Stake (PoS) and 1 for centralized Digital Rights Management (DRM)), confirms that a CCRMS deployment on Polkadot would meet or exceed the decentralization attributes of the alternative systems. The local Zombienet environment, with two validators and an HHI around 5,000, is not representative of production decentralization.
+
+\subsection{Static Analysis and Dependency Audit}\label{subsec:static-analysis}
+
+Static analysis conducted using \texttt{cargo clippy} reported zero warnings within the dissertation's codebase. The \texttt{cargo audit} reported 8 advisories, all pertaining to transitive dependencies of the Polkadot SDK, including components such as networking, the WebAssembly (WASM) executor, Transport Layer Security (TLS), and logging. Importantly, none of these advisories affect our pallet code. These issues are effectively mitigated by the architectural separation between the sandboxed WASM runtime and the node binary. See Appendix~\ref{app:security} for the full advisory breakdown.
+
+\section{Summary}\label{sec:chapter-7-summary}
+
+All 11 KPIs achieved their respective targets. The most significant outcome is the audience-dependent CCRMS advantage identified in the Monte Carlo simulation, discussed in Chapter~\ref{chap:discussion}.

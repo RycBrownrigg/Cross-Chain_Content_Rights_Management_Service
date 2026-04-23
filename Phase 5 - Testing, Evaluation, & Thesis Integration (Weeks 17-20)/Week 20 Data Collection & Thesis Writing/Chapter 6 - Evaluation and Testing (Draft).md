@@ -6,31 +6,31 @@
 
 ## 6.1 Evaluation Methodology
 
-The evaluation employs a comprehensive multi-layer testing strategy that integrates automated unit tests, integration tests conducted across both simulated and live networks, performance benchmarking, security assessments, and a comparative analysis against a centralized baseline. This stratified methodology guarantees that findings are validated at various levels of abstraction, ranging from individual pallet functions and cross-chain XCM flows to the entire Ethereum-to-Polkadot bridge pipeline.
+The evaluation utilizes a comprehensive multi-tiered testing strategy that incorporates automated unit testing, integration testing across simulated and live networks, performance benchmarking, security evaluations, and a comparative analysis against a centralized baseline. This stratified approach ensures that findings are validated at multiple levels of abstraction, from individual pallet functions and cross-chain XCM flows to the entire Ethereum-to-Polkadot bridge pipeline.
 
 ### 6.1.1 Testing Layers
 
-**Layer 1 — Unit Tests (56 tests):** Executed within an isolated mock runtime (`pallets/content-rights/src/tests.rs`), these tests verify both the success and error pathways of each extrinsic without the need for an active blockchain. The mock runtime emulates `pallet-nfts`, balances, and the content rights pallet within a controlled environment. The suite includes 23 functional tests, 10 security tests, 11 XCM tests, 5 royalty tests, 5 auto-renewal tests, and 2 metadata tests.
+**Layer 1 — Unit Tests (56 tests):** Performed within an isolated mock runtime (`pallets/content-rights/src/tests.rs`), these tests assess both the successful execution and error scenarios of each extrinsic without requiring an active blockchain. The mock runtime simulates `pallet-nfts`, balances, and the content rights pallet within a controlled environment. The test suite comprises 23 functional tests, 10 security tests, 11 XCM tests, 5 royalty tests, 5 auto-renewal tests, and 2 metadata tests.
 
-**Layer 2 — XCM Simulator Tests:** Utilizing the `xcm-simulator` framework, cross-chain operations are evaluated within a simulated multi-parachain environment. This process verifies the construction of XCM messages, the calculation of fees, and the routing of sovereign accounts without the necessity of deploying actual systems nodes.
+**Layer 2 — XCM Simulator Tests:** Utilizing the `xcm-simulator` framework, cross-chain operations are assessed within a simulated multi-parachain environment. This process verifies the construction of XCM messages, the calculation of fees, and the routing of sovereign accounts without the need to deploy actual systems nodes.
 
-**Layer 3 — Zombienet End-to-End Tests:** Conducting live multi-chain tests on an operational Zombienet network (comprising Rococo relay and two parachains) evaluates the entire transaction lifecycle, including block production, HRMP relay, and on-chain state management verification.
+**Layer 3 — Zombienet End-to-End Tests:** Conducting live multi-chain tests on an operational Zombienet network, which includes the Rococo relay and two parachains, assesses the comprehensive transaction lifecycle, encompassing block production, HRMP relay, and on-chain state management verification.
 
 **Layer 4 — Snowbridge E2E:** The comprehensive Ethereum-to-Polkadot bridge pipeline has been validated: `Gateway.sendToken()` on a local Ethereum network (Geth + Lodestar), relayed through Snowbridge's beacon and execution relays, verified on Bridge Hub, and delivered to the designated recipient AssetHub.
 
 ### 6.1.2 Performance Testing Framework
 
-Seven automated benchmark scripts located in the `scripts/perf/` directory assess throughput (11 extrinsic types), latency, block weight utilization, storage growth, XCM cross-chain latency, resource utilization, stress tolerance, and reliability. Each script employs the `@polkadot/api` library to submit transactions and record wall-clock timing. The results are stored in JSON format for subsequent analysis reproducibility.
+Seven automated benchmark scripts situated within the `scripts/perf/` directory evaluate throughput (including 11 extrinsic types), latency, block weight utilization, storage growth, XCM cross-chain latency, resource utilization, stress tolerance, and system reliability. Each script utilizes the `@polkadot/api` library to submit transactions and record wall-clock durations. The outcomes are documented in JSON format for further analysis reproducibility.
 
-The centralized comparison benchmark (`centralized-drm-benchmark/`) executes the same six operations utilizing Express.js and SQLite, with benchmarking conducted using an identical methodology, including consistent batch sizes, concurrency levels, and measurement techniques approach).
+The centralized comparison benchmark (`centralized-drm-benchmark/`) executes the same six operations utilizing Express.js and SQLite, with benchmarking conducted using an identical methodology (including consistent batch sizes, concurrency levels, and measurement techniques).
 
 ## 6.2 Test Scenarios
 
 ### 6.2.1 Throughput and Latency (Week 17)
 
-**Scenario:** Submit concurrent batches of each extrinsic type (batch sizes: 1, 10, 20, 50, 100) from distinct funded accounts. Measure time from submission to block inclusion.
+**Scenario:** Submit concurrent batches of each extrinsic type (batch sizes: 1, 10, 20, 50, 100) from distinct funded accounts. Measure the time from submission to block inclusion.
 
-**Purpose:** Determine practical TPS limits and identify the throughput bottleneck (block weight vs configuration parameters).
+**Purpose:** Determine practical TPS limits and identify the throughput bottleneck (block weight versus configuration) parameters).
 
 **Key variables:** Batch size, extrinsic type, number of unique accounts.
 
@@ -112,7 +112,7 @@ The evaluation framework uses eleven key performance indicators:
 | 10 | Test coverage | >80% | **82%** (14/17 error variants) | **Pass** |
 | 11 | Decentralisation ratio | Documented | **270× slower, qualitatively superior** | **Documented** |
 
-All eleven KPIs met their targets. The security audit identified five findings (1 Medium, 4 Low); the Medium finding (authorization gap in `xcm_transfer_ownership`) and one Low finding (view pack overwrite) were corrected during the testing phase. The remaining three Low findings are documented design decisions appropriate for a research prototype. All 56 unit tests pass.
+All eleven KPIs achieved their respective targets. The security audit revealed five findings: one Medium (authorization gap in `xcm_transfer_ownership`) and four Low; the Medium finding and one Low finding (view pack overwrite) were addressed during the testing phase. The remaining three Low findings are documented design decisions deemed appropriate for a research prototype. All 56 unit tests pass.
 
 ## 6.4 Testing Infrastructure
 
@@ -133,4 +133,4 @@ All eleven KPIs met their targets. The security audit identified five findings (
 
 ### Reproducibility
 
-All tests are automated via scripts in `scripts/perf/` and `bench/`. Results are stored as JSON files for independent verification. The Zombienet configuration, HRMP channel setup, and Snowbridge deployment are documented in `docs/SNOWBRIDGE_SETUP.md` and `docs/SNOWBRIDGE_SESSION_LOG.md`.
+All assessments are executed through automated scripts located in `scripts/perf/` and `bench/`. The outcomes are preserved as JSON files to facilitate independent verification. The configuration of Zombienet, the HRMP channel setup, and the Snowbridge deployment are thoroughly documented in `docs/SNOWBRIDGE_SETUP.md` and `docs/SNOWBRIDGE_SESSION_LOG.md`.

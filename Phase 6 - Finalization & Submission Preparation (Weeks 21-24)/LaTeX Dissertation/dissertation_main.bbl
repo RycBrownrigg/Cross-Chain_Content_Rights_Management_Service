@@ -1,0 +1,717 @@
+\begin{thebibliography}{100}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{360iResearch}(2025)]{iresearch3602025}
+{360iResearch}.
+\newblock {Blockchain for Content Monetization Market Size 2025-2030}.
+\newblock Technical report, 360iResearch, 2025.
+\newblock URL
+  \url{https://www.360iresearch.com/library/intelligence/blockchain-for-content-monetization}.
+\newblock Market Research Report.
+
+\bibitem[Abbas et~al.(2022)]{abbasEtAl2022}
+H.~Abbas et~al.
+\newblock {Analysis of Polkadot: Architecture, Internals, and Contradictions}.
+\newblock In \emph{IEEE Blockchain 2022}, 2022.
+\newblock URL
+  \url{https://www.cri-lab.net/wp-content/uploads/2022/07/IEEE_Blockchain_2022__Polkadot_Architecture___Limitations.pdf}.
+
+\bibitem[Abdul et~al.(2024)]{abdulEtAl2024}
+S.~S.~M. Abdul et~al.
+\newblock {CrossDeFi: A Novel Cross-Chain Communication Protocol}.
+\newblock \emph{Future Internet}, 16:\penalty0 314, 2024.
+
+\bibitem[Alotaibi(2023)]{alotaibi2023}
+S.~J. Alotaibi.
+\newblock {Using smart contracts in the proposed blockchain framework for an
+  identity management system based on the Internet of Things}.
+\newblock \emph{International Journal of Distributed Systems Technology},
+  14\penalty0 (1):\penalty0 1--22, 2023.
+
+\bibitem[Ante(2020)]{ante2020}
+L.~Ante.
+\newblock {Smart contracts on the blockchain -- A bibliometric analysis and
+  review}.
+\newblock \emph{SSRN Electronic Journal}, 2020.
+
+\bibitem[Atzori(2017)]{atzori2017}
+M.~Atzori.
+\newblock {Blockchain Technology and Decentralized Governance: Is the State
+  Still Necessary?}
+\newblock \emph{Journal of Governance and Regulation}, 6\penalty0 (1):\penalty0
+  45--62, 2017.
+\newblock \doi{10.22495/jgr_v6_i1_p5}.
+
+\bibitem[Balcerzak et~al.(2022)]{balcerzakEtAl2022}
+A.~P. Balcerzak et~al.
+\newblock {Blockchain technology and smart contracts in decentralized
+  governance systems}.
+\newblock \emph{Administrative Sciences}, 12\penalty0 (3):\penalty0 96, 2022.
+\newblock \doi{10.3390/admsci12030096}.
+
+\bibitem[Baliga(2020)]{baliga2020}
+A.~Baliga.
+\newblock {Understanding Blockchain Consensus Models}.
+\newblock Technical report, Persistent Systems, 2020.
+\newblock URL
+  \url{https://www.persistent.com/wp-content/uploads/2017/04/WP-Understanding-Blockchain-Consensus-Models.pdf}.
+
+\bibitem[Banerjee et~al.(2020)]{banerjeeEtAl2020}
+P.~Banerjee et~al.
+\newblock {Reliable, Fair and Decentralized Marketplace for Content Sharing
+  Using Blockchain}.
+\newblock arXiv:2009.11033, 2020.
+\newblock URL \url{https://arxiv.org/pdf/2009.11033}.
+
+\bibitem[Busch(2022)]{busch2022}
+K.~Busch.
+\newblock {Web3: A Proposed Blockchain-Based, Decentralized Web}.
+\newblock Technical Report IF12075, Congressional Research Service, 2022.
+\newblock URL
+  \url{https://www.congress.gov/crs_external_products/IF/PDF/IF12075/IF12075.2.pdf}.
+
+\bibitem[Buterin(2025)]{buterin2025}
+V.~Buterin.
+\newblock {Long term L1 execution layer proposal: replace the EVM with RISC-V}.
+\newblock Ethereum Magicians Forum, 2025.
+\newblock URL
+  \url{https://www.coindesk.com/tech/2025/04/21/vitalik-buterin-proposes-replacing-ethereums-evm-with-risc-v}.
+\newblock Posted April 20, 2025; coverage via CoinDesk.
+
+\bibitem[Buzu(2021)]{buzu2021}
+I.~Buzu.
+\newblock {Blockchain, smart contracts and copyright management disruption}.
+\newblock SSRN, 2021.
+\newblock URL
+  \url{https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3759260_code3591422.pdf}.
+
+\bibitem[{Castweet Team}(2019)]{castweet2019}
+{Castweet Team}.
+\newblock {Castweet -- A Multi-broadcast Platform Based on Blockchain
+  Incentives for Everyone}.
+\newblock Technical report, Castweet, 2019.
+\newblock URL
+  \url{https://resources.cryptocompare.com/asset-management/17402/1728919640132.pdf}.
+\newblock Whitepaper.
+
+\bibitem[Chen et~al.(2020)]{chenEtAl2020}
+F.~Chen et~al.
+\newblock {Blockchain for Internet of Things applications: A review and open
+  issues}.
+\newblock \emph{Journal of Network and Computer Applications}, 173:\penalty0
+  102854, 2020.
+\newblock \doi{10.1016/j.jnca.2020.102854}.
+
+\bibitem[Chen et~al.(2023)]{chenKEtAl2023}
+K.~Chen et~al.
+\newblock {A Trusted Reputation Management Scheme for Cross-Chain
+  Transactions}.
+\newblock \emph{Sensors}, 23:\penalty0 6033, 2023.
+
+\bibitem[{Coinbase} and {x402 Foundation}(2025)]{coinbaseX402_2025}
+{Coinbase} and {x402 Foundation}.
+\newblock {x402 Protocol: HTTP-native blockchain micropayments}.
+\newblock CoinPaprika, 2025.
+\newblock URL
+  \url{https://coinpaprika.com/education/x402-ecosystem-instant-blockchain-payments-for-apis-and-ai-agents/}.
+
+\bibitem[{CommuniPass}(2026)]{communipass2026}
+{CommuniPass}.
+\newblock {Creator Monetization in 2026: The 5 Models That Actually Generate
+  Recurring Revenue}.
+\newblock CommuniPass Blog, 2026.
+\newblock URL
+  \url{https://communipass.com/blog/creator-monetization-in-2026-the-5-models-that-actually-generate-recurring-revenues/}.
+
+\bibitem[Cutts(2019)]{cutts2019}
+T.~Cutts.
+\newblock {Smart Contracts and Consumers}.
+\newblock \emph{West Virginia Law Review}, 2019.
+
+\bibitem[Darshan et~al.(2025)Darshan, Rohan, Rajesh, Ruchitha, Kamath, and
+  Manas]{darshanEtAl2025}
+P.~Darshan, J.~S. Rohan, R.~Rajesh, M.~Ruchitha, S.~Kamath, and M.~N. Manas.
+\newblock {Intellectual Property Rights and Entrepreneurship in the NFT
+  Ecosystem: Legal Frameworks, Business Models, and Innovation Opportunities}.
+\newblock arXiv:2507.00172, 2025.
+\newblock URL \url{https://arxiv.org/html/2507.00172v1}.
+
+\bibitem[Davik(2025)]{davik2025}
+C.~Davik.
+\newblock {The Art Of NFTs: Copyright, Contracts, And The Fallacy Of
+  Ownership}.
+\newblock \emph{Georgia Law Review}, 2025.
+
+\bibitem[Deng et~al.(2025)Deng, Tang, Li, Abla, Chen, Liang, and
+  He]{dengEtAl2025}
+Z.~Deng, C.~Tang, T.~Li, P.~Abla, Q.~Chen, W.~Liang, and D.~He.
+\newblock {Enhancing Blockchain Cross-Chain Interoperability: A Comprehensive
+  Survey}.
+\newblock arXiv:2505.04934, 2025.
+\newblock URL \url{https://arxiv.org/abs/2505.04934}.
+
+\bibitem[Divyashree and Mishra(2023)]{divyashreeMishra2023}
+K.~S. Divyashree and A.~Mishra.
+\newblock {Blockchain technology in financial sector and its legal
+  implications}.
+\newblock In \emph{Lecture Notes in Networks and Systems}, volume 478, pages
+  219--231. 2023.
+
+\bibitem[Dreyer et~al.(2021)]{dreyerEtAl2021}
+A.~Dreyer et~al.
+\newblock {Can I mint an NFT with that?: Avoiding right of publicity and
+  trademark litigation risks in the brave new world of NFTs}.
+\newblock Skadden Publications, 2021.
+\newblock URL
+  \url{https://www.skadden.com/-/media/files/publications/2021/05/canimintannftwiththatavoidingrightofpublicityandtr.pdf}.
+
+\bibitem[{Eurojust}(2024)]{eurojust2024}
+{Eurojust}.
+\newblock {Non-Fungible Tokens and Intellectual Property Rights -- Can the use
+  of NFTs lead to IP infringements?}
+\newblock Technical report, European Union Agency for Criminal Justice
+  Cooperation, 2024.
+\newblock URL
+  \url{https://www.eurojust.europa.eu/sites/default/files/assets/eurojust-nfts-intellectual-property-rights-flyer.pdf}.
+
+\bibitem[{European Parliament}(2026)]{europeanParliament2026}
+{European Parliament}.
+\newblock {Report on copyright and generative artificial intelligence --
+  opportunities and challenges}.
+\newblock Technical Report A10-0019/2026, European Parliament, 2026.
+\newblock URL
+  \url{https://www.europarl.europa.eu/doceo/document/A-10-2026-0019_EN.html}.
+
+\bibitem[{European Securities and Markets Authority}(2025)]{esma2025}
+{European Securities and Markets Authority}.
+\newblock {MiCA Regulation: Markets in Crypto-Assets}.
+\newblock Technical report, ESMA, 2025.
+\newblock URL
+  \url{https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica}.
+\newblock Full enforcement by July 2026.
+
+\bibitem[Feng et~al.(2019)]{fengEtAl2019}
+T.~Feng et~al.
+\newblock {Smart contract model for complex reality transaction}.
+\newblock 2019.
+
+\bibitem[Finck(2018)]{finck2018}
+M.~Finck.
+\newblock \emph{{Blockchain regulation and governance in Europe}}.
+\newblock Cambridge University Press, 2018.
+\newblock URL
+  \url{https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3351542_code3242224.pdf}.
+\newblock Excerpt available via SSRN.
+
+\bibitem[Garba et~al.(2021)]{garbaEtAl2021}
+A.~Garba et~al.
+\newblock {A digital rights management system based on a scalable blockchain}.
+\newblock Copenhagen Business School Research, 2021.
+\newblock URL
+  \url{https://research-api.cbs.dk/ws/portalfiles/portal/93314574/abba_garba_et_al_a_digital_rights_management_system_based_on_a_scalable_blockchain_publishersversion.pdf}.
+
+\bibitem[Gatto et~al.(2021)]{gattoEtAl2021}
+J.~Gatto et~al.
+\newblock {NFT License Breakdown: Exploring Different Marketplaces and
+  Associated License Issues}.
+\newblock Law of the Ledger, 2021.
+\newblock URL
+  \url{https://www.lawoftheledger.com/wp-content/uploads/sites/15/2021/09/NFT-License-Breakdown-Article-0921.pdf}.
+
+\bibitem[Gogel et~al.(2021)]{gogelEtAl2021}
+D.~Gogel et~al.
+\newblock {DeFi Beyond the Hype: The Emerging World of Decentralized Finance}.
+\newblock Technical report, Wharton Blockchain and Digital Asset Project, 2021.
+\newblock URL
+  \url{https://wifpr.wharton.upenn.edu/wp-content/uploads/2021/05/DeFi-Beyond-the-Hype.pdf}.
+
+\bibitem[Gomaa(2019)]{gomaa2019}
+A.~Gomaa.
+\newblock {A DRM Solution for Online Content Using Blockchain -- A Music
+  Perspective}.
+\newblock In \emph{INFOCOMP 2019}, 2019.
+\newblock URL
+  \url{https://personales.upv.es/thinkmind/dl/conferences/infocomp/infocomp_2019/infocomp_2019_1_30_60048.pdf}.
+
+\bibitem[Goyal et~al.(2019)]{goyalEtAl2019}
+P.~Goyal et~al.
+\newblock {Secure Incentivization for Decentralized Content Delivery}.
+\newblock In \emph{USENIX Workshop on Hot Topics in Edge Computing (HotEdge
+  2019)}, 2019.
+\newblock URL
+  \url{https://www.usenix.org/system/files/hotedge19-paper-goyal_0.pdf}.
+
+\bibitem[{Grand View Research}(2025)]{grandViewResearch2025}
+{Grand View Research}.
+\newblock {Digital Rights Management Market Size, Share \& Trends Analysis
+  Report}.
+\newblock Technical report, Grand View Research, 2025.
+\newblock URL
+  \url{https://www.grandviewresearch.com/industry-analysis/digital-rights-management-market}.
+
+\bibitem[Guadamuz(2025)]{guadamuz2025}
+A.~Guadamuz.
+\newblock {The EU's Artificial Intelligence Act and copyright}.
+\newblock \emph{The Journal of World Intellectual Property}, 28:\penalty0
+  213--219, 2025.
+\newblock \doi{10.1111/jwip.12330}.
+
+\bibitem[Habermeier et~al.(2021)]{habermeierEtAl2021}
+R.~Habermeier et~al.
+\newblock {Polkadot's messaging scheme}.
+\newblock Web3 Foundation Research, Medium, 2021.
+\newblock URL
+  \url{https://medium.com/web3foundation/polkadots-messaging-scheme-b1ec560908b7}.
+
+\bibitem[Hevner et~al.(2004)Hevner, March, Park, and Ram]{hevnerEtAl2004}
+A.~R. Hevner, S.~T. March, J.~Park, and S.~Ram.
+\newblock {Design science in information systems research}.
+\newblock \emph{MIS Quarterly}, 28\penalty0 (1):\penalty0 75--105, 2004.
+\newblock Canonical reference for the design science research paradigm; added
+  here because the lit review v2 does not include it but the dissertation cites
+  it in Chapter 1 and Chapter 4.
+
+\bibitem[{Information (MDPI)}(2026)]{information2026}
+{Information (MDPI)}.
+\newblock {Library systems and digital-rights management: Towards a
+  blockchain-based solution for enhanced privacy and security}.
+\newblock \emph{Information}, 17\penalty0 (2):\penalty0 137, 2026.
+
+\bibitem[{ink! Alliance}(2026)]{inkAlliance2026}
+{ink! Alliance}.
+\newblock {Discontinuation of ink: Rust smart contract language}.
+\newblock Polkadot Forum, 2026.
+\newblock URL
+  \url{https://forum.polkadot.network/t/discontinuation-of-ink-rust-smart-contract-language/16849}.
+\newblock Posted January 27, 2026.
+
+\bibitem[Khan(2024)]{khan2024}
+K.~Khan.
+\newblock {Decentralized Video Streaming: Unleashing the Potential through
+  Blockchain-Powered Platforms}.
+\newblock \emph{International Journal of Modern Research in Applied Physics
+  (IJMRAP)}, 6\penalty0 (7), 2024.
+
+\bibitem[{Kraken Intelligence}(2021)]{krakenIntelligence2021}
+{Kraken Intelligence}.
+\newblock {Polkadot \& Kusama Parachains Primer}.
+\newblock Technical report, Kraken, 2021.
+\newblock URL
+  \url{https://cognizium.io/uploads/resources/Kraken%2520Intelligence%2520-%2520Polkadot%2520and%2520Kusama%2520Parachains%2520Primer%2520-%25202021%2520Sep.pdf}.
+
+\bibitem[Kulkarani et~al.(2024)]{kulkaraniEtAl2024}
+S.~Kulkarani et~al.
+\newblock {Blockchain Enabled Smart Contracts for Digital Assets}.
+\newblock \emph{International Journal of Advanced Research in Science,
+  Communication and Technology (IJARSCT)}, 2024.
+
+\bibitem[Kumar et~al.(2023)]{kumarEtAl2023}
+R.~K. Kumar et~al.
+\newblock {Revolutionizing digital ownership: Examining the perks of a
+  Polkadot-based NFT marketplace}.
+\newblock Technical report, ResearchGate, 2023.
+
+\bibitem[Li et~al.(2024)]{liLEtAl2024}
+L.~Li et~al.
+\newblock {Why Blockchain-Based Digital Assets Are Owned on Decentralized
+  Metaverse Platforms?}
+\newblock In \emph{Hawaii International Conference on System Sciences (HICSS)},
+  2024.
+\newblock URL
+  \url{https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/da7d3ba9-379e-48a8-98e8-18b2bc293b1f/content}.
+
+\bibitem[Li et~al.(2025{\natexlab{a}})Li, Wen, and Wu]{liQEtAl2025}
+Q.~Li, X.~Wen, and Z.~Wu.
+\newblock {Evaluating blockchain adoption barriers in China's IP trade and
+  protection internationally}.
+\newblock \emph{Frontiers in Blockchain}, 8, 2025{\natexlab{a}}.
+
+\bibitem[Li et~al.(2025{\natexlab{b}})Li, Liu, Chen, Liu, and He]{liEtAl2025a}
+W.~Li, Z.~Liu, J.~Chen, Z.~Liu, and Q.~He.
+\newblock {Towards blockchain interoperability: a comprehensive survey on
+  cross-chain solutions}.
+\newblock \emph{Blockchain: Research and Applications}, 6\penalty0
+  (3):\penalty0 100286, 2025{\natexlab{b}}.
+
+\bibitem[Lin et~al.(2022)]{linEtAl2022}
+S.~Y. Lin et~al.
+\newblock {A survey of application research based on blockchain smart
+  contract}.
+\newblock \emph{Wireless Networks}, 28:\penalty0 635--690, 2022.
+\newblock \doi{10.1007/s11276-021-02874-2}.
+
+\bibitem[Madapati and Pradhan(2025)]{madapatiPradhan2025}
+S.~L. Madapati and N.~R. Pradhan.
+\newblock {Decentralizing video copyright protection: a novel
+  blockchain-enabled framework with performance evaluation}.
+\newblock \emph{Frontiers in Artificial Intelligence}, 8, 2025.
+
+\bibitem[Mao et~al.(2022)]{maoEtAl2022}
+H.~Mao et~al.
+\newblock {A Survey on Cross-Chain Technology: Challenges, Development, and
+  Prospect}.
+\newblock 2022.
+
+\bibitem[Mareckova(2024)]{mareckova2024}
+D.~Mareckova.
+\newblock \emph{{Blockchain and Collective Rights Management of Copyright and
+  Related Rights at the Global Level: The Case of the Music Industry}}.
+\newblock PhD thesis, OAPEN, 2024.
+\newblock URL
+  \url{https://library.oapen.org/bitstream/handle/20.500.12657/94575/oa_pdf-057-1731486746.pdf}.
+
+\bibitem[Maric et~al.(2025)Maric, Scholz, and Subotic]{maricEtAl2025}
+F.~Maric, B.~Scholz, and P.~Subotic.
+\newblock {Formal Verification of a Fail-Safe Cross-Chain Bridge}.
+\newblock In \emph{6th International Workshop on Formal Methods for Blockchains
+  (FMBC 2025)}, volume 129 of \emph{OASIcs}, 2025.
+\newblock URL
+  \url{https://drops.dagstuhl.de/entities/document/10.4230/OASIcs.FMBC.2025.8}.
+
+\bibitem[{MarketsandMarkets}(2025)]{marketsandMarkets2025}
+{MarketsandMarkets}.
+\newblock {Digital Rights Management Market by Application}.
+\newblock Technical report, MarketsandMarkets Research, July 2025.
+\newblock URL
+  \url{https://www.marketsandmarkets.com/Market-Reports/digital-rights-management-market-152806525.html}.
+
+\bibitem[Mauro(2022)]{mauro2022}
+N.~Mauro.
+\newblock {Smart contracts for decentralized business models in the electricity
+  market: a consumer protection perspective}.
+\newblock Master's thesis, European Master in Law and Economics (EMLE), 2022.
+\newblock URL
+  \url{https://emle.org/wp-content/uploads/2023/01/EMLE_thesis_Mauro_Noemi.pdf}.
+
+\bibitem[Moncada et~al.(2021)]{moncadaEtAl2021}
+R.~Moncada et~al.
+\newblock {DLT-enabled Platforms: Distribution and Management of Media
+  Content}.
+\newblock Technical report, Mediaverse Project, 2021.
+\newblock URL
+  \url{https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}.
+
+\bibitem[{Mordor Intelligence}(2026)]{mordorIntelligence2026}
+{Mordor Intelligence}.
+\newblock {Digital Rights Management (DRM) Market -- Size, Share \& Industry
+  Analysis}.
+\newblock Technical report, Mordor Intelligence, January 2026.
+\newblock URL
+  \url{https://www.mordorintelligence.com/industry-reports/digital-rights-management-drm-market}.
+
+\bibitem[Moreno et~al.(2023)]{morenoEtAl2023}
+M.~F. Moreno et~al.
+\newblock {A Knowledge-Oriented Approach to Enhance Integration and
+  Communicability in the Polkadot Ecosystem}.
+\newblock arXiv:2308.00735, 2023.
+\newblock URL \url{https://arxiv.org/pdf/2308.00735}.
+
+\bibitem[Munson(2019)]{munson2019}
+M.~Munson.
+\newblock {A Blockchain Controlled Content Fabric}.
+\newblock Video Services Forum, 2019.
+\newblock URL
+  \url{https://static.vsf.tv/Meetings/2019/2019_DC/Munson_BlockchainFabric.pdf}.
+
+\bibitem[Munson et~al.(2022)]{munsonEtAl2022}
+M.~Munson et~al.
+\newblock {Blockchain Content Fabric for Multi-Chain Content Ownership and
+  Distribution}.
+\newblock Technical report, Eluvio, 2022.
+\newblock URL \url{https://eluv.io/3e39198441b1d578bc0f.pdf}.
+
+\bibitem[Murray(2022)]{murray2022}
+M.~Murray.
+\newblock {NFT Ownership And Copyrights}.
+\newblock \emph{Indiana Law Review}, 56:\penalty0 367, 2022.
+
+\bibitem[Orero et~al.(2023)]{oreroEtAl2023}
+P.~Orero et~al.
+\newblock {The Visible Subtitler: Blockchain Technology for Right Management
+  and Minting}.
+\newblock \emph{Open Research Europe}, 3:\penalty0 26, 2023.
+
+\bibitem[Osemwegie(2025)]{osemwegie2025}
+O.~Osemwegie.
+\newblock {Decentralized Media Distribution: Exploring blockchain's role in
+  copyright protection, monetization, and content ownership rights}.
+\newblock \emph{International Journal of Mechanical Technology and Marine
+  Engineering}, 2025.
+
+\bibitem[{Parity
+  Technologies}(2022{\natexlab{a}})]{parityTechnologiesInk3_2022}
+{Parity Technologies}.
+\newblock {ink! 3.0: Parity's Rust-based language for WASM smart contracts gets
+  a major update}.
+\newblock Parity Blog, 2022{\natexlab{a}}.
+\newblock URL
+  \url{https://www.parity.io/blog/ink-3-0-paritys-rust-based-language-gets-a-major-update}.
+
+\bibitem[{Parity Technologies}(2022{\natexlab{b}})]{parityTechnologiesInk_2022}
+{Parity Technologies}.
+\newblock {What is Parity's ink!?}
+\newblock Parity Blog, 2022{\natexlab{b}}.
+\newblock URL \url{https://www.parity.io/blog/what-is-paritys-ink}.
+
+\bibitem[{Parity Technologies}(2025)]{parityUpgrade2025}
+{Parity Technologies}.
+\newblock {Polkadot Upgrade 2025: What You Need to Know}.
+\newblock Parity Blog, 2025.
+\newblock URL
+  \url{https://www.parity.io/blog/polkadot-upgrade-2025-what-you-need-to-know}.
+
+\bibitem[Patil et~al.(2022)]{patilEtAl2022}
+S.~S. Patil et~al.
+\newblock {Blockchain Based Multimedia Content Protection Using Encryption in
+  DRM (Digital Rights Management)}.
+\newblock \emph{International Journal of Innovative Research in Technology
+  (IJIRT)}, 2022.
+
+\bibitem[{Polkadot Network}(2025)]{polkadotNetwork2025}
+{Polkadot Network}.
+\newblock {Polkadot Roundup 2025}.
+\newblock Medium, 2025.
+\newblock URL
+  \url{https://medium.com/polkadot-network/polkadot-roundup-2025-3c3c71c7e9c4}.
+
+\bibitem[Quan et~al.(2024)]{quanEtAl2024}
+L.~Quan et~al.
+\newblock {Research and application of digital collection smart contract method
+  based on Blockchain}.
+\newblock 2024.
+
+\bibitem[{R0GUE}(2025)]{r0gue2025}
+{R0GUE}.
+\newblock {ink! speaks Solidity on PolkaVM}.
+\newblock Medium, 2025.
+\newblock URL
+  \url{https://r0gue.medium.com/ink-solidity-abi-on-polkavm-c675c854efd3}.
+\newblock Posted August 2025.
+
+\bibitem[Reggianini(2025)]{reggianini2025}
+E.~Reggianini.
+\newblock {Standardizing On-chain IP Rights Management}.
+\newblock Technical report, BlockStand, 2025.
+\newblock URL
+  \url{https://blockstand.eu/blockstand/uploads/2025/05/Standardizing-On-chain-IP-Rights-Management_Reggianini.pdf}.
+
+\bibitem[Salman et~al.(2023)]{salmanEtAl2023}
+B.~Salman et~al.
+\newblock {NFT-Based Secure Platform for Copyright Images (NFT-SPCI)}.
+\newblock \emph{Technix International Journal for Engineering Research
+  (TIJER)}, 2023.
+
+\bibitem[Sevim(2024)]{sevim2024}
+H.~O. Sevim.
+\newblock {A Survey on Trustless Cross-chain Interoperability Solutions in
+  On-chain Finance}.
+\newblock In \emph{Distributed Ledger Technology Workshop (DLT 2024)}, 2024.
+\newblock URL
+  \url{https://dlt2024.di.unito.it/wp-content/uploads/2024/05/DLT2024_paper_14.pdf}.
+
+\bibitem[Shah(2025)]{shah2025}
+A.~Shah.
+\newblock {Automating Royalties: A Framework of Smart Contracts for
+  Cross-Platform Content Revenue}.
+\newblock \emph{International Journal for Multidisciplinary Research (IJFMR)},
+  2025.
+
+\bibitem[Shumyliak et~al.(2023)]{shumyliakEtAl2023}
+L.~Shumyliak et~al.
+\newblock {Practical Implementation of Smart Contracts for Payment of Digital
+  Goods}.
+\newblock In \emph{CEUR Workshop Proceedings}, volume 3373, 2023.
+\newblock URL \url{https://ceur-ws.org/Vol-3373/short1.pdf}.
+
+\bibitem[Singh et~al.(2024{\natexlab{a}})]{singhEtAl2024a}
+R.~Singh et~al.
+\newblock {Insights into research on blockchain for smart contracts: A
+  bibliometric analysis}.
+\newblock \emph{Multimedia Tools and Applications}, 83:\penalty0 1--25,
+  2024{\natexlab{a}}.
+\newblock \doi{10.1007/s11042-023-15647-1}.
+
+\bibitem[Singh et~al.(2024{\natexlab{b}})]{singhEtAl2024b}
+R.~Singh et~al.
+\newblock {Blockchain-Based Digital Rights Management and Its Impact on English
+  Language Resources in Libraries}.
+\newblock IGI Global, 2024{\natexlab{b}}.
+\newblock URL
+  \url{https://www.igi-global.com/viewtitle.aspx?TitleId=360345&isxn=9798369396162}.
+
+\bibitem[{Smart Contracts Alliance}(2016)]{smartContractsAlliance2016}
+{Smart Contracts Alliance}.
+\newblock {Smart Contracts: 12 Use Cases for Business \& Beyond}.
+\newblock Technical report, Chamber of Digital Commerce, 2016.
+\newblock URL
+  \url{https://d3h0qzni6h08fz.cloudfront.net/Smart-Contracts-12-Use-Cases-for-Business-and-Beyond_Chamber-of-Digital-Commerce.pdf}.
+
+\bibitem[{Smart Contracts Alliance}(2018)]{smartContractsAlliance2018}
+{Smart Contracts Alliance}.
+\newblock {Smart Contracts: Is the Law Ready?}
+\newblock Technical report, Chamber of Digital Commerce, 2018.
+\newblock URL
+  \url{https://lowellmilkeninstitute.law.ucla.edu/wp-content/uploads/2018/08/Smart-Contracts-Whitepaper.pdf}.
+
+\bibitem[{Snowfork}(2025{\natexlab{a}})]{snowfork2025a}
+{Snowfork}.
+\newblock {Snowbridge V2 Is Live!}
+\newblock Polkadot Forum, 2025{\natexlab{a}}.
+\newblock URL
+  \url{https://forum.polkadot.network/t/snowbridge-v2-is-live/15844}.
+\newblock Posted November 7, 2025.
+
+\bibitem[{Snowfork}(2025{\natexlab{b}})]{snowfork2025b}
+{Snowfork}.
+\newblock {Snowbridge 2025/2026 Stabilized}.
+\newblock Polkassembly Proposal \#3313, 2025{\natexlab{b}}.
+\newblock URL \url{https://polkadot.polkassembly.io/post/3313}.
+
+\bibitem[{Steem Team}(2025)]{steem2025}
+{Steem Team}.
+\newblock {Steem, an incentivized, blockchain-based, public content platform}.
+\newblock Technical report, Steem, 2025.
+\newblock URL \url{https://steem.com/SteemWhitePaper.pdf}.
+\newblock Whitepaper.
+
+\bibitem[{Story Foundation}(2025)]{storyFoundation2025}
+{Story Foundation}.
+\newblock {Story Mainnet Launch}.
+\newblock CoinDesk, 2025.
+\newblock URL
+  \url{https://www.coindesk.com/tech/2025/02/13/story-protocol-launches-to-let-people-to-register-ip-and-get-paid-for-it/}.
+\newblock Posted February 13, 2025.
+
+\bibitem[Tao(2025)]{tao2025}
+R.~Tao.
+\newblock {The Study of Blockchain Technology for Copyright Protection and
+  Resource Sharing Models in Library Digital Resources}.
+\newblock 2025.
+
+\bibitem[{TokenInsight Research}(2021)]{tokeninsight2021}
+{TokenInsight Research}.
+\newblock {2021 Polkadot Ecosystem Research Report}.
+\newblock Technical report, TokenInsight, 2021.
+\newblock URL
+  \url{https://downloads.coindesk.com/research/2021-Polkadot-Ecosystem-Research-Report.pdf}.
+
+\bibitem[Upadhyay et~al.(2021)]{upadhyayEtAl2021}
+K.~Upadhyay et~al.
+\newblock {Paradigm Shift from Paper Contracts to Smart Contracts}.
+\newblock 2021.
+
+\bibitem[{USPTO}(2024)]{uspto2024}
+{USPTO}.
+\newblock {Non-Fungible Tokens and Intellectual Property: A report to
+  Congress}.
+\newblock Technical report, U.S. Patent and Trademark Office, 2024.
+\newblock URL
+  \url{https://www.copyright.gov/policy/nft-study/Joint-USPTO-USCO-Report-on-NFTs-and-Intellectual-Property.pdf}.
+
+\bibitem[Valaštín et~al.(2024)]{valastinEtAl2024}
+V.~Valaštín et~al.
+\newblock {Protocol for Unifying Cross-Chain Liquidity on Polkadot}.
+\newblock 2024.
+
+\bibitem[Velmovitsky et~al.(2021)]{velmovitskyEtAl2021}
+P.~E. Velmovitsky et~al.
+\newblock {Blockchain applications in health care and public health: Increased
+  transparency}.
+\newblock \emph{JMIR Medical Informatics}, 9\penalty0 (6):\penalty0 e25893,
+  2021.
+\newblock \doi{10.2196/25893}.
+
+\bibitem[Virovets et~al.(2025)]{virovetsEtAl2025}
+D.~Virovets et~al.
+\newblock {A Framework for Decentralized Payment Instrument Integration with
+  Artificial Intelligence, Big Data, and Digital Identities}.
+\newblock In \emph{CEUR Workshop Proceedings}, volume 3991, 2025.
+\newblock URL \url{https://ceur-ws.org/Vol-3991/paper33.pdf}.
+
+\bibitem[Wamugo(2024)]{wamugo2024}
+M.~Wamugo.
+\newblock {Content monetization: non-fungible tokens as a new revenue stream
+  for the media sector in Kenya}.
+\newblock Master's thesis, Aga Khan University, 2024.
+\newblock URL
+  \url{https://ecommons.aku.edu/cgi/viewcontent.cgi?article=3232&context=theses_dissertations}.
+
+\bibitem[Wang et~al.(2025)Wang, Feng, Huang, Feng, Mo, and Li]{wangEtAl2025}
+Z.~Wang, W.~Feng, M.~Huang, S.~Feng, S.~Mo, and Y.~Li.
+\newblock {Blockchain-based information security protection mechanism for the
+  traceability of intellectual property transactions}.
+\newblock \emph{Sensors}, 25\penalty0 (10):\penalty0 3064, 2025.
+
+\bibitem[Wood(2016)]{wood2016}
+G.~Wood.
+\newblock {Polkadot: Vision for a heterogeneous multi-chain framework}.
+\newblock Technical report, Web3 Foundation, 2016.
+\newblock URL \url{https://polkadot.network/whitepaper}.
+\newblock White Paper.
+
+\bibitem[Wood(2022)]{wood2022}
+G.~Wood.
+\newblock {XCM: The cross-consensus message format}.
+\newblock Polkadot Blog, 2022.
+\newblock URL
+  \url{https://www.polkadot.network/blog/xcm-the-cross-consensus-message-format}.
+
+\bibitem[Wood(2024)]{wood2024}
+G.~Wood.
+\newblock {JAM: The Join-Accumulate Machine (Gray Paper)}.
+\newblock Technical report, Web3 Foundation, 2024.
+\newblock URL \url{https://wiki.polkadot.com/learn/learn-jam-chain/}.
+\newblock Version 0.7.1+, updated through 2025.
+
+\bibitem[Xie and Liu(2022)]{xieLiu2022}
+R.~Xie and Y.~Liu.
+\newblock {Research on copyright protection of digital works based on
+  multi-blockchain}.
+\newblock \emph{Recent Advances in Computer Science and Communications},
+  15\penalty0 (8):\penalty0 1126--1134, 2022.
+\newblock \doi{10.2174/2666255815666220204092947}.
+
+\bibitem[Xie and Tang(2024)]{xieTang2024a}
+R.~Xie and M.~Tang.
+\newblock {A digital resource copyright protection scheme based on blockchain
+  cross-chain technology}.
+\newblock \emph{Heliyon}, 10\penalty0 (16):\penalty0 e34781, 2024.
+\newblock \doi{10.1016/j.heliyon.2024.e34781}.
+
+\bibitem[Yin et~al.(2022)]{yinEtAl2022}
+Z.~Yin et~al.
+\newblock {Bool Network: An Open, Distributed, Secure Cross-chain Notary
+  Platform}.
+\newblock IACR ePrint 2022/1290, 2022.
+\newblock URL \url{https://eprint.iacr.org/2022/1290.pdf}.
+
+\bibitem[Zeggari et~al.(2022)]{zeggariEtAl2022}
+M.~Zeggari et~al.
+\newblock {An Efficient and Decentralized Blockchain-based Commercial
+  Alternative}.
+\newblock IACR ePrint 2022/1440, 2022.
+\newblock URL \url{https://eprint.iacr.org/2022/1440.pdf}.
+
+\bibitem[Zheng et~al.(2024)]{zhengHEtAl2024}
+H.~Zheng et~al.
+\newblock {Decentagram: Highly-Available Decentralized Publish/Subscribe
+  Systems}.
+\newblock 2024.
+
+\bibitem[Zheng et~al.(2019)]{zhengZEtAl2019}
+Z.~Zheng et~al.
+\newblock {An Overview on Smart Contracts: Challenges, Advances and Platforms}.
+\newblock arXiv:1912.10370, 2019.
+\newblock URL \url{https://arxiv.org/pdf/1912.10370}.
+
+\bibitem[Zhou et~al.(2021)]{zhouEtAl2021}
+Q.~Zhou et~al.
+\newblock {A Study on Blockchain Interoperability Mechanism}.
+\newblock \emph{Journal of System and Management Sciences}, 11\penalty0 (4),
+  2021.
+
+\end{thebibliography}

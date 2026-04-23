@@ -1,0 +1,77 @@
+%% ======================================================================
+%% appE/appendix_e_main.tex
+%%
+%% Appendix E: Future Work Details
+%%
+%% Expanded descriptions for the 11 future-work threads summarised in
+%% Table 9.1. Each section elaborates on priority, scope, and the
+%% implementation challenges for one thread. Priorities span near-term
+%% production readiness (deployment, Polkadot 2.0 migration, contract
+%% layer decisions, child-cap mitigation, user study, bridged payments)
+%% through medium-term feature extensions (resale royalties, capability
+%% delegation, Monte Carlo extensions) to long-term research directions
+%% (formal verification, JAM transition).
+%%
+%% Sections:
+%%   E.1  Production Deployment
+%%   E.2  Migration to Polkadot 2.0 Features
+%%   E.3  Migration Paths for the Smart Contract Layer
+%%   E.4  The 50-Child Cap
+%%   E.5  User Study and Consumer-Facing Application
+%%   E.6  The Bridged-Payment Final Hop
+%%   E.7  Resale Royalties
+%%   E.8  Capability-Based Delegation for Cross-Chain Transfers
+%%   E.9  Monte Carlo Simulation Extensions
+%%   E.10 Formal Verification
+%%   E.11 JAM Transition
+%%
+%% External labels referenced: none (self-contained).
+%%
+%% Citations: maricEtAl2025 (in E.10 Formal Verification)
+%% ======================================================================
+
+\chapter{Future Work Details}\label{app:future-work}
+
+\section{Production Deployment}\label{sec:e-production}
+
+The most significant future work is deployment to a public testnet or mainnet. This would yield realistic latency and throughput measurements under network conditions that include geographic distribution, real-world contention, and validator set diversity; multi-collator reliability data replacing the single-collator MTTR figure of 15--20 seconds; genuine cross-chain operation against other parachains; and the opportunity for third-party security audit that would address the single-author validation limitation.
+
+\section{Migration to Polkadot 2.0 Features}\label{sec:e-polkadot-2}
+
+Async Backing, Agile Coretime, and Elastic Scaling were all delivered to production by October 2025, after the implementation window closed. Migration would not require any pallet-level changes (the runtime would target a newer SDK release) but would compress single-chain and cross-chain latency, allow the parachain to acquire block production capacity on demand, and increase throughput proportionally via multi-core scheduling. XCM v5 support for multi-hop messages is included in the same release.
+
+\section{Migration Paths for the Smart Contract Layer}\label{sec:e-contract-migration}
+
+The January 2026 ink! discontinuation leaves \texttt{rights\_manager} without upstream toolchain support. Three migration paths are available: (a)~Solidity rewrite using the \texttt{revive} Solidity-to-PolkaVM compiler (broadest tooling support, requires Solidity reimplementation); (b)~adoption of \texttt{wrevive}, the community-maintained ink! successor (preserves the Rust experience, introduces a community-project dependency); (c)~removal of the contract layer entirely (zero maintenance cost, loses ink!-style API convenience). The right choice depends on the intended client base and available maintenance resources.
+
+\section{The 50-Child Cap}\label{sec:e-child-cap}
+
+Three mitigation paths: raise the bound and re-benchmark (trades worst-case extrinsic weight for capacity); replace the bounded vector with a counter plus a separate membership map (removes the cap but loses single-read enumeration); introduce hierarchical ``rights bucket'' NFTs (more complex query patterns but unbounded fan-out). Any production deployment expecting highly popular content items would need to address the cap as a priority.
+
+\section[User Study and Consumer Application]{User Study and Consumer-Facing Application}\label{sec:e-user-study}
+
+A future iteration would build a minimal web wallet integration or CLI tool and conduct user testing with creators and consumers drawn from Web3 communities. Specific questions: Can a typical Web3 user successfully purchase a subscription, consume a view, and transfer ownership without prompting? Do users understand the three monetization models from the wallet UI alone? What error messages are most confusing? Are creators willing to migrate from existing platforms? This was originally planned for Phase~2 but was not executed because we built no front end; it is the highest-priority near-term research extension.
+
+\section{The Bridged-Payment Final Hop}\label{sec:e-bridged-payment}
+
+Closing the gap between bridged ETH on AssetHub and a paid CCRMS rights operation requires either configuring \texttt{PaymentCurrency} to accept the foreign Ether asset directly or inserting an explicit swap step to convert ETH to the native parachain token. Either approach is conceptually straightforward.
+
+\section{Resale Royalties}\label{sec:e-resale-royalties}
+
+The current \texttt{transfer\_ownership} extrinsic has no creator share on secondary-market transfers. CCRMS could add an optional per-content \texttt{resale\_royalty\_basis\_points} field; the implementation challenge is verifying the declared sale price, which suggests resale royalties would work best in conjunction with an on-chain marketplace pallet that records sale prices as part of the transfer transaction.
+
+\section[Capability-Based Delegation]{Capability-Based Delegation for Cross-Chain Transfers}\label{sec:e-delegation}
+
+The conservative Finding~B remediation rules out delegated transfers. A future iteration could relax this with a capability-based authorization model (the owner pre-authorizes a specific delegate for a specific operation and time window), which is well-explored territory in capability-based security. The implementation challenge is the storage layout for capability records and the revocation lifecycle.
+
+\section{Monte Carlo Simulation Extensions}\label{sec:e-monte-carlo}
+
+Future extensions could incorporate creator psychology (risk aversion, platform-switching costs, brand attachment), model network-effect dynamics at critical creator mass, add longitudinal modeling over multiple years, and model regulatory effects from the EU AI Act or MiCA enforcement.
+
+\section{Formal Verification}\label{sec:e-formal-verification}
+
+Following \citet{maricEtAl2025} on Isabelle/HOL verification of cross-chain bridges, similar techniques could be applied to the CCRMS authorization model, the royalty distribution algorithm, and the cross-chain operation pattern. Formal verification is expensive but offers guarantees that empirical testing cannot match, and is worthwhile for any production deployment handling significant value.
+
+\section{JAM Transition}\label{sec:e-jam}
+
+JAM (the Join-Accumulate Machine) represents Polkadot's architectural successor to the existing relay chain. The testnet was launched in January 2026 with the participation of 43 implementation teams; the mainnet is scheduled for deployment in mid-to-late 2026. CCRMS does not incorporate any JAM-specific features, and our implementation specifications provide sufficiently detailed architectural decisions to facilitate potential future migration without necessitating a complete rebuild.

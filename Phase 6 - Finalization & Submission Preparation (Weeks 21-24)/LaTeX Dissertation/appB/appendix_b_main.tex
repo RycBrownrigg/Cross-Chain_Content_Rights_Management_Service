@@ -1,0 +1,65 @@
+%% ======================================================================
+%% appB/appendix_b_main.tex
+%%
+%% Appendix B: Research Objective Details
+%%
+%% Full Statement / Sub-questions / Deliverable / Note structure for each
+%% of the six research objectives (RO1-RO6) introduced in Chapter 3.
+%% RO5 (zero-knowledge proof hooks) is documented as not achieved and
+%% restated as future work. RO2 and RO4 carry notes about scope changes
+%% made during implementation.
+%%
+%% Sections:
+%%   B.1 RO1: Design and Prototype XCM Extensions
+%%   B.2 RO2: Implement a Unified Rights Token
+%%   B.3 RO3: Merge Subscription, PPV, and Purchase Logic
+%%   B.4 RO4: Benchmark Scalability, Interoperability, and Economic
+%%       Efficiency
+%%   B.5 RO5: Zero-Knowledge Proof Hooks (Not Achieved)
+%%   B.6 RO6: Quantify Creator Savings via Monte Carlo Simulation
+%%
+%% External labels referenced:
+%%   sec:future-work (9.3)
+%%
+%% Citations: none.
+%% ======================================================================
+
+\chapter{Research Objective Details}\label{app:objectives}
+
+\section{RO1: Design and Prototype XCM Extensions}
+
+\textbf{Statement.} Design and prototype the use of XCM messages to transmit recurring rights operations and comprehensive rights metadata across Polkadot parachains. Evaluate atomic success rates and cross-chain finality durations.\newline
+\textbf{Sub-questions:} SQ1 primarily; SQ2 indirectly.\newline
+\textbf{Deliverable:} Functioning prototype with documented XCM latency and success rate metrics.
+
+\section{RO2: Implement a Unified Rights Token}
+
+\textbf{Statement.} Implement a unified rights token (originally ink!, revised to FRAME pallet in Phase~4) with off-chain indexing support and access-verification latency measurement.\newline
+\textbf{Sub-questions:} SQ2, SQ3.\newline
+\textbf{Deliverable:} \texttt{pallet-content-rights} enforcing all three monetization models with documented latency.\newline
+\textbf{Note:} Off-chain indexer (SubQuery) was not implemented; pallet events suffice for on-chain queries via polkadot-js API. Acknowledged as a limitation.
+
+\section{RO3: Merge Subscription, PPV, and Purchase Logic}
+
+\textbf{Statement.} Develop and integrate subscription, pay-per-view, and ownership transfer mechanisms into a unified, composable rights framework.\newline
+\textbf{Sub-questions:} SQ3, SQ4.\newline
+\textbf{Deliverable:} Single pallet implementing all three models through a unified API, with documented trade-offs.
+
+\section[RO4: Benchmark Scalability and Interoperability]{RO4: Benchmark Scalability, Interoperability, and Economic Efficiency}
+
+\textbf{Statement.} Benchmark against centralized DRM, bridge-based solutions, and (originally) Ethereum L2s.\newline
+\textbf{Sub-questions:} SQ2, SQ5.\newline
+\textbf{Deliverable:} Comparative TPS, latency, and creator revenue retention analysis.\newline
+\textbf{Note:} Ethereum L2 target was substituted with Express.js + SQLite local benchmark in Phase~5. Core analysis is intact.
+
+\section{RO5: Zero-Knowledge Proof Hooks (Not Achieved)}
+
+\textbf{Statement.} Integrate optional ZK proof hooks for selective regulatory disclosure.\newline
+\textbf{Status: Not achieved.} Integrating a ZK proof system into a Substrate runtime (selecting a proof system, building a verifier pallet, designing a disclosure protocol, producing test circuits) was substantially more complex than anticipated. Restated as future work in Section~\ref{sec:future-work}.
+
+\section[RO6: Quantify Creator Savings]{RO6: Quantify Creator Savings via Monte Carlo Simulation}
+
+\textbf{Statement.} Quantify creator savings through Monte Carlo simulation comparing CCRMS with centralized (30--45\% fees), Web3 marketplace, and bridge-based (8--15\% fees) alternatives.\newline
+\textbf{Sub-questions:} SQ5.\newline
+\textbf{Deliverable:} Monte Carlo simulation with documented input distributions, model assumptions, and comparative output statistics.\newline
+\textbf{Note:} Phase~2 listed this as potentially replaceable by centralized benchmarking. Phase~5 included both; RO6 is fully achieved.

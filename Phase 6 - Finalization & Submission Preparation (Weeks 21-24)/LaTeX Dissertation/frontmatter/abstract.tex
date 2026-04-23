@@ -1,0 +1,32 @@
+%% ======================================================================
+%% frontmatter/abstract.tex
+%%
+%% Abstract (and keywords).
+%%
+%% Structured in the five-section Koopman/CMU format:
+%%   Motivation  -- why this matters
+%%   Problem     -- the specific gap
+%%   Approach    -- CCRMS + evaluation methods
+%%   Results     -- all 11 KPIs met, Monte Carlo audience-size finding
+%%   Conclusions -- DSR framing and the "defensive engineering" lesson
+%%
+%% Written in first-person plural per advisor approval (overrides the
+%% CDLT default of third person for abstracts). Target length 150-200
+%% words plus keywords; actual length approx. 230 words.
+%% ======================================================================
+
+\begin{abstract}
+
+\textbf{Motivation.} Creators on centralized content platforms typically retain a minority of the revenue they generate, while decentralized alternatives fragment rights across incompatible chains.
+
+\textbf{Problem.} No existing system delivers subscription, pay-per-view, and permanent-ownership monetization through a unified, cross-chain-portable rights token with automatic revenue sharing.
+
+\textbf{Approach.} We present the Cross-Chain Content Rights Management Service (CCRMS), a Polkadot parachain in which parent--child NFT nesting on \texttt{pallet-nfts} binds each content item to a rights token supporting all three monetization models, with automatic royalty splits and cross-chain portability via XCM and Snowbridge. We evaluate the prototype with 56 unit tests, seven performance benchmarks, a security audit, a centralized Express.js/SQLite baseline, and a 10,000-iteration Monte Carlo simulation.
+
+\textbf{Results.} All 11 KPIs met their targets, including 26.2~TPS sustained throughput, $\sim$6-second inclusion latency, 3--5-block cross-chain finality, 191 bytes per content item, 90\% baseline uptime, and 15--20-second MTTR. Monte Carlo yields $\sim$16.8\% higher average creator revenue than centralized platforms, but the advantage is \textbf{strongly conditional on audience size}: creators with 10,000+ followers benefit decisively, while those below $\sim$2,000 are better served by centralized platforms.
+
+\textbf{Conclusions.} Framed as design science research, the work documents nine architectural pivots, including the pallet-first decision that proved unexpectedly resilient to the January 2026 discontinuation of ink!\ development. The principal lesson: conservatively chosen, carefully documented architectural decisions are the most durable deliverables in a fast-moving blockchain ecosystem.
+
+\end{abstract}
+
+\noindent\textbf{Keywords:} cross-chain content rights, Polkadot XCM, unified rights token, creator revenue retention, design science research

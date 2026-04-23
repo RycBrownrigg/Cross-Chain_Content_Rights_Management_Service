@@ -1,0 +1,288 @@
+%% ======================================================================
+%% chap5/implementation_main.tex
+%%
+%% Chapter 5: Implementation
+%%
+%% Details the CCRMS implementation: development environment and test
+%% infrastructure; the pallet-content-rights design including the unified
+%% rights token, NFT nesting, royalty propagation, ink! contract wrapper
+%% and EVM precompile; XCM and Snowbridge cross-chain integration; and
+%% the nine technical challenges encountered during Phase 4.
+%%
+%% Sections:
+%%   5.1 Development Environment (4 subsections)
+%%   5.2 Pallet Implementation and Smart Contract Layer (4 subsections,
+%%       Tables 5.1 and 5.2)
+%%   5.3 Cross-Chain Integration (2 subsections)
+%%   5.4 Challenges and Solutions (Table 5.3)
+%%   5.5 Summary
+%%
+%% External labels referenced:
+%%   chap:discussion (Ch 8), chap:conclusion (Ch 9),
+%%   app:challenges (Appendix A), app:code (Appendix C),
+%%   sec:contract-first-pivot (Appendix A.2),
+%%   sec:children-bound (Appendix A.8),
+%%   sec:ink-discontinuation (Appendix A.9)
+%%
+%% Citations: none (implementation narrative is self-contained).
+%% ======================================================================
+
+\chapter{Implementation}\label{chap:implementation}
+
+This chapter details the implementation of the Cross-Chain Content Rights Management Service (CCRMS). It encompasses the development environment, the design of the core \texttt{pallet-content-rights} module, the integration of smart contracts with Ethereum, cross-chain rights operations between parachains and the Snowbridge bridge, and the primary challenges encountered along with their solutions.
+
+\section{Development Environment}\label{sec:dev-environment}
+
+We base the implementation on the Polkadot SDK monorepo, which integrates the Substrate framework, Cumulus parachain runtime, and Polkadot relay chain within a single workspace. Completed in 2024, this unified approach supersedes the previous multi-repository structure, wherein Substrate, Cumulus, and Polkadot were maintained as separate projects. All CCRMS pallet code, runtime configurations, and node binaries depend on the monorepo via Git references rather than published crate versions, ensuring the system always uses the latest stable releases of the Polkadot SDK for compatibility with the current toolchain across all production parachains.
+
+\subsection{Toolchain and Language}\label{subsec:toolchain}
+
+We authored the runtime, pallets, node, and smart contracts in Rust, compiling the runtime and pallets in \texttt{no\_std} mode for integration into the WebAssembly runtime blob and in \texttt{std} mode for unit testing. The smart contract layer employs ink! 6, the Rust-based smart contract language tailored for \texttt{pallet-revive} (PolkaVM, the RISC-V execution environment succeeding the legacy WebAssembly contract executor). We compile all Rust code using the stable toolchain, specifically versioned to \texttt{stable2512} (December 2024), which remains the most extensively deployed version on production parachains during the implementation period.
+
+\subsection{Workspace Layout}\label{subsec:workspace}
+
+The CCRMS parachain repository follows the standard Polkadot SDK template structure:
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=none]
+content-rights-parachain/
+|-- pallets/
+|   |-- content-rights/        # Core business logic and tests
+|   `-- rights-verifier/       # Cross-chain Merkle proof verification
+|-- runtime/
+|   `-- src/
+|       |-- lib.rs              # Runtime composition
+|       |-- configs/            # Pallet configurations and XCM
+|       `-- precompiles.rs      # Custom EVM precompile
+|-- contracts/
+|   `-- rights_manager/         # ink! 6 contract
+|-- node/                       # Collator binary
+|-- scripts/                    # Benchmarking, testing, deployment
+`-- docs/                       # Setup and integration documentation
+\end{lstlisting}
+
+A secondary pallet, \texttt{pallet-rights-verifier}, accompanies the primary pallet and provides cryptographic verification of the cross-chain rights state via Merkle storage proofs.
+
+\subsection{Local Development Network}\label{subsec:local-network}
+
+Local development and testing are conducted using Zombienet, a network orchestration tool within the Polkadot SDK. Two topologies are implemented: the standard topology, which establishes a Rococo relay chain with validators Alice and Bob, along with two CCRMS parachains, Para~A and Para~B, for cross-chain XCM testing; and the Snowbridge topology, which incorporates two additional parachains, Bridge Hub (parachain 1013) and AssetHub (parachain 1000), as well as a local Ethereum environment comprising Geth and Lodestar, enabling end-to-end Snowbridge testing.
+
+We selected Zombienet over the alternative \texttt{polkadot-launch} because Zombienet is actively maintained and provides more comprehensive support for the parachain testing patterns we employ.
+
+\subsection{Test Infrastructure}\label{subsec:test-infra}
+
+The unit test suite for \texttt{pallet-content-rights} comprises 56 tests organized into six categories: 23 functional tests covering the standard operational scenarios for each extrinsic, ten security-focused tests, 11 cross-chain XCM tests, five royalty propagation tests, five auto-renewal lifecycle tests, and two metadata query tests. We execute these tests within a mock runtime defined in \texttt{pallets/content-rights/src/mock.rs}, which simulates \texttt{pallet-nfts}, \texttt{pallet-balances}, and the content rights pallet in an isolated environment. This setup ensures that each test begins from a clean state.
+
+In addition to unit tests, we maintain seven automated benchmark scripts located in \texttt{scripts/perf/}. These scripts manage a live Zombienet network using the \texttt{@polkadot/api} JavaScript library and evaluate performance metrics, including throughput, latency, block weight usage, storage growth, cross-chain XCM latency, sustained stress tolerance, and system reliability, under simulated failure scenarios. The benchmark results are generated in a machine-readable JSON format to ensure reproducibility and to support subsequent analyses.
+
+\section{Pallet Implementation and Smart Contract Layer}\label{sec:pallet-impl}
+
+\subsection{The \texttt{pallet-content-rights} Design}\label{subsec:pallet-design}
+
+The \texttt{pallet-content-rights} forms the fundamental component of the CCRMS implementation. It encompasses all the system's business logic, including content registration, the three monetization models (subscription, pay-per-view, and permanent ownership), automatic royalty distribution, automated subscription renewal via a block-hook scheduler, and cross-chain (XCM) variants of all financial transactions. The pallet exposes 17 dispatchable extrinsics, as detailed in Table~\ref{tab:extrinsics}.
+
+\begin{longtable}{@{}L{0.06\linewidth} L{0.32\linewidth} L{0.56\linewidth}@{}}
+\caption{Dispatchable Extrinsics in \texttt{pallet-content-rights}}\label{tab:extrinsics}\\
+\toprule
+\textbf{Index} & \textbf{Extrinsic} & \textbf{Purpose} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:extrinsics} continued from previous page}}\\
+\toprule
+\textbf{Index} & \textbf{Extrinsic} & \textbf{Purpose} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+0 & \texttt{register\_content} & Create a new content item, instantiate the underlying NFT collection, mint the parent Content NFT \\
+\addlinespace
+1 & \texttt{subscribe} & Purchase a new subscription \\
+\addlinespace
+2 & \texttt{renew\_subscription} & Renew an expired subscription \\
+\addlinespace
+3 & \texttt{purchase\_views} & Purchase a pay-per-view pack of N views \\
+\addlinespace
+4 & \texttt{consume\_view} & Decrement a view from an existing pack \\
+\addlinespace
+5 & \texttt{purchase\_ownership} & Purchase permanent ownership \\
+\addlinespace
+6 & \texttt{check\_access} & Verify whether a user holds any active rights \\
+\addlinespace
+7 & \texttt{xcm\_subscribe} & Cross-chain subscription with payer--beneficiary decoupling \\
+\addlinespace
+8 & \texttt{xcm\_renew\_subscription} & Cross-chain renewal \\
+\addlinespace
+9 & \texttt{xcm\_purchase\_views} & Cross-chain pay-per-view purchase \\
+\addlinespace
+10 & \texttt{xcm\_purchase\_ownership} & Cross-chain ownership purchase \\
+\addlinespace
+11 & \texttt{transfer\_ownership} & Peer-to-peer secondary-market ownership transfer \\
+\addlinespace
+12 & \texttt{xcm\_transfer\_ownership} & Cross-chain ownership transfer (caller-must-be-owner) \\
+\addlinespace
+13 & \texttt{set\_royalty\_splits} & Configure the royalty distribution table (creator-only) \\
+\addlinespace
+14 & \texttt{enable\_auto\_renew} & Enable automatic renewal for an existing subscription \\
+\addlinespace
+15 & \texttt{disable\_auto\_renew} & Disable automatic renewal \\
+\addlinespace
+16 & \texttt{query\_rights\_metadata} & Emit a self-describing metadata event for cross-chain consumption \\
+\end{longtable}
+
+Appendix~\ref{sec:contract-first-pivot} details the pallet-first architectural decision and Appendix~\ref{sec:ink-discontinuation} records how it was unexpectedly vindicated by the discontinuation of ink! in January 2026. The discussion herein concentrates on the resulting pallet structure.
+
+We organize pallet storage into 10 items, summarized in Table~\ref{tab:storage}.
+
+\begin{longtable}{@{}L{0.20\linewidth} L{0.32\linewidth} L{0.42\linewidth}@{}}
+\caption{Storage Layout of \texttt{pallet-content-rights}}\label{tab:storage}\\
+\toprule
+\textbf{Storage} & \textbf{Key $\to$ Value} & \textbf{Purpose} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:storage} continued from previous page}}\\
+\toprule
+\textbf{Storage} & \textbf{Key $\to$ Value} & \textbf{Purpose} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\texttt{NextContentId} & $\to$ \texttt{u32} & Global content ID counter \\
+\addlinespace
+\texttt{NextItemId} & \texttt{collection\_id} $\to$ \texttt{u32} & Per-collection child item counter \\
+\addlinespace
+\texttt{Contents} & \texttt{content\_id} $\to$ \texttt{ContentMetadata} & Master record per content \\
+\addlinespace
+\texttt{Subscriptions} & \texttt{(content\_id, user)} $\to$ \texttt{SubscriptionInfo} & Active subscription state \\
+\addlinespace
+\texttt{ViewPacks} & \texttt{(content\_id, user)} $\to$ \texttt{ViewPackInfo} & Pay-per-view balance \\
+\addlinespace
+\texttt{Ownership} & \texttt{(content\_id, user)} $\to$ \texttt{OwnershipInfo} & Permanent ownership records \\
+\addlinespace
+\texttt{Children} & \texttt{(collection\_id, parent)} $\to$ \texttt{BoundedVec<50>} & NFT nesting forward index \\
+\addlinespace
+\texttt{Parent} & \texttt{(collection\_id, child)} $\to$ \texttt{(u32, u32)} & NFT nesting reverse index \\
+\addlinespace
+\texttt{AutoRenewIndex} & \texttt{(content\_id, user)} $\to$ \texttt{bool} & Auto-renew-enabled subscriptions \\
+\addlinespace
+\texttt{RoyaltySplits} & \texttt{content\_id} $\to$ \texttt{BoundedVec<10>} & Collaborator payout shares \\
+\end{longtable}
+
+The use of bounded collections throughout the storage configuration (\texttt{BoundedVec<\_, ConstU32<50>{}>} for children, \texttt{BoundedVec<\_, ConstU32<10>{}>} for royalty splits, fixed-size arrays for hashes and titles) is a standard requirement within the FRAME framework. Bounded types guarantee that we can accurately anticipate the worst-case weight of each extrinsic. Furthermore, bounded storage is an indispensable prerequisite for benchmarking, as an unbounded vector cannot be assigned a definitive cost due to its potential for unbounded worst-case scenarios.
+
+The pallet produces 22 unique event variants that encompass the content lifecycle, subscription mechanisms, pay-per-view operations, ownership transactions, and royalty distribution. These events serve both on-chain consumers, including precompile processes that implicitly access them through state queries, and off-chain indexers that reconstruct historical states for analytical purposes or wallet management displays.
+
+\subsection{NFT Nesting via \texttt{pallet-nfts}}\label{subsec:nft-nesting}
+
+Each registered piece of content is an NFT collection: a parent Content NFT and zero or more child NFTs representing individual user rights. Each child NFT binds one user to one monetization model (subscription, pay-per-view, or ownership). The structure is inspired by the RMRK 2.0 nested-NFT specification but uses only standard \texttt{pallet-nfts} primitives, because the RMRK pallets are frozen on Polkadot SDK version 0.9.36 and incompatible with the current monorepo.
+
+The nesting model serves three functions. \textbf{Identity:} the parent Content NFT, keyed by \texttt{(collection\_id, item\_id=0)}, is the canonical on-chain reference for a content piece. \textbf{Rights tokenization:} each child NFT is an independent transferable token that any standard NFT wallet can display. \textbf{Auditability:} the parent--child relationship is persisted on-chain through the \texttt{Children} and \texttt{Parent} storage maps, supporting forward enumeration for off-chain indexers and reverse lookup during child removal.
+
+A helper function, \texttt{mint\_and\_nest\_child}, is invoked by every extrinsic that creates a rights record (\texttt{subscribe}, \texttt{purchase\_views}, \texttt{purchase\_ownership}, the four \texttt{xcm\_*} variants, and the mint-burn-mint pattern in ownership transfers). It performs five atomic operations: allocate a new ID from \texttt{NextItemId}; mint with \texttt{pallet\_nfts::do\_mint} (creator pays the deposit, user receives ownership); set \texttt{rights\_type}; update nesting indices; emit \texttt{ChildNested}. FRAME storage rollback guarantees atomicity. Child lifecycles vary: subscriptions persist and extend their \texttt{expiry\_block} on renewal; pay-per-view NFTs burn when \texttt{views\_remaining} reaches zero; ownership NFTs use burn-then-mint on transfer to preserve provenance and maintain \texttt{rights\_type=Ownership}.
+
+The \texttt{Children} storage entry is bounded by \texttt{ConstU32<50>}, capping each parent at 50 child NFTs. This is the most significant constraint in the nesting model; we discuss it in Appendix~\ref{sec:children-bound} and Chapter~\ref{chap:discussion}. The bound exists because every mutation reads the entire vector, and an unbounded vector would make benchmarking impossible.
+
+\subsection{Royalty Propagation}\label{subsec:royalty-propagation}
+
+Royalty propagation distributes revenue on-chain to up to ten collaborators per transaction. Each \texttt{RoyaltySplit} pairs an \texttt{AccountId32} recipient with a \texttt{u16} basis-points share (0--10,000, where 10,000 is 100 percent). The per-content configuration is stored as a \texttt{BoundedVec<RoyaltySplit, ConstU32<10>{}>} in the \texttt{RoyaltySplits} storage map.
+
+\texttt{set\_royalty\_splits} is the only extrinsic in the pallet gated by a creator-only check (\texttt{ensure!(caller == content.creator, Error::<T>::NotContentCreator)}). It verifies that the submitted basis points sum to no more than 10,000; any unallocated remainder is retained by the creator, and an empty vector disables splitting entirely.
+
+The \texttt{pay\_with\_royalties} helper is called by every revenue trigger: \texttt{subscribe}, \texttt{renew\_subscription}, \texttt{purchase\_views}, \texttt{purchase\_ownership}, the \texttt{xcm\_*} variants, and auto-renewal hooks. It computes each share as \texttt{amount $\times$ basis\_points $\div$ 10,000} using saturating arithmetic, transfers non-zero shares, and routes any rounding remainder to the creator so the distributed total always equals the payment. FRAME storage rollback makes the sequence atomic: if any individual transfer fails (for example, a non-existent recipient or insufficient sender balance), the extrinsic reverts. No partial distribution occurs, the buyer keeps their funds, and no rights record is created.
+
+Royalties apply to every primary-market revenue event but not to peer-to-peer secondary transfers (\texttt{transfer\_ownership}, \texttt{xcm\_transfer\_ownership}), because the on-chain transfer settles an off-chain payment the protocol does not mediate; imposing a creator share would tax a transaction outside its scope. An optional per-content resale royalty is a candidate for future work.
+
+\subsection{The ink! Contract Wrapper and EVM Precompile}\label{subsec:ink-contract}
+
+The smart contract layer comprises two components: an ink! 6 contract (\texttt{rights\_manager}) that mirrors the pallet's user-facing API with Solidity-compatible function selectors, and an EVM precompile (\texttt{ContentRightsPrecompile}) that exposes read-only access to pallet storage at a fixed address.
+
+The ink! contract is a minimalist wrapper that holds no state and no business logic: it decodes arguments and forwards calls to the pallet extrinsic, consistent with the principle established in Section~\ref{subsec:pallet-design} that the pallet is the authoritative source of truth. The contract exists only to provide an interface for ink!-based clients.
+
+The precompile, in contrast, is callable from any Solidity contract or Ethereum-compatible client on \texttt{pallet-revive}. It is registered at \texttt{0x00000000\allowbreak00000000\allowbreak00000000\allowbreak00000000\allowbreak10010000} by inserting the 16-bit identifier \texttt{0x1001} into bytes [16..18] of an H160 address, and exposes five \texttt{external view} functions: \texttt{checkAccess}, \texttt{getContent}, \texttt{isOwner}, \texttt{getSubscription}, and \texttt{getViewPack} (Appendix~\ref{app:code} lists the Solidity interface). It is stateless from the perspective of \texttt{pallet-revive} (\texttt{HAS\_CONTRACT\_INFO = false}) and only translates ABI calls into pallet storage reads; only read operations are exposed to keep the audit surface small. The Solidity \texttt{address} (H160) to \texttt{AccountId32} mapping is handled by \texttt{AddressMapper}, a known constraint of the hybrid EVM/Substrate runtime. Weight uses a placeholder ($\sim$25,000 \texttt{ref\_time} per read) pending benchmarking.
+
+\section{Cross-Chain Integration}\label{sec:cross-chain-integration}
+
+\subsection{XCM Message Flows}\label{subsec:xcm-flows}
+
+Cross-chain operations use Polkadot XCM v3 to let remote parachains acquire content rights. The pallet exposes five XCM extrinsics: \texttt{xcm\_subscribe}, \texttt{xcm\_renew\_subscription}, \texttt{xcm\_purchase\_views}, \texttt{xcm\_purchase\_ownership}, and \texttt{xcm\_transfer\_ownership}. Each separates the dispatch origin (\textbf{payer}) from the \textbf{beneficiary} of the rights record: when a remote parachain sends a \texttt{Transact} message, the origin is the remote parachain's sovereign account, but the rights record is issued to a distinct \texttt{beneficiary} account representing the end user on the remote chain.
+
+The runtime XCM configuration follows the standard Cumulus pattern with one customization: the \texttt{LocationToAccountId} chain adds \texttt{HashedDescription<\_,}\allowbreak \texttt{DescribeFamily<}\allowbreak\texttt{DescribeAllTerminal>{}>} and \texttt{GlobalConsensusParachainConvertsFor<\_,\,\_>} so the runtime can interpret Ethereum locations of the form \texttt{GlobalConsensus(Ethereum)} $\to$ \texttt{AccountKey20(0x...)}. This is required for Snowbridge (Section~\ref{subsec:snowbridge}); the full Ethereum-to-CCRMS flow is configured but has not been end-to-end tested.
+
+Each XCM rights operation uses the three-instruction sequence \texttt{WithdrawAsset}, \texttt{BuyExecution}, \texttt{Transact}. This is sufficient because rights operations are stateful side effects, not asset transfers (Appendix~\ref{app:code} shows the full message structure). The allocated fee of 100 billion tokens reflects the dominance of \texttt{proof\_size} over \texttt{ref\_time} in the \texttt{BlockRatioFee} model; Phase~4 data place the typical fee range at 75--100 billion tokens, with lower allowances triggering \texttt{BarrierError(WeightLimitExceeded)}.
+
+Sovereign account derivation is handled by \texttt{SiblingParachainConvertsVia} using the layout \texttt{[0x73, 0x69, 0x62, 0x6c]}\allowbreak{} \texttt{||}\allowbreak{} \texttt{u32\_le(para\_id)}\allowbreak{} \texttt{||}\allowbreak{} \texttt{[0x00; 24]}: ASCII \texttt{sibl} followed by the parachain ID in little-endian, zero-padded to 32 bytes. An early XCM test used \texttt{toHex()} in big-endian mode, and the resulting accounts received funds but were never debited. The fix was \texttt{toHex(true)} for little-endian output; diagnosis was slow because the transfer appeared to succeed.
+
+We measured end-to-end XCM latency at three to five parachain blocks ($\sim$18--32 seconds) for \texttt{xcm\_subscribe}, \texttt{xcm\_purchase\_views}, and \texttt{xcm\_purchase\_ownership} on the local Zombienet topology. The relay-chain hop and the consumer parachain's next-slot wait dominate; the dispatched extrinsic itself is cheap. Polkadot~2.0 features (Async Backing, Agile Coretime, Elastic Scaling) would substantially reduce the latency floor in production.
+
+A secondary pallet, \texttt{pallet-rights-verifier}, provides trustless verification of CCRMS rights status to other parachains via Merkle storage proofs. A remote parachain can verify an active subscription without oracles or relayers by submitting a proof against a known CCRMS state root, which the verifier replays against the Substrate trie. Three extrinsics (\texttt{verify\_ownership}, \texttt{verify\_subscription}, \texttt{verify\_view\_pack}) construct a storage key, validate the proof, and emit a result event. Proof validation costs roughly 100 million \texttt{ref\_time} per call but avoids any network round-trip.
+
+\subsection{Snowbridge Integration with Ethereum}\label{subsec:snowbridge}
+
+We extended the cross-chain architecture to Ethereum through Snowbridge, a trust-minimized bridge that uses light-client verification on both sides, eliminating custodians and relayer trust. During Phase~4 we bridged two 1-ETH transactions from a local Ethereum chain to a local AssetHub parachain using the Snowbridge pipeline, demonstrating that the CCRMS runtime can accept bridged Ethereum messages using the same XCM configuration as sibling-parachain messages (via \texttt{HashedDescription} and \texttt{GlobalConsensusParachainConvertsFor} in \texttt{LocationToAccountId}).
+
+The topology spans four parachains and a local Ethereum network: CCRMS (parachain 100); Bridge Hub (parachain 1013), hosting the inbound queue and Ethereum beacon light client; AssetHub (parachain 1000), holding the foreign-asset reserve; and the Rococo relay chain. Four HRMP channels link Bridge Hub $\leftrightarrow$ AssetHub and AssetHub $\leftrightarrow$ CCRMS, carrying bridge messages and enabling future Polkadot--Ethereum interoperability.
+
+The Ethereum side runs Geth v1.17.1 (chain ID 11155111) as execution layer, Lodestar v1.35.0 as beacon node, and the 16-contract Snowbridge Gateway suite deployed via Forge, with \texttt{GatewayProxy} at \texttt{0xb1185ede04202fe\allowbreak 62d38f5db72f\allowbreak 71e38ff3e8305}. After initializing the beacon light client, two relayer processes run: a beacon relay that forwards Lodestar finality events to the \texttt{EthereumBeaconClient} pallet, and an execution relay that forwards Gateway events from Geth to the \texttt{EthereumInboundQueue} pallet.
+
+The integration surfaced three persistent issues, documented in Appendix~\ref{app:challenges}: a Lodestar version-pinning requirement that forces source compilation; a fork-version configuration bug that produced invalid Merkle proofs; and a beacon state cache timing issue that required reordering the setup sequence.
+
+The final step, using bridged Ether on AssetHub to pay for a CCRMS rights operation, is conceptually straightforward but was not implemented in the prototype. It requires an XCM message on AssetHub that withdraws the bridged Ether and dispatches the appropriate \texttt{xcm\_*} extrinsic to CCRMS with the user as beneficiary. The CCRMS XCM side is already prepared; the remaining task is to configure \texttt{pallet-content-rights::PaymentCurrency} to accept foreign Ether as well as the native token. This is listed as future work in Chapter~\ref{chap:conclusion}.
+
+\section{Challenges and Solutions}\label{sec:challenges-solutions}
+
+The CCRMS implementation encountered nine technical issues that shaped the final architecture and security stance. Table~\ref{tab:challenges} summarizes each issue, our response, and the principal lesson; Appendix~\ref{app:challenges} describes them in full.
+
+\begin{longtable}{@{}L{0.05\linewidth} L{0.30\linewidth} L{0.30\linewidth} L{0.30\linewidth}@{}}
+\caption{Implementation Challenges Summary}\label{tab:challenges}\\
+\toprule
+\textbf{\#} & \textbf{Challenge} & \textbf{Response} & \textbf{Key Lesson} \\
+\midrule
+\endfirsthead
+
+\multicolumn{4}{l}{\emph{Table~\ref{tab:challenges} continued from previous page}}\\
+\toprule
+\textbf{\#} & \textbf{Challenge} & \textbf{Response} & \textbf{Key Lesson} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+A.1 & RMRK 2.0 pallets frozen on SDK 0.9.36, incompatible with current monorepo & Replicated RMRK nesting semantics on \texttt{pallet-nfts} directly & Standards reimplementation is preferable when reference implementation is unmaintained \\
+\addlinespace
+A.2 & Contract-first design blocked: chain extensions non-functional for writes, debugging complexity & Inverted to pallet-first; retained ink! contract as thin wrapper & Pallet-first proved resilient to ink! discontinuation (A.9) \\
+\addlinespace
+A.3 & Snowbridge beacon relay generated proofs at wrong gindex (54 vs.\ 86) & \texttt{forkVersions} field means activation epoch, not version hex; changed to \texttt{\{"deneb": 0, "electra": 0\}} & Cryptographic systems fail silently on configuration errors \\
+\addlinespace
+A.4 & Lodestar v1.41.0 ignored \texttt{LODESTAR\_PRESET=mainnet} in dev mode (32 vs.\ 512 validators) & Pinned Lodestar v1.35.0, built from source & Light clients impose strict counterpart requirements; bridge toolchain compatibility is fragile \\
+\addlinespace
+A.5 & XCM tests: funds debited on source chain but \texttt{InsufficientPayment} on CCRMS & polkadot.js \texttt{toHex()} used big-endian; CCRMS expects little-endian; fixed with \texttt{toHex(true)} & Endianness bugs produce valid-looking but wrong addresses \\
+\addlinespace
+A.6 & XCM \texttt{BuyExecution} failed at 1B tokens; required ${\sim}$75--100B & \texttt{proof\_size} dominates \texttt{BlockRatioFee}, not \texttt{ref\_time} & Polkadot fee modeling is driven by proof size, not computation \\
+\addlinespace
+A.7 & \texttt{xcm\_transfer\_ownership} had no check that caller == \texttt{from} (Medium severity) & Added \texttt{ensure!(authorizer == from)}; unit test confirms block & Cross-chain extrinsics accepting identity parameters need explicit authorization \\
+\addlinespace
+A.8 & \texttt{MaxChildrenReached} at 50 subscribers per content item & Documented as known limitation; benchmark scripts rotate content items & Bounded FRAME collections trade benchmarkability for capacity limits \\
+\addlinespace
+A.9 & ink! development discontinued Jan 2026 & 95\% of logic in pallet; contract layer is non-load-bearing; migration deferred & Minimize dependency on non-essential components for ecosystem resilience \\
+\end{longtable}
+
+\section{Summary}\label{sec:chapter-5-summary}
+
+This chapter described the implementation of CCRMS, with a focus on \texttt{pallet-content-rights}. Nine notable challenges shaped the final architecture: two pivotal architectural shifts (RMRK to \texttt{pallet-nfts}, contract-first to pallet-first), four diagnostic issues encountered during Snowbridge and XCM integration, two findings from Phase~5 (the authorization gap in \texttt{xcm\_transfer\_ownership} and the cap on \texttt{MaxChildrenReached}), and the discontinuation of ink! post-implementation, which corroborated the decision to adopt the pallet-first approach.

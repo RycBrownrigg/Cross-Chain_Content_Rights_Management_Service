@@ -1,0 +1,153 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% CCRMS Dissertation - Cross-Chain Content Rights Management Service
+%% Based on University of Malta CDLT LaTeX Template
+%% https://github.com/jp-um/university_of_malta_LaTeX_dissertation_template
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% ======================================================================
+%% Build entry point for the dissertation.
+%%
+%% Structure (in order of output):
+%%   frontmatter  copyright, originality, acknowledgements, abstract,
+%%                table of contents, list of tables, list of abbreviations
+%%   mainmatter   Chapters 1-9 (chap1/...chap9/)
+%%   appendix     Appendices A-F (appA/...appF/)
+%%   backmatter   bibliography (references.bib, \nocite{*} includes all
+%%                100 entries with ragged-right layout)
+%%
+%% Build sequence (required for full cross-reference + citation resolve):
+%%   pdflatex dissertation_main
+%%   bibtex   dissertation_main
+%%   pdflatex dissertation_main
+%%   pdflatex dissertation_main
+%%
+%% Or: latexmk -pdf dissertation_main (does the above automatically).
+%%
+%% Key customizations added to the stock CDLT template:
+%%   - microtype package (better line-breaking)
+%%   - \setlength{\emergencystretch}{3em} (prevents margin overflow when
+%%     long \texttt{} tokens cannot break at sensible points)
+%%   - \newcolumntype{L}{} and \newcolumntype{R}{} for ragged-right /
+%%     ragged-left fixed-width table columns (avoids \texttt{}
+%%     justification stretching in long tables)
+%%   - \raggedright inside the bibliography block (URLs don't justify well)
+%%   - \nocite{*} includes every bib entry in the final bibliography,
+%%     matching the lit-review source count of 100 unique entries
+%%   - \listoffigures* removed (no figures in the document)
+%%
+%% Metadata (title, author, ID, supervisor, degree, date) is set below in
+%% the "(Your) Data" block. Verify these before submission.
+%% ======================================================================
+
+\RequirePackage[l2tabu, orthodox]{nag}
+
+\documentclass[twoside]{um}
+
+
+%% **************** (Your) Packages (Start) ******************
+
+\usepackage{booktabs}       % professional tables (\toprule, \midrule, \bottomrule)
+\usepackage{longtable}      % tables spanning multiple pages
+\usepackage{array}          % extra column formatting
+\usepackage{listings}       % code listings
+\usepackage{xcolor}         % colored code
+\usepackage{textcomp}       % additional text symbols
+\usepackage{hyperref}       % clickable cross-references
+\usepackage{microtype}      % better line-breaking / character protrusion
+
+% Allow LaTeX more flexibility to stretch lines that contain long unbreakable
+% \texttt{} tokens (code identifiers, hex addresses). Without this, long tokens
+% overflow into the margin rather than causing an earlier line break.
+\setlength{\emergencystretch}{3em}
+
+% Custom left-aligned (ragged-right) fixed-width column for text-heavy tables.
+% Use L{0.25\linewidth} instead of p{0.25\linewidth} to avoid justification stretching.
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+% Right-aligned fixed-width counterpart, for numeric columns that would otherwise
+% auto-expand beyond the text block when their header is wide.
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Code listing style
+\lstdefinestyle{code}{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red!60!black},
+    showstringspaces=false,
+    tabsize=2
+}
+\lstset{style=code}
+
+%% ***************** (Your) Packages (End) *******************
+
+
+%% **************** (Your) Data (Start) ******************
+
+\title{Cross-Chain Content Rights\\Management Service}
+\tagline{A Polkadot-Based Unified Rights Token for Subscription,\\Pay-Per-View, and Permanent Ownership}
+\author{Ryc Brownrigg}
+\authorID{2104001}
+\supervisor{Dr Joshua Ellul}
+%%\cosupervisor{Dr Someone}                              %% uncomment if applicable
+\department{Centre for Distributed Ledger Technologies}
+\faculty{Faculty of ICT}
+\degree{M.Sc.\ in Blockchain and Distributed Ledger Technologies}
+\doctype{dissertation}
+\degreedate{May, 2026}
+
+%% ***************** (Your) Data (End) *******************
+
+
+%% ******** (Your) Document Settings (Start) *************
+
+\graphicspath{{./images/}}
+
+%% ********* (Your) Document Settings (End) **************
+
+
+\begin{document}
+\frontmatter
+    \maketitle
+    \input{frontmatter/copyright}
+    \input{frontmatter/originality}
+    \input{frontmatter/acknowledgements}
+    \input{frontmatter/abstract}\if@openright\cleardoublepage\else\clearpage\fi
+    \tableofcontents*\if@openright\cleardoublepage\else\clearpage\fi
+    \listoftables*\if@openright\cleardoublepage\else\clearpage\fi
+    \input{frontmatter/abbreviations}\if@openright\cleardoublepage\else\clearpage\fi
+
+\pagestyle{umpage}
+\mainmatter
+    \input{chap1/introduction_main}             % Chapter 1: Introduction
+    \input{chap2/background_main}               % Chapter 2: Background and Related Work
+    \input{chap3/research_questions_main}        % Chapter 3: Research Questions and Objectives
+    \input{chap4/methodology_main}              % Chapter 4: Methodology and System Design
+    \input{chap5/implementation_main}           % Chapter 5: Implementation
+    \input{chap6/evaluation_main}               % Chapter 6: Evaluation and Testing
+    \input{chap7/results_main}                  % Chapter 7: Results
+    \input{chap8/discussion_main}               % Chapter 8: Discussion
+    \input{chap9/conclusion_main}               % Chapter 9: Conclusion and Future Work
+    \appendix
+        \input{appA/appendix_a_main}            % Appendix A: Implementation Challenge Narratives
+        \input{appB/appendix_b_main}            % Appendix B: Research Objective Details
+        \input{appC/appendix_c_main}            % Appendix C: Code Listings
+        \input{appD/appendix_d_main}            % Appendix D: Security and Coverage Findings
+        \input{appE/appendix_e_main}            % Appendix E: Future Work Details
+        \input{appF/appendix_f_main}            % Appendix F: Work Plan and Timeline
+
+{\backmatter
+    \if@openright\cleardoublepage\else\clearpage\fi
+    \bibliographystyle{um-plainnat}
+    \nocite{*}
+    {\footnotesize\raggedright\bibliography{references}}
+}
+
+\end{document}
+
+%%% The End %%%
