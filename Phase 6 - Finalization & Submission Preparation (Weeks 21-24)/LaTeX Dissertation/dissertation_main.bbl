@@ -1,4 +1,4 @@
-\begin{thebibliography}{100}
+\begin{thebibliography}{122}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -36,7 +36,18 @@ S.~J. Alotaibi.
 L.~Ante.
 \newblock {Smart contracts on the blockchain -- A bibliometric analysis and
   review}.
-\newblock \emph{SSRN Electronic Journal}, 2020.
+\newblock SSRN Electronic Journal, 2020.
+\newblock URL
+  \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3576393}.
+
+\bibitem[{Apple Inc.}(2025)]{appleForArtists}
+{Apple Inc.}
+\newblock {Apple Music Insights Royalty Rate}.
+\newblock Apple for Artists Support, 2025.
+\newblock URL
+  \url{https://artists.apple.com/support/1124-apple-music-insights-royalty-rate}.
+\newblock Accessed May 2026. Apple Music pays approximately 52\% to labels;
+  platform retains approximately 48\%.
 
 \bibitem[Atzori(2017)]{atzori2017}
 M.~Atzori.
@@ -67,6 +78,14 @@ P.~Banerjee et~al.
 \newblock arXiv:2009.11033, 2020.
 \newblock URL \url{https://arxiv.org/pdf/2009.11033}.
 
+\bibitem[Bigiotti et~al.(2025)Bigiotti, Mostarda, Navarra, Pinna, Sestili,
+  Tonelli, and Vaccargiu]{bigiottiEtAl2025}
+A.~Bigiotti, L.~Mostarda, A.~Navarra, A.~Pinna, D.~Sestili, R.~Tonelli, and
+  M.~Vaccargiu.
+\newblock {Blockchain Agnostic Protocols: An Analysis of the State of the Art}.
+\newblock \emph{ACM Computing Surveys}, 58\penalty0 (2):\penalty0 1--36, 2025.
+\newblock \doi{10.1145/3758089}.
+
 \bibitem[Busch(2022)]{busch2022}
 K.~Busch.
 \newblock {Web3: A Proposed Blockchain-Based, Decentralized Web}.
@@ -89,6 +108,24 @@ I.~Buzu.
 \newblock URL
   \url{https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3759260_code3591422.pdf}.
 
+\bibitem[Cabot-Nadal et~al.(2022)Cabot-Nadal, Payeras-Capellà, Mut-Puigserver,
+  and Soto-Fernández]{cabotNadalEtAl2022}
+M.~A. Cabot-Nadal, M.~Payeras-Capellà, M.~Mut-Puigserver, and
+  A.~Soto-Fernández.
+\newblock {Improving the Token ERC-721 Implementation for Selective Receipt:
+  Rejectable NFTs}.
+\newblock In \emph{2022 6th International Conference on System Reliability and
+  Safety (ICSRS)}, pages 243--250. IEEE, 2022.
+\newblock \doi{10.1109/ICSRS56243.2022.10067494}.
+
+\bibitem[Cao et~al.(2025)Cao, Cao, Bai, Wen, Liu, and Li]{caoEtAl2025}
+Y.~Cao, J.~Cao, D.~Bai, L.~Wen, Y.~Liu, and R.~Li.
+\newblock {MAP the Blockchain World: A Trustless and Scalable Blockchain
+  Interoperability Protocol for Cross-chain Applications}.
+\newblock In \emph{Proceedings of the ACM Web Conference 2025 (WWW '25)}. ACM,
+  2025.
+\newblock \doi{10.1145/3696410.3714867}.
+
 \bibitem[{Castweet Team}(2019)]{castweet2019}
 {Castweet Team}.
 \newblock {Castweet -- A Multi-broadcast Platform Based on Blockchain
@@ -97,6 +134,15 @@ I.~Buzu.
 \newblock URL
   \url{https://resources.cryptocompare.com/asset-management/17402/1728919640132.pdf}.
 \newblock Whitepaper.
+
+\bibitem[Chegenizadeh et~al.(2024)Chegenizadeh, Rafati~Niya, and
+  Tessone]{chegenizadehEtAl2024}
+M.~Chegenizadeh, S.~Rafati~Niya, and C.~J. Tessone.
+\newblock {Multi-agent Privacy-Preserving Micro-payment Verification for
+  Offline Resource-Constrained Devices Using Smart Contracts}.
+\newblock In \emph{Mathematical Research for Blockchain Economy (MARBLE 2024)},
+  Lecture Notes in Operations Research. Springer, 2024.
+\newblock \doi{10.1007/978-3-031-68974-1_7}.
 
 \bibitem[Chen et~al.(2020)]{chenEtAl2020}
 F.~Chen et~al.
@@ -111,6 +157,22 @@ K.~Chen et~al.
 \newblock {A Trusted Reputation Management Scheme for Cross-Chain
   Transactions}.
 \newblock \emph{Sensors}, 23:\penalty0 6033, 2023.
+
+\bibitem[Cherdakov et~al.(2023)Cherdakov, Kudashkin, Madhwal, and
+  Yanovich]{cherdakovEtAl2023}
+M.~Cherdakov, A.~Kudashkin, Y.~Madhwal, and Y.~Yanovich.
+\newblock {Web3 Based Digital Rights Management in the Music Industry}.
+\newblock In \emph{Proceedings of the 2023 6th International Conference on
+  Blockchain Technology and Applications (ICBTA)}. ACM, 2023.
+\newblock \doi{10.1145/3651655.3651667}.
+
+\bibitem[Ciriello et~al.(2023)Ciriello, Torbensen, Hansen, and
+  Müller-Bloch]{cirelloEtAl2023}
+R.~F. Ciriello, A.~C.~G. Torbensen, M.~R.~P. Hansen, and C.~Müller-Bloch.
+\newblock {Blockchain-based digital rights management systems: Design
+  principles for the music industry}.
+\newblock \emph{Electronic Markets}, 33\penalty0 (1), 2023.
+\newblock \doi{10.1007/s12525-023-00628-5}.
 
 \bibitem[{Coinbase} and {x402 Foundation}(2025)]{coinbaseX402_2025}
 {Coinbase} and {x402 Foundation}.
@@ -160,6 +222,15 @@ K.~S. Divyashree and A.~Mishra.
   implications}.
 \newblock In \emph{Lecture Notes in Networks and Systems}, volume 478, pages
   219--231. 2023.
+
+\bibitem[Dondjio and Kazamias(2024)]{dondjioKazamias2024}
+I.~Dondjio and A.~Kazamias.
+\newblock {A Blockchain Framework for Digital Asset Ownership and Transfer in
+  Succession}.
+\newblock In \emph{20th European, Mediterranean, and Middle Eastern Conference
+  on Information Systems (EMCIS 2023)}, volume 501 of \emph{Lecture Notes in
+  Business Information Processing}. Springer, 2024.
+\newblock \doi{10.1007/978-3-031-56478-9_7}.
 
 \bibitem[Dreyer et~al.(2021)]{dreyerEtAl2021}
 A.~Dreyer et~al.
@@ -237,6 +308,14 @@ A.~Gomaa.
 \newblock URL
   \url{https://personales.upv.es/thinkmind/dl/conferences/infocomp/infocomp_2019/infocomp_2019_1_30_60048.pdf}.
 
+\bibitem[{Google LLC}(2025)]{youtubePartnerProgram}
+{Google LLC}.
+\newblock {YouTube Partner Program: How ad revenue is shared}.
+\newblock YouTube Help Center, 2025.
+\newblock URL \url{https://support.google.com/youtube/answer/72902}.
+\newblock Accessed May 2026. YouTube retains 45\% of ad revenue; creators
+  receive 55\%.
+
 \bibitem[Goyal et~al.(2019)]{goyalEtAl2019}
 P.~Goyal et~al.
 \newblock {Secure Incentivization for Decentralized Content Delivery}.
@@ -267,13 +346,19 @@ R.~Habermeier et~al.
 \newblock URL
   \url{https://medium.com/web3foundation/polkadots-messaging-scheme-b1ec560908b7}.
 
+\bibitem[Hanneke et~al.(2024)Hanneke, Hinz, Pfeiffer, and {van der
+  Aalst}]{hannekeEtAl2024}
+B.~Hanneke, O.~Hinz, J.~Pfeiffer, and W.~M.~P. {van der Aalst}.
+\newblock {The Internet of Value: Unleashing the Blockchain's Potential with
+  Tokenization}.
+\newblock \emph{Business \& Information Systems Engineering}, 66\penalty0
+  (4):\penalty0 411--419, 2024.
+\newblock \doi{10.1007/s12599-024-00883-6}.
+
 \bibitem[Hevner et~al.(2004)Hevner, March, Park, and Ram]{hevnerEtAl2004}
 A.~R. Hevner, S.~T. March, J.~Park, and S.~Ram.
 \newblock {Design science in information systems research}.
 \newblock \emph{MIS Quarterly}, 28\penalty0 (1):\penalty0 75--105, 2004.
-\newblock Canonical reference for the design science research paradigm; added
-  here because the lit review v2 does not include it but the dissertation cites
-  it in Chapter 1 and Chapter 4.
 
 \bibitem[{Information (MDPI)}(2026)]{information2026}
 {Information (MDPI)}.
@@ -314,6 +399,22 @@ R.~K. Kumar et~al.
 \newblock {Revolutionizing digital ownership: Examining the perks of a
   Polkadot-based NFT marketplace}.
 \newblock Technical report, ResearchGate, 2023.
+
+\bibitem[Kumar et~al.(2025)Kumar, Budhiraja, Jabbari, et~al.]{kumarVEtAl2025}
+V.~Kumar, I.~Budhiraja, A.~Jabbari, et~al.
+\newblock {Efficient blockchain interoperability design for cross-chain
+  transactions in future internet-of-value}.
+\newblock \emph{Peer-to-Peer Networking and Applications}, 18:\penalty0 110,
+  2025.
+\newblock \doi{10.1007/s12083-025-01941-w}.
+
+\bibitem[Lahiri et~al.(2026)]{lahiriEtAl2026}
+S.~Lahiri et~al.
+\newblock {Multidisciplinary perspectives on Non-Fungible Tokens (NFTs): a
+  comprehensive meta-analysis}.
+\newblock \emph{Digital Economy and Sustainable Development}, 4:\penalty0 3,
+  2026.
+\newblock \doi{10.1007/s44265-026-00078-9}.
 
 \bibitem[Li et~al.(2024)]{liLEtAl2024}
 L.~Li et~al.
@@ -387,6 +488,15 @@ N.~Mauro.
 \newblock URL
   \url{https://emle.org/wp-content/uploads/2023/01/EMLE_thesis_Mauro_Noemi.pdf}.
 
+\bibitem[Mendoza-Tello et~al.(2024)Mendoza-Tello, Sánchez-Lucas, and
+  Orosco-Pantoja]{mendozaTelloEtAl2024}
+J.~C. Mendoza-Tello, J.~J. Sánchez-Lucas, and J.~G. Orosco-Pantoja.
+\newblock {A Model to Support the Music Streaming Service Using
+  Blockchain-Based Smart Contracts}.
+\newblock In \emph{Applied Technologies (ICAT 2023)}, volume 2051 of
+  \emph{Communications in Computer and Information Science}. Springer, 2024.
+\newblock \doi{10.1007/978-3-031-58950-8_10}.
+
 \bibitem[Moncada et~al.(2021)]{moncadaEtAl2021}
 R.~Moncada et~al.
 \newblock {DLT-enabled Platforms: Distribution and Management of Media
@@ -410,6 +520,31 @@ M.~F. Moreno et~al.
 \newblock arXiv:2308.00735, 2023.
 \newblock URL \url{https://arxiv.org/pdf/2308.00735}.
 
+\bibitem[Morháč et~al.(2023{\natexlab{a}})Morháč, Valaštín, Košťál,
+  and Kotuliak]{morhacEtAl2023a}
+D.~Morháč, V.~Valaštín, K.~Košťál, and I.~Kotuliak.
+\newblock {ParaSpell XCM SDK: A New Protocol for Interoperability in Polkadot
+  Paraverse}.
+\newblock In \emph{2023 Fifth International Conference on Blockchain Computing
+  and Applications (BCCA)}, pages 569--576. IEEE, 2023{\natexlab{a}}.
+\newblock \doi{10.1109/BCCA58897.2023.10338906}.
+
+\bibitem[Morháč et~al.(2023{\natexlab{b}})Morháč, Valaštín, Košťál,
+  and Kotuliak]{morhacEtAl2023b}
+D.~Morháč, V.~Valaštín, K.~Košťál, and I.~Kotuliak.
+\newblock {Enhancing XCMP Interoperability Across Polkadot Paraverse}.
+\newblock In \emph{2023 IEEE International Conference on Blockchain and
+  Cryptocurrency (ICBC)}, pages 1--3. IEEE, 2023{\natexlab{b}}.
+\newblock \doi{10.1109/ICBC56567.2023.10174872}.
+
+\bibitem[Morháč et~al.(2025)Morháč, Košťál, Valaštín,
+  et~al.]{morhacEtAl2025}
+D.~Morháč, K.~Košťál, V.~Valaštín, et~al.
+\newblock {Unispell: universal adapter for interoperability in Polkadot
+  Paraverse}.
+\newblock \emph{Cluster Computing}, 28:\penalty0 311, 2025.
+\newblock \doi{10.1007/s10586-025-05183-6}.
+
 \bibitem[Munson(2019)]{munson2019}
 M.~Munson.
 \newblock {A Blockchain Controlled Content Fabric}.
@@ -429,6 +564,15 @@ M.~Murray.
 \newblock {NFT Ownership And Copyrights}.
 \newblock \emph{Indiana Law Review}, 56:\penalty0 367, 2022.
 
+\bibitem[{Music Business Research}(2024)]{musicBizResearch2024}
+{Music Business Research}.
+\newblock {The Music Streaming Economy Part 14: The Artists' Share of the Music
+  Streaming Pie}.
+\newblock Music Business Research Blog, 2024.
+\newblock URL
+  \url{https://musicbusinessresearch.wordpress.com/2024/09/16/the-music-streaming-economy-part-14-the-artists-share-of-the-music-streaming-pie/}.
+\newblock Accessed May 2026.
+
 \bibitem[Orero et~al.(2023)]{oreroEtAl2023}
 P.~Orero et~al.
 \newblock {The Visible Subtitler: Blockchain Technology for Right Management
@@ -441,6 +585,14 @@ O.~Osemwegie.
   copyright protection, monetization, and content ownership rights}.
 \newblock \emph{International Journal of Mechanical Technology and Marine
   Engineering}, 2025.
+
+\bibitem[{Parity Technologies}(2021)]{polkadotParachainSlots}
+{Parity Technologies}.
+\newblock {Polkadot Parachain Slots}.
+\newblock Polkadot Blog, 2021.
+\newblock URL \url{https://polkadot.com/blog/polkadot-parachain-slots/}.
+\newblock Describes Polkadot's support for up to 100 parachain slots and
+  additive parallel throughput.
 
 \bibitem[{Parity
   Technologies}(2022{\natexlab{a}})]{parityTechnologiesInk3_2022}
@@ -492,12 +644,27 @@ L.~Quan et~al.
   \url{https://r0gue.medium.com/ink-solidity-abi-on-polkavm-c675c854efd3}.
 \newblock Posted August 2025.
 
+\bibitem[Rao et~al.(2024)Rao, Kiah, Hameed, and Memon]{raoEtAl2024}
+I.~S. Rao, M.~L.~M. Kiah, M.~M. Hameed, and Z.~A. Memon.
+\newblock {Scalability of blockchain: a comprehensive review and future
+  research direction}.
+\newblock \emph{Cluster Computing}, 27:\penalty0 5547--5570, 2024.
+\newblock \doi{10.1007/s10586-023-04257-7}.
+
 \bibitem[Reggianini(2025)]{reggianini2025}
 E.~Reggianini.
 \newblock {Standardizing On-chain IP Rights Management}.
 \newblock Technical report, BlockStand, 2025.
 \newblock URL
   \url{https://blockstand.eu/blockstand/uploads/2025/05/Standardizing-On-chain-IP-Rights-Management_Reggianini.pdf}.
+
+\bibitem[Ren et~al.(2023)Ren, Ho, Loghin, Nguyen, Ooi, Ta, and
+  Zhu]{renEtAl2023}
+K.~Ren, N.-M. Ho, D.~Loghin, T.-T. Nguyen, B.~C. Ooi, Q.-T. Ta, and F.~Zhu.
+\newblock {Interoperability in Blockchain: A Survey}.
+\newblock \emph{IEEE Transactions on Knowledge and Data Engineering},
+  35\penalty0 (12):\penalty0 12750--12769, 2023.
+\newblock \doi{10.1109/TKDE.2023.3275220}.
 
 \bibitem[Salman et~al.(2023)]{salmanEtAl2023}
 B.~Salman et~al.
@@ -571,6 +738,15 @@ R.~Singh et~al.
 \newblock Polkassembly Proposal \#3313, 2025{\natexlab{b}}.
 \newblock URL \url{https://polkadot.polkassembly.io/post/3313}.
 
+\bibitem[{Spotify AB}(2025)]{spotifyForArtists}
+{Spotify AB}.
+\newblock {Understanding Spotify Royalties}.
+\newblock Spotify for Artists Support, 2025.
+\newblock URL
+  \url{https://support.spotify.com/us/artists/article/understanding-spotify-royalties/}.
+\newblock Accessed May 2026. Spotify pays approximately 70\% of revenue to
+  rights holders.
+
 \bibitem[{Steem Team}(2025)]{steem2025}
 {Steem Team}.
 \newblock {Steem, an incentivized, blockchain-based, public content platform}.
@@ -615,7 +791,8 @@ K.~Upadhyay et~al.
 \bibitem[Valaštín et~al.(2024)]{valastinEtAl2024}
 V.~Valaštín et~al.
 \newblock {Protocol for Unifying Cross-Chain Liquidity on Polkadot}.
-\newblock 2024.
+\newblock \emph{Frontiers in Blockchain}, 2024.
+\newblock \doi{10.3389/fbloc.2024.1413840}.
 
 \bibitem[Velmovitsky et~al.(2021)]{velmovitskyEtAl2021}
 P.~E. Velmovitsky et~al.
@@ -681,6 +858,14 @@ R.~Xie and M.~Tang.
   cross-chain technology}.
 \newblock \emph{Heliyon}, 10\penalty0 (16):\penalty0 e34781, 2024.
 \newblock \doi{10.1016/j.heliyon.2024.e34781}.
+
+\bibitem[Yi et~al.(2023)Yi, Zhou, Lin, et~al.]{yiEtAl2023}
+X.~Yi, Y.~Zhou, Y.~Lin, et~al.
+\newblock {Digital rights management scheme based on redactable blockchain and
+  perceptual hash}.
+\newblock \emph{Peer-to-Peer Networking and Applications}, 16:\penalty0
+  2630--2648, 2023.
+\newblock \doi{10.1007/s12083-023-01552-3}.
 
 \bibitem[Yin et~al.(2022)]{yinEtAl2022}
 Z.~Yin et~al.

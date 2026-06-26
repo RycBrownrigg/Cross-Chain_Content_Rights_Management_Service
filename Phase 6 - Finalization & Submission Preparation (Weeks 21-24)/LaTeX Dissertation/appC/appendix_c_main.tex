@@ -77,3 +77,128 @@ const xcmMessage = {
   ]
 };
 \end{lstlisting}
+
+\section{Repository Directory Layout}\label{sec:workspace-layout}
+
+The CCRMS parachain repository follows the standard Polkadot SDK template structure:
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=none]
+content-rights-parachain/
+|-- pallets/
+|   |-- content-rights/        # Core business logic and tests
+|   `-- rights-verifier/       # Cross-chain Merkle proof verification
+|-- runtime/
+|   `-- src/
+|       |-- lib.rs              # Runtime composition
+|       |-- configs/            # Pallet configurations and XCM
+|       `-- precompiles.rs      # Custom EVM precompile
+|-- contracts/
+|   `-- rights_manager/         # ink! 6 contract
+|-- node/                       # Collator binary
+|-- scripts/                    # Benchmarking, testing, deployment
+`-- docs/                       # Setup and integration documentation
+\end{lstlisting}
+
+\section{Dispatchable Extrinsics Reference}\label{sec:extrinsics-reference}
+
+Table~\ref{tab:extrinsics} lists all 17 dispatchable extrinsics of \texttt{pallet-content-rights}.
+
+\begin{longtable}{@{}L{0.06\linewidth} L{0.32\linewidth} L{0.56\linewidth}@{}}
+\caption{Dispatchable Extrinsics in \texttt{pallet-content-rights}}\label{tab:extrinsics}\\
+\toprule
+\textbf{Index} & \textbf{Extrinsic} & \textbf{Purpose} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:extrinsics} continued from previous page}}\\
+\toprule
+\textbf{Index} & \textbf{Extrinsic} & \textbf{Purpose} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+0 & \texttt{register\_content} & Create a new content item, instantiate the underlying NFT collection, mint the parent Content NFT \\
+\addlinespace
+1 & \texttt{subscribe} & Purchase a new subscription \\
+\addlinespace
+2 & \texttt{renew\_subscription} & Renew an expired subscription \\
+\addlinespace
+3 & \texttt{purchase\_views} & Purchase a pay-per-view pack of N views \\
+\addlinespace
+4 & \texttt{consume\_view} & Decrement a view from an existing pack \\
+\addlinespace
+5 & \texttt{purchase\_ownership} & Purchase permanent ownership \\
+\addlinespace
+6 & \texttt{check\_access} & Verify whether a user holds any active rights \\
+\addlinespace
+7 & \texttt{xcm\_subscribe} & Cross-chain subscription with payer--beneficiary decoupling \\
+\addlinespace
+8 & \texttt{xcm\_renew\_subscription} & Cross-chain renewal \\
+\addlinespace
+9 & \texttt{xcm\_purchase\_views} & Cross-chain pay-per-view purchase \\
+\addlinespace
+10 & \texttt{xcm\_purchase\_ownership} & Cross-chain ownership purchase \\
+\addlinespace
+11 & \texttt{transfer\_ownership} & Peer-to-peer secondary-market ownership transfer \\
+\addlinespace
+12 & \texttt{xcm\_transfer\_ownership} & Cross-chain ownership transfer (caller-must-be-owner) \\
+\addlinespace
+13 & \texttt{set\_royalty\_splits} & Configure the royalty distribution table (creator-only) \\
+\addlinespace
+14 & \texttt{enable\_auto\_renew} & Enable automatic renewal for an existing subscription \\
+\addlinespace
+15 & \texttt{disable\_auto\_renew} & Disable automatic renewal \\
+\addlinespace
+16 & \texttt{query\_rights\_metadata} & Emit a self-describing metadata event for cross-chain consumption \\
+\end{longtable}
+
+\section{Pallet Storage Layout Reference}\label{sec:storage-reference}
+
+Table~\ref{tab:storage} lists all 10 storage items of \texttt{pallet-content-rights}.
+
+\begin{longtable}{@{}L{0.20\linewidth} L{0.32\linewidth} L{0.42\linewidth}@{}}
+\caption{Storage Layout of \texttt{pallet-content-rights}}\label{tab:storage}\\
+\toprule
+\textbf{Storage} & \textbf{Key $\to$ Value} & \textbf{Purpose} \\
+\midrule
+\endfirsthead
+
+\multicolumn{3}{l}{\emph{Table~\ref{tab:storage} continued from previous page}}\\
+\toprule
+\textbf{Storage} & \textbf{Key $\to$ Value} & \textbf{Purpose} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{\emph{Continued on next page}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\texttt{NextContentId} & $\to$ \texttt{u32} & Global content ID counter \\
+\addlinespace
+\texttt{NextItemId} & \texttt{collection\_id} $\to$ \texttt{u32} & Per-collection child item counter \\
+\addlinespace
+\texttt{Contents} & \texttt{content\_id} $\to$ \texttt{ContentMetadata} & Master record per content \\
+\addlinespace
+\texttt{Subscriptions} & \texttt{(content\_id, user)} $\to$ \texttt{SubscriptionInfo} & Active subscription state \\
+\addlinespace
+\texttt{ViewPacks} & \texttt{(content\_id, user)} $\to$ \texttt{ViewPackInfo} & Pay-per-view balance \\
+\addlinespace
+\texttt{Ownership} & \texttt{(content\_id, user)} $\to$ \texttt{OwnershipInfo} & Permanent ownership records \\
+\addlinespace
+\texttt{Children} & \texttt{(collection\_id, parent)} $\to$ \texttt{BoundedVec<50>} & NFT nesting forward index \\
+\addlinespace
+\texttt{Parent} & \texttt{(collection\_id, child)} $\to$ \texttt{(u32, u32)} & NFT nesting reverse index \\
+\addlinespace
+\texttt{AutoRenewIndex} & \texttt{(content\_id, user)} $\to$ \texttt{bool} & Auto-renew-enabled subscriptions \\
+\addlinespace
+\texttt{RoyaltySplits} & \texttt{content\_id} $\to$ \texttt{BoundedVec<10>} & Collaborator payout shares \\
+\end{longtable}

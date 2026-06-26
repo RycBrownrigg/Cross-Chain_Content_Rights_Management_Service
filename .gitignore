@@ -177,12 +177,32 @@ lcov.info
 tarpaulin-report.*
 
 # -----------------------------------------------------------------------------
+# LaTeX build artefacts
+# -----------------------------------------------------------------------------
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.toc
+*.synctex.gz
+*.synctex(busy)
+# Note: *.out omitted — too broad for a mixed Rust/LaTeX project
+# Note: *.bbl omitted — kept so bibliography compiles without re-running BibTeX
+
+# -----------------------------------------------------------------------------
 # Documentation builds
 # -----------------------------------------------------------------------------
 /doc/
 /docs/book/book/
 mdbook-output/
 Implementation Decisions & Design Rationale.md
+Advisor Feedback Response — May 2026.md
+Advisor PDF Comments — Full Catalogue.md
+Citation Review — Advisor Point 2.md
+Phase 6 Objectives, Tasks and Deliverables.md
+Pre-Meeting Revision Summary — May 2026.md
 
 # -----------------------------------------------------------------------------
 # Claude / Anthropic

@@ -35,7 +35,8 @@
 %%   - \raggedright inside the bibliography block (URLs don't justify well)
 %%   - \nocite{*} includes every bib entry in the final bibliography,
 %%     matching the lit-review source count of 100 unique entries
-%%   - \listoffigures* removed (no figures in the document)
+%%   - \listoffigures* restored (seven TikZ diagrams: four in Chapter 4,
+%%     one each in Chapters 5, 6, and 7)
 %%
 %% Metadata (title, author, ID, supervisor, degree, date) is set below in
 %% the "(Your) Data" block. Verify these before submission.
@@ -56,11 +57,19 @@
 \usepackage{textcomp}       % additional text symbols
 \usepackage{hyperref}       % clickable cross-references
 \usepackage{microtype}      % better line-breaking / character protrusion
+\usepackage{tikz}           % diagrams (architecture, NFT nesting, XCM flow, three models)
+\usetikzlibrary{arrows.meta, positioning, fit}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption} % distinct caption style
 
 % Allow LaTeX more flexibility to stretch lines that contain long unbreakable
 % \texttt{} tokens (code identifiers, hex addresses). Without this, long tokens
 % overflow into the margin rather than causing an earlier line break.
 \setlength{\emergencystretch}{3em}
+
+% Pin floats to the top of float-only pages instead of vertically centering them.
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
 
 % Custom left-aligned (ragged-right) fixed-width column for text-heavy tables.
 % Use L{0.25\linewidth} instead of p{0.25\linewidth} to avoid justification stretching.
@@ -97,7 +106,7 @@
 %%\cosupervisor{Dr Someone}                              %% uncomment if applicable
 \department{Centre for Distributed Ledger Technologies}
 \faculty{Faculty of ICT}
-\degree{M.Sc.\ in Blockchain and Distributed Ledger Technologies}
+\degree{M.Sc.\ in Blockchain and Distributed Ledger Technologies (ICT)}
 \doctype{dissertation}
 \degreedate{May, 2026}
 
@@ -120,6 +129,7 @@
     \input{frontmatter/abstract}\if@openright\cleardoublepage\else\clearpage\fi
     \tableofcontents*\if@openright\cleardoublepage\else\clearpage\fi
     \listoftables*\if@openright\cleardoublepage\else\clearpage\fi
+    \listoffigures*\if@openright\cleardoublepage\else\clearpage\fi
     \input{frontmatter/abbreviations}\if@openright\cleardoublepage\else\clearpage\fi
 
 \pagestyle{umpage}

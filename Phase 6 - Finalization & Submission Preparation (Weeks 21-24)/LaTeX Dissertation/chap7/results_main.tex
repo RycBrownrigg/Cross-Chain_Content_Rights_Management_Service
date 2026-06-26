@@ -37,6 +37,8 @@ This chapter reports the measured results. Section~\ref{sec:technical-results} c
 
 \section{Technical Results}\label{sec:technical-results}
 
+The technical results in this section address SQ1 (XCM cross-chain finality, Section~\ref{subsec:latency}), SQ2 (the latency--decentralization trade-off, Section~\ref{subsec:comparative-analysis}), and SQ3 (unified rights token throughput and storage performance, Sections~\ref{subsec:throughput}--\ref{subsec:storage}).
+
 \subsection{Throughput}\label{subsec:throughput}
 
 We evaluated all 11 local extrinsic types across four batch sizes (1, 10, 50, 100). At a batch size of 100, extrinsics without nesting constraints achieved a throughput of 16.6 TPS, whereas those involving the minting of child NFTs (\texttt{subscribe}, \texttt{purchase\_ownership}, \texttt{enable\_auto\_renew}, \texttt{disable\_auto\_renew}, \texttt{transfer\_ownership}) were limited to 8.3 TPS due to the maximum children constraint (\texttt{MaxChildren=50}), rather than by block weight. The extrinsics in Phase~4 (\texttt{set\_royalty\_splits}, \texttt{enable\_auto\_renew}, \texttt{disable\_auto\_renew}, \texttt{query\_rights\_metadata}) achieved throughput comparable to that of the baseline extrinsics, confirming that the unified rights token model incurs no measurable performance overhead.
@@ -285,9 +287,61 @@ The centralized implementation outperforms CCRMS in all quantitative metrics ($2
 
 \section{Economic Results}\label{sec:economic-results}
 
+The economic results in this section address SQ5 (economic viability under realistic creator audience distributions) through the Monte Carlo simulation, the audience-size crossover finding, and the comparative platform fee analysis.
+
 \subsection{Monte Carlo Creator Revenue Simulation}\label{subsec:monte-carlo}
 
-The simulation models 1,000 creators across 10,000 iterations under four platform configurations, drawing creator parameters from realistic distributions and projecting one-year revenue based on platform-specific fees and dynamics (algorithmic discovery, organic growth, monthly churn). Table~\ref{tab:monte-carlo} summarizes the results.
+The simulation models 1,000 creators across 10,000 iterations under four platform configurations, drawing creator parameters from realistic distributions and projecting one-year revenue based on platform-specific fees and dynamics (algorithmic discovery, organic growth, monthly churn). Figure~\ref{fig:monte-carlo-flow} illustrates the simulation structure; Table~\ref{tab:monte-carlo} summarizes the results.
+
+\begin{figure}[htbp]
+\vspace{\baselineskip}
+\centering
+\begin{tikzpicture}[
+    flowstep/.style={draw, rectangle, rounded corners=3pt, minimum width=7.5cm,
+                     minimum height=1.05cm, align=center, font=\small},
+    plat/.style={draw, rectangle, rounded corners=2pt, minimum width=2.1cm,
+                 minimum height=1.05cm, align=center, font=\footnotesize},
+    >=Stealth
+]
+%% Step 1: input
+\node[flowstep, fill=gray!15] (s1) at (0, 0) {
+    \textbf{Creator Parameter Sampling (1,000 creators)}\\
+    {\footnotesize followers $\sim$ log-normal distribution \quad churn rate \quad growth rate \quad content volume}
+};
+%% Step 2: iteration loop
+\node[flowstep, fill=blue!12] (s2) at (0, -1.9) {
+    \textbf{10,000 Revenue Iterations per Creator}\\
+    {\footnotesize uniform fee draw · algorithmic discovery boost · organic growth · monthly churn}
+};
+\draw[->, thick] (s1.south) -- (s2.north);
+%% Branch point below s2
+\coordinate (sp) at (0, -2.75);
+\draw[thick] (s2.south) -- (sp);
+%% Four platform nodes
+\node[plat, fill=red!12]    (p1) at (-4.0, -3.55) {\textbf{Centralized}\\{\footnotesize 30--45\% fee}};
+\node[plat, fill=orange!18] (p2) at (-1.3, -3.55) {\textbf{Web3}\\{\footnotesize 5--10\% fee}};
+\node[plat, fill=blue!15]   (p3) at ( 1.3, -3.55) {\textbf{Bridge}\\{\footnotesize 8--15\% fee}};
+\node[plat, fill=green!18]  (p4) at ( 4.0, -3.55) {\textbf{CCRMS}\\{\footnotesize 1--5\% fee}};
+\draw[->, thick] (sp) -| (p1.north);
+\draw[->, thick] (sp) -| (p2.north);
+\draw[->, thick] (sp) -| (p3.north);
+\draw[->, thick] (sp) -| (p4.north);
+%% Join point above s3
+\coordinate (jp) at (0, -4.6);
+\draw[thick] (p1.south) |- (jp);
+\draw[thick] (p2.south) |- (jp);
+\draw[thick] (p3.south) |- (jp);
+\draw[thick] (p4.south) |- (jp);
+%% Step 3: aggregate outputs
+\node[flowstep, fill=green!18] (s3) at (0, -5.5) {
+    \textbf{Aggregate Distributions (per Platform)}\\
+    {\footnotesize mean annual revenue · 95\% confidence intervals · per-scenario win rates}
+};
+\draw[->, thick] (jp) -- (s3.north);
+\end{tikzpicture}
+\caption{Monte Carlo simulation structure (1,000 creators $\times$ 10,000 iterations = 10 million revenue paths per platform). Creator parameters are sampled per creator; the platform fee is drawn uniformly from each platform's range at each iteration. The four paths run in parallel and are aggregated independently, yielding the mean revenue figures in Table~\ref{tab:monte-carlo}, the 95\% confidence intervals in Table~\ref{tab:ci}, and the audience-size crossover finding in Table~\ref{tab:audience-tiers}.}
+\label{fig:monte-carlo-flow}
+\end{figure}
 
 \begin{longtable}{@{}L{0.34\linewidth} L{0.14\linewidth} R{0.20\linewidth} L{0.24\linewidth}@{}}
 \caption{Monte Carlo Creator Revenue Simulation (Mean Annual Revenue Per Creator)}\label{tab:monte-carlo}\\
@@ -442,7 +496,7 @@ We drew the platform fee structures used in the Monte Carlo simulation, which we
 \bottomrule
 \endlastfoot
 
-Centralized & 30--45\% & YouTube (45\%), Spotify (30\%), Apple Music (30\%), Audible (40\%) \\
+Centralized & 30--60\% & YouTube (45\% \citep{youtubePartnerProgram}), Spotify ($\sim$30\% \citep{spotifyForArtists}), Apple Music ($\sim$48\% \citep{appleForArtists}), Audible (pays authors 40\%, retains 60\%) \\
 \addlinespace
 Web3 marketplace & 5--10\% & OpenSea (2.5\% + 5\% creator), Magic Eden (2\%) \\
 \addlinespace
@@ -457,7 +511,7 @@ A note on hidden costs: the simulation does not aim to represent the friction as
 
 \section{Security and User-Centric Results}\label{sec:security-user-results}
 
-Having established the technical and economic results, we turn to security, test coverage, decentralization, and static-analysis findings. Each of these contributes to the system's overall trustworthiness.
+The results in this section address SQ4 (authorization model and adversarial conditions) through the security audit findings, test coverage metrics, and decentralization assessment. Each finding contributes to the overall trustworthiness argument for CCRMS.
 
 \subsection{Security Audit Findings}\label{subsec:security-audit}
 

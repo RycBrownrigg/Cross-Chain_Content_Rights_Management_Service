@@ -73,7 +73,45 @@ Each KPI (Section~\ref{sec:kpis}) has a specified target derived from the Phase~
 
 \section{Testing Layers}\label{sec:testing-layers}
 
-We organize testing into four layers, each executed at the lowest applicable level of abstraction.
+We organize testing into four layers, each executed at the lowest applicable level of abstraction. Figure~\ref{fig:testing-layers} summarises the stack; the subsections below describe each layer.
+
+\begin{figure}[htbp]
+\vspace{\baselineskip}
+\centering
+\begin{tikzpicture}[
+    layer/.style={draw, rectangle, minimum width=12cm, text width=11.5cm,
+                  minimum height=1.4cm, align=center, font=\small},
+    node distance=3pt
+]
+\node[layer, fill=green!18] (l1) at (0,0) {
+    \textbf{Layer 1 --- Unit Tests}\\
+    {\footnotesize 56 tests in mock runtime: 23 functional · 10 security · 11 XCM · 5 royalty · 5 auto-renewal · 2 metadata;
+     \texttt{cargo test}; $\sim$3\,s; run on every commit.
+     \emph{Does not cover:} network latency, live cross-chain routing, or sustained load.}
+};
+\node[layer, fill=blue!18, above=3pt of l1] (l2) {
+    \textbf{Layer 2 --- XCM Simulator}\\
+    {\footnotesize In-process two-parachain dispatch via \texttt{xcm-simulator}; no Zombienet required.
+     Isolates XCM message construction and configuration failures from block-timing and network conditions.
+     \emph{Does not cover:} wall-clock latency or live relay-chain routing.}
+};
+\node[layer, fill=orange!18, above=3pt of l2] (l3) {
+    \textbf{Layer 3 --- Zombienet End-to-End}\\
+    {\footnotesize Live Rococo-local relay chain; Para~A and Para~B connected via HRMP;
+     7 automated \texttt{@polkadot/api} benchmark scripts producing JSON output.
+     Primary evidence source for KPIs 1--8.
+     \emph{Does not cover:} real-network latency or multi-collator topologies.}
+};
+\node[layer, fill=purple!18, above=3pt of l3] (l4) {
+    \textbf{Layer 4 --- Snowbridge End-to-End}\\
+    {\footnotesize Full bridge stack: 4 parachains, Geth v1.17.1, Lodestar v1.35.0, 16 Gateway contracts,
+     beacon and execution relayers; $\approx$40\,min beacon synchronisation.
+     Validates the complete Ethereum-to-Polkadot bridge pathway; run infrequently.}
+};
+\end{tikzpicture}
+\caption{Four-layer testing architecture (Layer~1 at base: fastest and most granular, run on every commit; Layer~4 at apex: broadest scope, run infrequently). Each layer tests what lower layers cannot: unit tests isolate individual extrinsic logic; the XCM simulator isolates message-construction failures; Zombienet provides definitive wall-clock performance evidence; Snowbridge validates the complete Ethereum bridge pathway.}
+\label{fig:testing-layers}
+\end{figure}
 
 \textbf{Layer 1: Unit tests} (56 tests in a mock runtime). The suite encompasses 23 functional tests, ten security tests, 11 XCM tests, five royalty propagation verifications, five auto-renewal tests, and two metadata query tests. We run them with \texttt{cargo test}; all 56 tests pass on every commit in approximately three seconds. The unit layer provides the most accurate indications of individual extrinsic correctness but does not cover cross-chain interactions, network latency, or sustained load testing.
 

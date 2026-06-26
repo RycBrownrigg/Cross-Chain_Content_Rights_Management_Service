@@ -1,12 +1,22 @@
 %% ======================================================================
 %% references.bib
-%% Generated from Literature Review v2 (April 2026, 100 unique entries after deduplication)
+%% Updated June 2026 — 122 entries
+%% Reorganised into three tiers:
+%%   Tier 1 — Peer-reviewed academic (journals, conference proceedings,
+%%             academic theses, academic books and book chapters)
+%%   Tier 2 — Academic-adjacent (preprints: arXiv, IACR, SSRN; and
+%%             low-quality or unverifiable journals)
+%%   Tier 3 — Non-academic (industry, government, blogs, whitepapers,
+%%             market research, platform documentation)
 %% Natbib-compatible. Use \citet{key} for in-text, \citep{key} for parenthetical.
 %% ======================================================================
 
-%% ==================================================
-%% Research Methodology (added for dissertation use)
-%% ==================================================
+
+%% ==================================================================
+%% TIER 1 — PEER-REVIEWED ACADEMIC SOURCES
+%% ==================================================================
+
+%% ── Research Methodology ──────────────────────────────────────────
 
 @article{hevnerEtAl2004,
   author  = {Hevner, A. R. and March, S. T. and Park, J. and Ram, S.},
@@ -15,141 +25,49 @@
   year    = {2004},
   volume  = {28},
   number  = {1},
-  pages   = {75--105},
-  note    = {Canonical reference for the design science research paradigm; added here because the lit review v2 does not include it but the dissertation cites it in Chapter 1 and Chapter 4}
+  pages   = {75--105}
 }
 
+%% ── Blockchain for DRM and Copyright Protection ───────────────────
 
-%% ==================================================
-%% Blockchain for DRM and Copyright Protection
-%% ==================================================
-
-@article{alotaibi2023,
-  author  = {Alotaibi, S. J.},
-  title   = {{Using smart contracts in the proposed blockchain framework for an identity management system based on the Internet of Things}},
-  journal = {International Journal of Distributed Systems Technology},
+@article{cirelloEtAl2023,
+  author  = {Ciriello, R. F. and Torbensen, A. C. G. and Hansen, M. R. P. and Müller-Bloch, C.},
+  title   = {{Blockchain-based digital rights management systems: Design principles for the music industry}},
+  journal = {Electronic Markets},
   year    = {2023},
-  volume  = {14},
+  volume  = {33},
   number  = {1},
-  pages   = {1--22}
+  doi     = {10.1007/s12525-023-00628-5}
 }
 
-@article{ante2020,
-  author  = {Ante, L.},
-  title   = {{Smart contracts on the blockchain -- A bibliometric analysis and review}},
-  journal = {SSRN Electronic Journal},
-  year    = {2020},
-  url     = {https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3576393}
+@article{yiEtAl2023,
+  author  = {Yi, X. and Zhou, Y. and Lin, Y. and others},
+  title   = {{Digital rights management scheme based on redactable blockchain and perceptual hash}},
+  journal = {Peer-to-Peer Networking and Applications},
+  year    = {2023},
+  volume  = {16},
+  pages   = {2630--2648},
+  doi     = {10.1007/s12083-023-01552-3}
 }
 
-@article{balcerzakEtAl2022,
-  author  = {Balcerzak, A. P. and others},
-  title   = {{Blockchain technology and smart contracts in decentralized governance systems}},
-  journal = {Administrative Sciences},
-  year    = {2022},
-  volume  = {12},
-  number  = {3},
-  pages   = {96},
-  doi     = {10.3390/admsci12030096}
-}
-
-@article{chenEtAl2020,
-  author  = {Chen, F. and others},
-  title   = {{Blockchain for Internet of Things applications: A review and open issues}},
-  journal = {Journal of Network and Computer Applications},
-  year    = {2020},
-  volume  = {173},
-  pages   = {102854},
-  doi     = {10.1016/j.jnca.2020.102854}
-}
-
-@incollection{divyashreeMishra2023,
-  author    = {Divyashree, K. S. and Mishra, A.},
-  title     = {{Blockchain technology in financial sector and its legal implications}},
-  booktitle = {Lecture Notes in Networks and Systems},
+@inproceedings{cherdakovEtAl2023,
+  author    = {Cherdakov, M. and Kudashkin, A. and Madhwal, Y. and Yanovich, Y.},
+  title     = {{Web3 Based Digital Rights Management in the Music Industry}},
+  booktitle = {Proceedings of the 2023 6th International Conference on Blockchain Technology and Applications (ICBTA)},
   year      = {2023},
-  volume    = {478},
-  pages     = {219--231}
+  publisher = {ACM},
+  doi       = {10.1145/3651655.3651667}
 }
 
-@misc{habermeierEtAl2021,
-  author       = {Habermeier, R. and others},
-  title        = {{Polkadot's messaging scheme}},
-  year         = {2021},
-  howpublished = {Web3 Foundation Research, Medium},
-  url          = {https://medium.com/web3foundation/polkadots-messaging-scheme-b1ec560908b7}
-}
-
-@techreport{kumarEtAl2023,
-  author      = {Kumar, R. K. and others},
-  title       = {{Revolutionizing digital ownership: Examining the perks of a Polkadot-based NFT marketplace}},
-  institution = {ResearchGate},
-  year        = {2023},
-  doi         = {10.13140/RG.2.2.26304.87040}
-}
-
-@article{linEtAl2022,
-  author  = {Lin, S. Y. and others},
-  title   = {{A survey of application research based on blockchain smart contract}},
-  journal = {Wireless Networks},
-  year    = {2022},
-  volume  = {28},
-  pages   = {635--690},
-  doi     = {10.1007/s11276-021-02874-2}
-}
-
-@misc{parityTechnologiesInk3_2022,
-  author       = {{Parity Technologies}},
-  title        = {{ink! 3.0: Parity's Rust-based language for WASM smart contracts gets a major update}},
-  year         = {2022},
-  howpublished = {Parity Blog},
-  url          = {https://www.parity.io/blog/ink-3-0-paritys-rust-based-language-gets-a-major-update}
-}
-
-@misc{parityTechnologiesInk_2022,
-  author       = {{Parity Technologies}},
-  title        = {{What is Parity's ink!?}},
-  year         = {2022},
-  howpublished = {Parity Blog},
-  url          = {https://www.parity.io/blog/what-is-paritys-ink}
-}
-
-@article{singhEtAl2024a,
-  author  = {Singh, R. and others},
-  title   = {{Insights into research on blockchain for smart contracts: A bibliometric analysis}},
-  journal = {Multimedia Tools and Applications},
-  year    = {2024},
-  volume  = {83},
-  pages   = {1--25},
-  doi     = {10.1007/s11042-023-15647-1}
-}
-
-@article{velmovitskyEtAl2021,
-  author  = {Velmovitsky, P. E. and others},
-  title   = {{Blockchain applications in health care and public health: Increased transparency}},
-  journal = {JMIR Medical Informatics},
-  year    = {2021},
-  volume  = {9},
-  number  = {6},
-  pages   = {e25893},
-  doi     = {10.2196/25893}
-}
-
-@techreport{wood2016,
-  author      = {Wood, G.},
-  title       = {{Polkadot: Vision for a heterogeneous multi-chain framework}},
-  institution = {Web3 Foundation},
-  year        = {2016},
-  note        = {White Paper},
-  url         = {https://polkadot.network/whitepaper}
-}
-
-@misc{wood2022,
-  author       = {Wood, G.},
-  title        = {{XCM: The cross-consensus message format}},
-  year         = {2022},
-  howpublished = {Polkadot Blog},
-  url          = {https://www.polkadot.network/blog/xcm-the-cross-consensus-message-format}
+@inproceedings{mendozaTelloEtAl2024,
+  author    = {Mendoza-Tello, J. C. and Sánchez-Lucas, J. J. and Orosco-Pantoja, J. G.},
+  title     = {{A Model to Support the Music Streaming Service Using Blockchain-Based Smart Contracts}},
+  booktitle = {Applied Technologies (ICAT 2023)},
+  series    = {Communications in Computer and Information Science},
+  volume    = {2051},
+  year      = {2024},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-031-58950-8_10}
 }
 
 @article{xieLiu2022,
@@ -174,37 +92,14 @@
   doi     = {10.1016/j.heliyon.2024.e34781}
 }
 
-@misc{garbaEtAl2021,
-  author       = {Garba, A. and others},
-  title        = {{A digital rights management system based on a scalable blockchain}},
-  year         = {2021},
-  howpublished = {Copenhagen Business School Research},
-  url          = {https://research-api.cbs.dk/ws/portalfiles/portal/93314574/abba_garba_et_al_a_digital_rights_management_system_based_on_a_scalable_blockchain_publishersversion.pdf}
-}
-
-@book{finck2018,
-  author    = {Finck, M.},
-  title     = {{Blockchain regulation and governance in Europe}},
-  publisher = {Cambridge University Press},
-  year      = {2018},
-  note      = {Excerpt available via SSRN},
-  url       = {https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3351542_code3242224.pdf}
-}
-
-@article{patilEtAl2022,
-  author  = {Patil, S. S. and others},
-  title   = {{Blockchain Based Multimedia Content Protection Using Encryption in DRM (Digital Rights Management)}},
-  journal = {International Journal of Innovative Research in Technology (IJIRT)},
-  year    = {2022},
-  url     = {https://ijirt.org/publishedpaper/IJIRT156400_PAPER.pdf}
-}
-
-@incollection{singhEtAl2024b,
-  author    = {Singh, R. and others},
-  title     = {{Blockchain-Based Digital Rights Management and Its Impact on English Language Resources in Libraries}},
-  publisher = {IGI Global},
-  year      = {2024},
-  url       = {https://www.igi-global.com/viewtitle.aspx?TitleId=360345&isxn=9798369396162}
+@article{oreroEtAl2023,
+  author  = {Orero, P. and others},
+  title   = {{The Visible Subtitler: Blockchain Technology for Right Management and Minting}},
+  journal = {Open Research Europe},
+  year    = {2023},
+  volume  = {3},
+  pages   = {26},
+  url     = {https://open-research-europe.ec.europa.eu/articles/3-26/pdf}
 }
 
 @article{madapatiPradhan2025,
@@ -238,33 +133,63 @@
   url     = {https://www.mdpi.com/2078-2489/17/2/137}
 }
 
-
-%% ==================================================
-%% Cross-Chain Interoperability and Polkadot
-%% ==================================================
-
-@inproceedings{abbasEtAl2022,
-  author    = {Abbas, H. and others},
-  title     = {{Analysis of Polkadot: Architecture, Internals, and Contradictions}},
-  booktitle = {IEEE Blockchain 2022},
-  year      = {2022},
-  url       = {https://www.cri-lab.net/wp-content/uploads/2022/07/IEEE_Blockchain_2022__Polkadot_Architecture___Limitations.pdf}
+@inproceedings{gomaa2019,
+  author    = {Gomaa, A.},
+  title     = {{A DRM Solution for Online Content Using Blockchain -- A Music Perspective}},
+  booktitle = {INFOCOMP 2019},
+  year      = {2019},
+  url       = {https://personales.upv.es/thinkmind/dl/conferences/infocomp/infocomp_2019/infocomp_2019_1_30_60048.pdf}
 }
 
-@techreport{tokeninsight2021,
-  author      = {{TokenInsight Research}},
-  title       = {{2021 Polkadot Ecosystem Research Report}},
-  institution = {TokenInsight},
-  year        = {2021},
-  url         = {https://downloads.coindesk.com/research/2021-Polkadot-Ecosystem-Research-Report.pdf}
+@phdthesis{mareckova2024,
+  author = {Mareckova, D.},
+  title  = {{Blockchain and Collective Rights Management of Copyright and Related Rights at the Global Level: The Case of the Music Industry}},
+  year   = {2024},
+  school = {OAPEN},
+  url    = {https://library.oapen.org/bitstream/handle/20.500.12657/94575/oa_pdf-057-1731486746.pdf}
 }
 
-@misc{morenoEtAl2023,
-  author       = {Moreno, M. F. and others},
-  title        = {{A Knowledge-Oriented Approach to Enhance Integration and Communicability in the Polkadot Ecosystem}},
-  year         = {2023},
-  howpublished = {arXiv:2308.00735},
-  url          = {https://arxiv.org/pdf/2308.00735}
+%% ── Cross-Chain Interoperability — General ────────────────────────
+
+@article{renEtAl2023,
+  author  = {Ren, K. and Ho, N.-M. and Loghin, D. and Nguyen, T.-T. and Ooi, B. C. and Ta, Q.-T. and Zhu, F.},
+  title   = {{Interoperability in Blockchain: A Survey}},
+  journal = {IEEE Transactions on Knowledge and Data Engineering},
+  year    = {2023},
+  volume  = {35},
+  number  = {12},
+  pages   = {12750--12769},
+  doi     = {10.1109/TKDE.2023.3275220}
+}
+
+@article{bigiottiEtAl2025,
+  author  = {Bigiotti, A. and Mostarda, L. and Navarra, A. and Pinna, A. and Sestili, D. and Tonelli, R. and Vaccargiu, M.},
+  title   = {{Blockchain Agnostic Protocols: An Analysis of the State of the Art}},
+  journal = {ACM Computing Surveys},
+  year    = {2025},
+  volume  = {58},
+  number  = {2},
+  pages   = {1--36},
+  doi     = {10.1145/3758089}
+}
+
+@inproceedings{caoEtAl2025,
+  author    = {Cao, Y. and Cao, J. and Bai, D. and Wen, L. and Liu, Y. and Li, R.},
+  title     = {{MAP the Blockchain World: A Trustless and Scalable Blockchain Interoperability Protocol for Cross-chain Applications}},
+  booktitle = {Proceedings of the ACM Web Conference 2025 (WWW '25)},
+  year      = {2025},
+  publisher = {ACM},
+  doi       = {10.1145/3696410.3714867}
+}
+
+@article{kumarVEtAl2025,
+  author  = {Kumar, V. and Budhiraja, I. and Jabbari, A. and others},
+  title   = {{Efficient blockchain interoperability design for cross-chain transactions in future internet-of-value}},
+  journal = {Peer-to-Peer Networking and Applications},
+  year    = {2025},
+  volume  = {18},
+  pages   = {110},
+  doi     = {10.1007/s12083-025-01941-w}
 }
 
 @article{zhouEtAl2021,
@@ -277,36 +202,6 @@
   url     = {https://www.aasmr.org/jsms/Vol11/vol.11.4.7.pdf}
 }
 
-@article{valastinEtAl2024,
-  author = {Valaštín, V. and others},
-  title  = {{Protocol for Unifying Cross-Chain Liquidity on Polkadot}},
-  year   = {2024},
-  url    = {https://pdfs.semanticscholar.org/5152/064e23fb989674640caaa438495dbb83a88c.pdf}
-}
-
-@article{maoEtAl2022,
-  author = {Mao, H. and others},
-  title  = {{A Survey on Cross-Chain Technology: Challenges, Development, and Prospect}},
-  year   = {2022},
-  url    = {https://www.researchgate.net/publication/366226788}
-}
-
-@inproceedings{sevim2024,
-  author    = {Sevim, H. O.},
-  title     = {{A Survey on Trustless Cross-chain Interoperability Solutions in On-chain Finance}},
-  booktitle = {Distributed Ledger Technology Workshop (DLT 2024)},
-  year      = {2024},
-  url       = {https://dlt2024.di.unito.it/wp-content/uploads/2024/05/DLT2024_paper_14.pdf}
-}
-
-@techreport{krakenIntelligence2021,
-  author      = {{Kraken Intelligence}},
-  title       = {{Polkadot \& Kusama Parachains Primer}},
-  institution = {Kraken},
-  year        = {2021},
-  url         = {https://cognizium.io/uploads/resources/Kraken%2520Intelligence%2520-%2520Polkadot%2520and%2520Kusama%2520Parachains%2520Primer%2520-%25202021%2520Sep.pdf}
-}
-
 @article{abdulEtAl2024,
   author  = {Abdul, S. S. M. and others},
   title   = {{CrossDeFi: A Novel Cross-Chain Communication Protocol}},
@@ -315,73 +210,6 @@
   volume  = {16},
   pages   = {314},
   url     = {https://research.usq.edu.au/download/2db986086d8a09d3c5b40bff343fcd0d8731bc38a84f5101bfd5269dfde1f089/1117226/futureinternet-16-00314.pdf}
-}
-
-@phdthesis{mareckova2024,
-  author = {Mareckova, D.},
-  title  = {{Blockchain and Collective Rights Management of Copyright and Related Rights at the Global Level: The Case of the Music Industry}},
-  year   = {2024},
-  school = {OAPEN},
-  url    = {https://library.oapen.org/bitstream/handle/20.500.12657/94575/oa_pdf-057-1731486746.pdf}
-}
-
-@misc{yinEtAl2022,
-  author       = {Yin, Z. and others},
-  title        = {{Bool Network: An Open, Distributed, Secure Cross-chain Notary Platform}},
-  year         = {2022},
-  howpublished = {IACR ePrint 2022/1290},
-  url          = {https://eprint.iacr.org/2022/1290.pdf}
-}
-
-@article{oreroEtAl2023,
-  author  = {Orero, P. and others},
-  title   = {{The Visible Subtitler: Blockchain Technology for Right Management and Minting}},
-  journal = {Open Research Europe},
-  year    = {2023},
-  volume  = {3},
-  pages   = {26},
-  url     = {https://open-research-europe.ec.europa.eu/articles/3-26/pdf}
-}
-
-@techreport{munsonEtAl2022,
-  author      = {Munson, M. and others},
-  title       = {{Blockchain Content Fabric for Multi-Chain Content Ownership and Distribution}},
-  institution = {Eluvio},
-  year        = {2022},
-  url         = {https://eluv.io/3e39198441b1d578bc0f.pdf}
-}
-
-@article{chenKEtAl2023,
-  author  = {Chen, K. and others},
-  title   = {{A Trusted Reputation Management Scheme for Cross-Chain Transactions}},
-  journal = {Sensors},
-  year    = {2023},
-  volume  = {23},
-  pages   = {6033},
-  url     = {https://orbit.dtu.dk/files/330353284/sensors_23_06033.pdf}
-}
-
-@article{tao2025,
-  author = {Tao, R.},
-  title  = {{The Study of Blockchain Technology for Copyright Protection and Resource Sharing Models in Library Digital Resources}},
-  year   = {2025},
-  url    = {http://www.issplc.com/api/detail/journalDetail/id/3968}
-}
-
-@misc{buzu2021,
-  author       = {Buzu, I.},
-  title        = {{Blockchain, smart contracts and copyright management disruption}},
-  year         = {2021},
-  howpublished = {SSRN},
-  url          = {https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3759260_code3591422.pdf}
-}
-
-@misc{dengEtAl2025,
-  author       = {Deng, Z. and Tang, C. and Li, T. and Abla, P. and Chen, Q. and Liang, W. and He, D.},
-  title        = {{Enhancing Blockchain Cross-Chain Interoperability: A Comprehensive Survey}},
-  year         = {2025},
-  howpublished = {arXiv:2505.04934},
-  url          = {https://arxiv.org/abs/2505.04934}
 }
 
 @article{liEtAl2025a,
@@ -395,6 +223,14 @@
   url     = {https://www.sciencedirect.com/science/article/pii/S2096720925000132}
 }
 
+@inproceedings{sevim2024,
+  author    = {Sevim, H. O.},
+  title     = {{A Survey on Trustless Cross-chain Interoperability Solutions in On-chain Finance}},
+  booktitle = {Distributed Ledger Technology Workshop (DLT 2024)},
+  year      = {2024},
+  url       = {https://dlt2024.di.unito.it/wp-content/uploads/2024/05/DLT2024_paper_14.pdf}
+}
+
 @inproceedings{maricEtAl2025,
   author    = {Maric, F. and Scholz, B. and Subotic, P.},
   title     = {{Formal Verification of a Fail-Safe Cross-Chain Bridge}},
@@ -405,74 +241,230 @@
   url       = {https://drops.dagstuhl.de/entities/document/10.4230/OASIcs.FMBC.2025.8}
 }
 
-@misc{snowfork2025a,
-  author       = {{Snowfork}},
-  title        = {{Snowbridge V2 Is Live!}},
-  year         = {2025},
-  howpublished = {Polkadot Forum},
-  note         = {Posted November 7, 2025},
-  url          = {https://forum.polkadot.network/t/snowbridge-v2-is-live/15844}
+%% ── Polkadot and XCM ──────────────────────────────────────────────
+
+@inproceedings{morhacEtAl2023a,
+  author    = {Morháč, D. and Valaštín, V. and Košťál, K. and Kotuliak, I.},
+  title     = {{ParaSpell XCM SDK: A New Protocol for Interoperability in Polkadot Paraverse}},
+  booktitle = {2023 Fifth International Conference on Blockchain Computing and Applications (BCCA)},
+  year      = {2023},
+  pages     = {569--576},
+  publisher = {IEEE},
+  doi       = {10.1109/BCCA58897.2023.10338906}
 }
 
-@misc{snowfork2025b,
-  author       = {{Snowfork}},
-  title        = {{Snowbridge 2025/2026 Stabilized}},
-  year         = {2025},
-  howpublished = {Polkassembly Proposal \#3313},
-  url          = {https://polkadot.polkassembly.io/post/3313}
+@inproceedings{morhacEtAl2023b,
+  author    = {Morháč, D. and Valaštín, V. and Košťál, K. and Kotuliak, I.},
+  title     = {{Enhancing XCMP Interoperability Across Polkadot Paraverse}},
+  booktitle = {2023 IEEE International Conference on Blockchain and Cryptocurrency (ICBC)},
+  year      = {2023},
+  pages     = {1--3},
+  publisher = {IEEE},
+  doi       = {10.1109/ICBC56567.2023.10174872}
 }
 
-
-%% ==================================================
-%% Decentralized Monetization Models
-%% ==================================================
-
-@article{zhengHEtAl2024,
-  author = {Zheng, H. and others},
-  title  = {{Decentagram: Highly-Available Decentralized Publish/Subscribe Systems}},
-  year   = {2024},
-  url    = {https://owenarden.github.io/home/papers/decentagram.pdf}
-}
-
-@article{osemwegie2025,
-  author  = {Osemwegie, O.},
-  title   = {{Decentralized Media Distribution: Exploring blockchain's role in copyright protection, monetization, and content ownership rights}},
-  journal = {International Journal of Mechanical Technology and Marine Engineering},
+@article{morhacEtAl2025,
+  author  = {Morháč, D. and Košťál, K. and Valaštín, V. and others},
+  title   = {{Unispell: universal adapter for interoperability in Polkadot Paraverse}},
+  journal = {Cluster Computing},
   year    = {2025},
-  url     = {https://www.mechanicaljournals.com/ijmtme/article/52/6-1-1-964.pdf}
+  volume  = {28},
+  pages   = {311},
+  doi     = {10.1007/s10586-025-05183-6}
 }
 
-@inproceedings{virovetsEtAl2025,
-  author    = {Virovets, D. and others},
-  title     = {{A Framework for Decentralized Payment Instrument Integration with Artificial Intelligence, Big Data, and Digital Identities}},
-  booktitle = {CEUR Workshop Proceedings},
-  volume    = {3991},
-  year      = {2025},
-  url       = {https://ceur-ws.org/Vol-3991/paper33.pdf}
+@inproceedings{abbasEtAl2022,
+  author    = {Abbas, H. and others},
+  title     = {{Analysis of Polkadot: Architecture, Internals, and Contradictions}},
+  booktitle = {IEEE Blockchain 2022},
+  year      = {2022},
+  url       = {https://www.cri-lab.net/wp-content/uploads/2022/07/IEEE_Blockchain_2022__Polkadot_Architecture___Limitations.pdf}
 }
 
-@misc{zeggariEtAl2022,
-  author       = {Zeggari, M. and others},
-  title        = {{An Efficient and Decentralized Blockchain-based Commercial Alternative}},
-  year         = {2022},
-  howpublished = {IACR ePrint 2022/1440},
-  url          = {https://eprint.iacr.org/2022/1440.pdf}
+@article{valastinEtAl2024,
+  author  = {Valaštín, V. and others},
+  title   = {{Protocol for Unifying Cross-Chain Liquidity on Polkadot}},
+  journal = {Frontiers in Blockchain},
+  year    = {2024},
+  doi     = {10.3389/fbloc.2024.1413840},
+  url     = {https://www.frontiersin.org/journals/blockchain/articles/10.3389/fbloc.2024.1413840/full}
 }
 
-@techreport{baliga2020,
-  author      = {Baliga, A.},
-  title       = {{Understanding Blockchain Consensus Models}},
-  institution = {Persistent Systems},
-  year        = {2020},
-  url         = {https://www.persistent.com/wp-content/uploads/2017/04/WP-Understanding-Blockchain-Consensus-Models.pdf}
+%% ── NFTs and IP Rights ────────────────────────────────────────────
+
+@article{lahiriEtAl2026,
+  author  = {Lahiri, S. and others},
+  title   = {{Multidisciplinary perspectives on Non-Fungible Tokens (NFTs): a comprehensive meta-analysis}},
+  journal = {Digital Economy and Sustainable Development},
+  year    = {2026},
+  volume  = {4},
+  pages   = {3},
+  doi     = {10.1007/s44265-026-00078-9}
 }
 
-@inproceedings{liLEtAl2024,
-  author    = {Li, L. and others},
-  title     = {{Why Blockchain-Based Digital Assets Are Owned on Decentralized Metaverse Platforms?}},
-  booktitle = {Hawaii International Conference on System Sciences (HICSS)},
+@inproceedings{cabotNadalEtAl2022,
+  author    = {Cabot-Nadal, M. A. and Payeras-Capellà, M. and Mut-Puigserver, M. and Soto-Fernández, A.},
+  title     = {{Improving the Token ERC-721 Implementation for Selective Receipt: Rejectable NFTs}},
+  booktitle = {2022 6th International Conference on System Reliability and Safety (ICSRS)},
+  year      = {2022},
+  pages     = {243--250},
+  publisher = {IEEE},
+  doi       = {10.1109/ICSRS56243.2022.10067494}
+}
+
+@article{davik2025,
+  author  = {Davik, C.},
+  title   = {{The Art Of NFTs: Copyright, Contracts, And The Fallacy Of Ownership}},
+  journal = {Georgia Law Review},
+  year    = {2025},
+  url     = {https://georgialawreview.org/wp-content/uploads/2025/01/Davik_The-Art-of-NFTs.pdf}
+}
+
+@article{murray2022,
+  author  = {Murray, M.},
+  title   = {{NFT Ownership And Copyrights}},
+  journal = {Indiana Law Review},
+  year    = {2022},
+  volume  = {56},
+  pages   = {367},
+  url     = {https://mckinneylaw.iu.edu/practice/law-reviews/ilr/pdf/vol56p367.pdf}
+}
+
+@article{liQEtAl2025,
+  author  = {Li, Q. and Wen, X. and Wu, Z.},
+  title   = {{Evaluating blockchain adoption barriers in China's IP trade and protection internationally}},
+  journal = {Frontiers in Blockchain},
+  year    = {2025},
+  volume  = {8},
+  url     = {https://www.frontiersin.org/journals/blockchain/articles/10.3389/fbloc.2025.1608181/full}
+}
+
+@incollection{singhEtAl2024b,
+  author    = {Singh, R. and others},
+  title     = {{Blockchain-Based Digital Rights Management and Its Impact on English Language Resources in Libraries}},
+  publisher = {IGI Global},
   year      = {2024},
-  url       = {https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/da7d3ba9-379e-48a8-98e8-18b2bc293b1f/content}
+  url       = {https://www.igi-global.com/viewtitle.aspx?TitleId=360345&isxn=9798369396162}
+}
+
+@book{finck2018,
+  author    = {Finck, M.},
+  title     = {{Blockchain regulation and governance in Europe}},
+  publisher = {Cambridge University Press},
+  year      = {2018},
+  note      = {Excerpt available via SSRN},
+  url       = {https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3351542_code3242224.pdf}
+}
+
+%% ── Smart Contracts and Blockchain Applications ───────────────────
+
+@article{alotaibi2023,
+  author  = {Alotaibi, S. J.},
+  title   = {{Using smart contracts in the proposed blockchain framework for an identity management system based on the Internet of Things}},
+  journal = {International Journal of Distributed Systems Technology},
+  year    = {2023},
+  volume  = {14},
+  number  = {1},
+  pages   = {1--22}
+}
+
+@article{balcerzakEtAl2022,
+  author  = {Balcerzak, A. P. and others},
+  title   = {{Blockchain technology and smart contracts in decentralized governance systems}},
+  journal = {Administrative Sciences},
+  year    = {2022},
+  volume  = {12},
+  number  = {3},
+  pages   = {96},
+  doi     = {10.3390/admsci12030096}
+}
+
+@article{linEtAl2022,
+  author  = {Lin, S. Y. and others},
+  title   = {{A survey of application research based on blockchain smart contract}},
+  journal = {Wireless Networks},
+  year    = {2022},
+  volume  = {28},
+  pages   = {635--690},
+  doi     = {10.1007/s11276-021-02874-2}
+}
+
+@article{singhEtAl2024a,
+  author  = {Singh, R. and others},
+  title   = {{Insights into research on blockchain for smart contracts: A bibliometric analysis}},
+  journal = {Multimedia Tools and Applications},
+  year    = {2024},
+  volume  = {83},
+  pages   = {1--25},
+  doi     = {10.1007/s11042-023-15647-1}
+}
+
+@article{chenEtAl2020,
+  author  = {Chen, F. and others},
+  title   = {{Blockchain for Internet of Things applications: A review and open issues}},
+  journal = {Journal of Network and Computer Applications},
+  year    = {2020},
+  volume  = {173},
+  pages   = {102854},
+  doi     = {10.1016/j.jnca.2020.102854}
+}
+
+@article{velmovitskyEtAl2021,
+  author  = {Velmovitsky, P. E. and others},
+  title   = {{Blockchain applications in health care and public health: Increased transparency}},
+  journal = {JMIR Medical Informatics},
+  year    = {2021},
+  volume  = {9},
+  number  = {6},
+  pages   = {e25893},
+  doi     = {10.2196/25893}
+}
+
+@article{chenKEtAl2023,
+  author  = {Chen, K. and others},
+  title   = {{A Trusted Reputation Management Scheme for Cross-Chain Transactions}},
+  journal = {Sensors},
+  year    = {2023},
+  volume  = {23},
+  pages   = {6033},
+  url     = {https://orbit.dtu.dk/files/330353284/sensors_23_06033.pdf}
+}
+
+@article{cutts2019,
+  author  = {Cutts, T.},
+  title   = {{Smart Contracts and Consumers}},
+  journal = {West Virginia Law Review},
+  year    = {2019},
+  url     = {https://researchrepository.wvu.edu/cgi/viewcontent.cgi?article=5358&context=wvlr}
+}
+
+@inproceedings{shumyliakEtAl2023,
+  author    = {Shumyliak, L. and others},
+  title     = {{Practical Implementation of Smart Contracts for Payment of Digital Goods}},
+  booktitle = {CEUR Workshop Proceedings},
+  volume    = {3373},
+  year      = {2023},
+  url       = {https://ceur-ws.org/Vol-3373/short1.pdf}
+}
+
+@mastersthesis{mauro2022,
+  author = {Mauro, N.},
+  title  = {{Smart contracts for decentralized business models in the electricity market: a consumer protection perspective}},
+  school = {European Master in Law and Economics (EMLE)},
+  year   = {2022},
+  url    = {https://emle.org/wp-content/uploads/2023/01/EMLE_thesis_Mauro_Noemi.pdf}
+}
+
+%% ── Decentralized Monetization and Micropayments ──────────────────
+
+@inproceedings{chegenizadehEtAl2024,
+  author    = {Chegenizadeh, M. and Rafati Niya, S. and Tessone, C. J.},
+  title     = {{Multi-agent Privacy-Preserving Micro-payment Verification for Offline Resource-Constrained Devices Using Smart Contracts}},
+  booktitle = {Mathematical Research for Blockchain Economy (MARBLE 2024)},
+  series    = {Lecture Notes in Operations Research},
+  year      = {2024},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-031-68974-1_7}
 }
 
 @article{atzori2017,
@@ -487,21 +479,225 @@
   url     = {https://virtusinterpress.org/IMG/pdf/10.22495_jgr_v6_i1_p5.pdf}
 }
 
-@techreport{busch2022,
-  author      = {Busch, K.},
-  title       = {{Web3: A Proposed Blockchain-Based, Decentralized Web}},
-  institution = {Congressional Research Service},
-  year        = {2022},
-  number      = {IF12075},
-  url         = {https://www.congress.gov/crs_external_products/IF/PDF/IF12075/IF12075.2.pdf}
+@inproceedings{liLEtAl2024,
+  author    = {Li, L. and others},
+  title     = {{Why Blockchain-Based Digital Assets Are Owned on Decentralized Metaverse Platforms?}},
+  booktitle = {Hawaii International Conference on System Sciences (HICSS)},
+  year      = {2024},
+  url       = {https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/da7d3ba9-379e-48a8-98e8-18b2bc293b1f/content}
 }
 
-@techreport{gogelEtAl2021,
-  author      = {Gogel, D. and others},
-  title       = {{DeFi Beyond the Hype: The Emerging World of Decentralized Finance}},
-  institution = {Wharton Blockchain and Digital Asset Project},
-  year        = {2021},
-  url         = {https://wifpr.wharton.upenn.edu/wp-content/uploads/2021/05/DeFi-Beyond-the-Hype.pdf}
+@inproceedings{goyalEtAl2019,
+  author    = {Goyal, P. and others},
+  title     = {{Secure Incentivization for Decentralized Content Delivery}},
+  booktitle = {USENIX Workshop on Hot Topics in Edge Computing (HotEdge 2019)},
+  year      = {2019},
+  url       = {https://www.usenix.org/system/files/hotedge19-paper-goyal_0.pdf}
+}
+
+@inproceedings{virovetsEtAl2025,
+  author    = {Virovets, D. and others},
+  title     = {{A Framework for Decentralized Payment Instrument Integration with Artificial Intelligence, Big Data, and Digital Identities}},
+  booktitle = {CEUR Workshop Proceedings},
+  volume    = {3991},
+  year      = {2025},
+  url       = {https://ceur-ws.org/Vol-3991/paper33.pdf}
+}
+
+@mastersthesis{wamugo2024,
+  author = {Wamugo, M.},
+  title  = {{Content monetization: non-fungible tokens as a new revenue stream for the media sector in Kenya}},
+  school = {Aga Khan University},
+  year   = {2024},
+  url    = {https://ecommons.aku.edu/cgi/viewcontent.cgi?article=3232&context=theses_dissertations}
+}
+
+%% ── Blockchain Scalability and Performance ────────────────────────
+
+@article{raoEtAl2024,
+  author  = {Rao, I. S. and Kiah, M. L. M. and Hameed, M. M. and Memon, Z. A.},
+  title   = {{Scalability of blockchain: a comprehensive review and future research direction}},
+  journal = {Cluster Computing},
+  year    = {2024},
+  volume  = {27},
+  pages   = {5547--5570},
+  doi     = {10.1007/s10586-023-04257-7}
+}
+
+%% ── Digital Asset Tokenization and Rights Transfer ────────────────
+
+@article{hannekeEtAl2024,
+  author  = {Hanneke, B. and Hinz, O. and Pfeiffer, J. and {van der Aalst}, W. M. P.},
+  title   = {{The Internet of Value: Unleashing the Blockchain's Potential with Tokenization}},
+  journal = {Business \& Information Systems Engineering},
+  year    = {2024},
+  volume  = {66},
+  number  = {4},
+  pages   = {411--419},
+  doi     = {10.1007/s12599-024-00883-6}
+}
+
+@inproceedings{dondjioKazamias2024,
+  author    = {Dondjio, I. and Kazamias, A.},
+  title     = {{A Blockchain Framework for Digital Asset Ownership and Transfer in Succession}},
+  booktitle = {20th European, Mediterranean, and Middle Eastern Conference on Information Systems (EMCIS 2023)},
+  series    = {Lecture Notes in Business Information Processing},
+  volume    = {501},
+  year      = {2024},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-031-56478-9_7}
+}
+
+%% ── Regulatory Landscape ──────────────────────────────────────────
+
+@article{guadamuz2025,
+  author  = {Guadamuz, A.},
+  title   = {{The EU's Artificial Intelligence Act and copyright}},
+  journal = {The Journal of World Intellectual Property},
+  year    = {2025},
+  volume  = {28},
+  pages   = {213--219},
+  doi     = {10.1111/jwip.12330},
+  url     = {https://onlinelibrary.wiley.com/doi/10.1111/jwip.12330}
+}
+
+%% ── Book Chapters and Academic Theses ────────────────────────────
+
+@incollection{divyashreeMishra2023,
+  author    = {Divyashree, K. S. and Mishra, A.},
+  title     = {{Blockchain technology in financial sector and its legal implications}},
+  booktitle = {Lecture Notes in Networks and Systems},
+  year      = {2023},
+  volume    = {478},
+  pages     = {219--231}
+}
+
+
+%% ==================================================================
+%% TIER 2 — ACADEMIC-ADJACENT
+%% (arXiv / IACR / SSRN preprints; low-quality or unverifiable journals)
+%% ==================================================================
+
+%% ── arXiv and IACR Preprints ──────────────────────────────────────
+
+@misc{morenoEtAl2023,
+  author       = {Moreno, M. F. and others},
+  title        = {{A Knowledge-Oriented Approach to Enhance Integration and Communicability in the Polkadot Ecosystem}},
+  year         = {2023},
+  howpublished = {arXiv:2308.00735},
+  url          = {https://arxiv.org/pdf/2308.00735}
+}
+
+@misc{yinEtAl2022,
+  author       = {Yin, Z. and others},
+  title        = {{Bool Network: An Open, Distributed, Secure Cross-chain Notary Platform}},
+  year         = {2022},
+  howpublished = {IACR ePrint 2022/1290},
+  url          = {https://eprint.iacr.org/2022/1290.pdf}
+}
+
+@misc{zeggariEtAl2022,
+  author       = {Zeggari, M. and others},
+  title        = {{An Efficient and Decentralized Blockchain-based Commercial Alternative}},
+  year         = {2022},
+  howpublished = {IACR ePrint 2022/1440},
+  url          = {https://eprint.iacr.org/2022/1440.pdf}
+}
+
+@misc{banerjeeEtAl2020,
+  author       = {Banerjee, P. and others},
+  title        = {{Reliable, Fair and Decentralized Marketplace for Content Sharing Using Blockchain}},
+  year         = {2020},
+  howpublished = {arXiv:2009.11033},
+  url          = {https://arxiv.org/pdf/2009.11033}
+}
+
+@misc{dengEtAl2025,
+  author       = {Deng, Z. and Tang, C. and Li, T. and Abla, P. and Chen, Q. and Liang, W. and He, D.},
+  title        = {{Enhancing Blockchain Cross-Chain Interoperability: A Comprehensive Survey}},
+  year         = {2025},
+  howpublished = {arXiv:2505.04934},
+  url          = {https://arxiv.org/abs/2505.04934}
+}
+
+@misc{darshanEtAl2025,
+  author       = {Darshan, P. and Rohan, J. S. and Rajesh, R. and Ruchitha, M. and Kamath, S. and Manas, M. N.},
+  title        = {{Intellectual Property Rights and Entrepreneurship in the NFT Ecosystem: Legal Frameworks, Business Models, and Innovation Opportunities}},
+  year         = {2025},
+  howpublished = {arXiv:2507.00172},
+  url          = {https://arxiv.org/html/2507.00172v1}
+}
+
+@misc{zhengZEtAl2019,
+  author       = {Zheng, Z. and others},
+  title        = {{An Overview on Smart Contracts: Challenges, Advances and Platforms}},
+  year         = {2019},
+  howpublished = {arXiv:1912.10370},
+  url          = {https://arxiv.org/pdf/1912.10370}
+}
+
+@misc{buzu2021,
+  author       = {Buzu, I.},
+  title        = {{Blockchain, smart contracts and copyright management disruption}},
+  year         = {2021},
+  howpublished = {SSRN},
+  url          = {https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3759260_code3591422.pdf}
+}
+
+@misc{ante2020,
+  author       = {Ante, L.},
+  title        = {{Smart contracts on the blockchain -- A bibliometric analysis and review}},
+  year         = {2020},
+  howpublished = {SSRN Electronic Journal},
+  url          = {https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3576393}
+}
+
+@misc{garbaEtAl2021,
+  author       = {Garba, A. and others},
+  title        = {{A digital rights management system based on a scalable blockchain}},
+  year         = {2021},
+  howpublished = {Copenhagen Business School Research},
+  url          = {https://research-api.cbs.dk/ws/portalfiles/portal/93314574/abba_garba_et_al_a_digital_rights_management_system_based_on_a_scalable_blockchain_publishersversion.pdf}
+}
+
+%% ── Low-quality or unverifiable journal entries ───────────────────
+
+@article{maoEtAl2022,
+  author = {Mao, H. and others},
+  title  = {{A Survey on Cross-Chain Technology: Challenges, Development, and Prospect}},
+  year   = {2022},
+  url    = {https://www.researchgate.net/publication/366226788}
+}
+
+@article{zhengHEtAl2024,
+  author = {Zheng, H. and others},
+  title  = {{Decentagram: Highly-Available Decentralized Publish/Subscribe Systems}},
+  year   = {2024},
+  url    = {https://owenarden.github.io/home/papers/decentagram.pdf}
+}
+
+@techreport{kumarEtAl2023,
+  author      = {Kumar, R. K. and others},
+  title       = {{Revolutionizing digital ownership: Examining the perks of a Polkadot-based NFT marketplace}},
+  institution = {ResearchGate},
+  year        = {2023},
+  doi         = {10.13140/RG.2.2.26304.87040}
+}
+
+@article{patilEtAl2022,
+  author  = {Patil, S. S. and others},
+  title   = {{Blockchain Based Multimedia Content Protection Using Encryption in DRM (Digital Rights Management)}},
+  journal = {International Journal of Innovative Research in Technology (IJIRT)},
+  year    = {2022},
+  url     = {https://ijirt.org/publishedpaper/IJIRT156400_PAPER.pdf}
+}
+
+@article{osemwegie2025,
+  author  = {Osemwegie, O.},
+  title   = {{Decentralized Media Distribution: Exploring blockchain's role in copyright protection, monetization, and content ownership rights}},
+  journal = {International Journal of Mechanical Technology and Marine Engineering},
+  year    = {2025},
+  url     = {https://www.mechanicaljournals.com/ijmtme/article/52/6-1-1-964.pdf}
 }
 
 @article{khan2024,
@@ -514,116 +710,12 @@
   url     = {http://ijmrap.com/wp-content/uploads/2024/01/IJMRAP-V6N7P97Y23.pdf}
 }
 
-@inproceedings{gomaa2019,
-  author    = {Gomaa, A.},
-  title     = {{A DRM Solution for Online Content Using Blockchain -- A Music Perspective}},
-  booktitle = {INFOCOMP 2019},
-  year      = {2019},
-  url       = {https://personales.upv.es/thinkmind/dl/conferences/infocomp/infocomp_2019/infocomp_2019_1_30_60048.pdf}
-}
-
-@techreport{castweet2019,
-  author      = {{Castweet Team}},
-  title       = {{Castweet -- A Multi-broadcast Platform Based on Blockchain Incentives for Everyone}},
-  institution = {Castweet},
-  year        = {2019},
-  note        = {Whitepaper},
-  url         = {https://resources.cryptocompare.com/asset-management/17402/1728919640132.pdf}
-}
-
-@misc{banerjeeEtAl2020,
-  author       = {Banerjee, P. and others},
-  title        = {{Reliable, Fair and Decentralized Marketplace for Content Sharing Using Blockchain}},
-  year         = {2020},
-  howpublished = {arXiv:2009.11033},
-  url          = {https://arxiv.org/pdf/2009.11033}
-}
-
-@misc{munson2019,
-  author       = {Munson, M.},
-  title        = {{A Blockchain Controlled Content Fabric}},
-  year         = {2019},
-  howpublished = {Video Services Forum},
-  url          = {https://static.vsf.tv/Meetings/2019/2019_DC/Munson_BlockchainFabric.pdf}
-}
-
-@techreport{steem2025,
-  author      = {{Steem Team}},
-  title       = {{Steem, an incentivized, blockchain-based, public content platform}},
-  institution = {Steem},
-  year        = {2025},
-  note        = {Whitepaper},
-  url         = {https://steem.com/SteemWhitePaper.pdf}
-}
-
-@article{shah2025,
-  author  = {Shah, A.},
-  title   = {{Automating Royalties: A Framework of Smart Contracts for Cross-Platform Content Revenue}},
-  journal = {International Journal for Multidisciplinary Research (IJFMR)},
-  year    = {2025},
-  url     = {https://www.ijfmr.com/papers/2025/4/51619.pdf}
-}
-
-@mastersthesis{wamugo2024,
-  author = {Wamugo, M.},
-  title  = {{Content monetization: non-fungible tokens as a new revenue stream for the media sector in Kenya}},
-  school = {Aga Khan University},
-  year   = {2024},
-  url    = {https://ecommons.aku.edu/cgi/viewcontent.cgi?article=3232&context=theses_dissertations}
-}
-
-@techreport{moncadaEtAl2021,
-  author      = {Moncada, R. and others},
-  title       = {{DLT-enabled Platforms: Distribution and Management of Media Content}},
-  institution = {Mediaverse Project},
-  year        = {2021},
-  url         = {https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}
-}
-
-@techreport{iresearch3602025,
-  author      = {{360iResearch}},
-  title       = {{Blockchain for Content Monetization Market Size 2025-2030}},
-  institution = {360iResearch},
-  year        = {2025},
-  note        = {Market Research Report},
-  url         = {https://www.360iresearch.com/library/intelligence/blockchain-for-content-monetization}
-}
-
-@misc{communipass2026,
-  author       = {{CommuniPass}},
-  title        = {{Creator Monetization in 2026: The 5 Models That Actually Generate Recurring Revenue}},
-  year         = {2026},
-  howpublished = {CommuniPass Blog},
-  url          = {https://communipass.com/blog/creator-monetization-in-2026-the-5-models-that-actually-generate-recurring-revenues/}
-}
-
-@misc{coinbaseX402_2025,
-  author       = {{Coinbase} and {x402 Foundation}},
-  title        = {{x402 Protocol: HTTP-native blockchain micropayments}},
-  year         = {2025},
-  howpublished = {CoinPaprika},
-  url          = {https://coinpaprika.com/education/x402-ecosystem-instant-blockchain-payments-for-apis-and-ai-agents/}
-}
-
-
-%% ==================================================
-%% NFTs and IP Rights
-%% ==================================================
-
-@techreport{uspto2024,
-  author      = {{USPTO}},
-  title       = {{Non-Fungible Tokens and Intellectual Property: A report to Congress}},
-  institution = {U.S. Patent and Trademark Office},
-  year        = {2024},
-  url         = {https://www.copyright.gov/policy/nft-study/Joint-USPTO-USCO-Report-on-NFTs-and-Intellectual-Property.pdf}
-}
-
-@article{davik2025,
-  author  = {Davik, C.},
-  title   = {{The Art Of NFTs: Copyright, Contracts, And The Fallacy Of Ownership}},
-  journal = {Georgia Law Review},
-  year    = {2025},
-  url     = {https://georgialawreview.org/wp-content/uploads/2025/01/Davik_The-Art-of-NFTs.pdf}
+@article{kulkaraniEtAl2024,
+  author  = {Kulkarani, S. and others},
+  title   = {{Blockchain Enabled Smart Contracts for Digital Assets}},
+  journal = {International Journal of Advanced Research in Science, Communication and Technology (IJARSCT)},
+  year    = {2024},
+  url     = {https://ijarsct.co.in/Paper15404.pdf}
 }
 
 @article{salmanEtAl2023,
@@ -632,96 +724,6 @@
   journal = {Technix International Journal for Engineering Research (TIJER)},
   year    = {2023},
   url     = {https://tijer.org/tijer/papers/TIJER2307069.pdf}
-}
-
-@techreport{eurojust2024,
-  author      = {{Eurojust}},
-  title       = {{Non-Fungible Tokens and Intellectual Property Rights -- Can the use of NFTs lead to IP infringements?}},
-  institution = {European Union Agency for Criminal Justice Cooperation},
-  year        = {2024},
-  url         = {https://www.eurojust.europa.eu/sites/default/files/assets/eurojust-nfts-intellectual-property-rights-flyer.pdf}
-}
-
-@misc{darshanEtAl2025,
-  author       = {Darshan, P. and Rohan, J. S. and Rajesh, R. and Ruchitha, M. and Kamath, S. and Manas, M. N.},
-  title        = {{Intellectual Property Rights and Entrepreneurship in the NFT Ecosystem: Legal Frameworks, Business Models, and Innovation Opportunities}},
-  year         = {2025},
-  howpublished = {arXiv:2507.00172},
-  url          = {https://arxiv.org/html/2507.00172v1}
-}
-
-@article{murray2022,
-  author  = {Murray, M.},
-  title   = {{NFT Ownership And Copyrights}},
-  journal = {Indiana Law Review},
-  year    = {2022},
-  volume  = {56},
-  pages   = {367},
-  url     = {https://mckinneylaw.iu.edu/practice/law-reviews/ilr/pdf/vol56p367.pdf}
-}
-
-@misc{dreyerEtAl2021,
-  author       = {Dreyer, A. and others},
-  title        = {{Can I mint an NFT with that?: Avoiding right of publicity and trademark litigation risks in the brave new world of NFTs}},
-  year         = {2021},
-  howpublished = {Skadden Publications},
-  url          = {https://www.skadden.com/-/media/files/publications/2021/05/canimintannftwiththatavoidingrightofpublicityandtr.pdf}
-}
-
-@misc{gattoEtAl2021,
-  author       = {Gatto, J. and others},
-  title        = {{NFT License Breakdown: Exploring Different Marketplaces and Associated License Issues}},
-  year         = {2021},
-  howpublished = {Law of the Ledger},
-  url          = {https://www.lawoftheledger.com/wp-content/uploads/sites/15/2021/09/NFT-License-Breakdown-Article-0921.pdf}
-}
-
-@techreport{reggianini2025,
-  author      = {Reggianini, E.},
-  title       = {{Standardizing On-chain IP Rights Management}},
-  institution = {BlockStand},
-  year        = {2025},
-  url         = {https://blockstand.eu/blockstand/uploads/2025/05/Standardizing-On-chain-IP-Rights-Management_Reggianini.pdf}
-}
-
-@misc{storyFoundation2025,
-  author       = {{Story Foundation}},
-  title        = {{Story Mainnet Launch}},
-  year         = {2025},
-  howpublished = {CoinDesk},
-  note         = {Posted February 13, 2025},
-  url          = {https://www.coindesk.com/tech/2025/02/13/story-protocol-launches-to-let-people-to-register-ip-and-get-paid-for-it/}
-}
-
-@article{liQEtAl2025,
-  author  = {Li, Q. and Wen, X. and Wu, Z.},
-  title   = {{Evaluating blockchain adoption barriers in China's IP trade and protection internationally}},
-  journal = {Frontiers in Blockchain},
-  year    = {2025},
-  volume  = {8},
-  url     = {https://www.frontiersin.org/journals/blockchain/articles/10.3389/fbloc.2025.1608181/full}
-}
-
-
-%% ==================================================
-%% Smart Contracts and Digital Content
-%% ==================================================
-
-@inproceedings{shumyliakEtAl2023,
-  author    = {Shumyliak, L. and others},
-  title     = {{Practical Implementation of Smart Contracts for Payment of Digital Goods}},
-  booktitle = {CEUR Workshop Proceedings},
-  volume    = {3373},
-  year      = {2023},
-  url       = {https://ceur-ws.org/Vol-3373/short1.pdf}
-}
-
-@techreport{smartContractsAlliance2016,
-  author      = {{Smart Contracts Alliance}},
-  title       = {{Smart Contracts: 12 Use Cases for Business \& Beyond}},
-  institution = {Chamber of Digital Commerce},
-  year        = {2016},
-  url         = {https://d3h0qzni6h08fz.cloudfront.net/Smart-Contracts-12-Use-Cases-for-Business-and-Beyond_Chamber-of-Digital-Commerce.pdf}
 }
 
 @article{quanEtAl2024,
@@ -746,44 +748,103 @@
   url    = {https://file.sciopen.com/sciopen_public/1492758728785117186.pdf}
 }
 
-@techreport{smartContractsAlliance2018,
-  author      = {{Smart Contracts Alliance}},
-  title       = {{Smart Contracts: Is the Law Ready?}},
-  institution = {Chamber of Digital Commerce},
-  year        = {2018},
-  url         = {https://lowellmilkeninstitute.law.ucla.edu/wp-content/uploads/2018/08/Smart-Contracts-Whitepaper.pdf}
+@article{tao2025,
+  author = {Tao, R.},
+  title  = {{The Study of Blockchain Technology for Copyright Protection and Resource Sharing Models in Library Digital Resources}},
+  year   = {2025},
+  url    = {http://www.issplc.com/api/detail/journalDetail/id/3968}
 }
 
-@article{cutts2019,
-  author  = {Cutts, T.},
-  title   = {{Smart Contracts and Consumers}},
-  journal = {West Virginia Law Review},
-  year    = {2019},
-  url     = {https://researchrepository.wvu.edu/cgi/viewcontent.cgi?article=5358&context=wvlr}
+@article{shah2025,
+  author  = {Shah, A.},
+  title   = {{Automating Royalties: A Framework of Smart Contracts for Cross-Platform Content Revenue}},
+  journal = {International Journal for Multidisciplinary Research (IJFMR)},
+  year    = {2025},
+  url     = {https://www.ijfmr.com/papers/2025/4/51619.pdf}
 }
 
-@article{kulkaraniEtAl2024,
-  author  = {Kulkarani, S. and others},
-  title   = {{Blockchain Enabled Smart Contracts for Digital Assets}},
-  journal = {International Journal of Advanced Research in Science, Communication and Technology (IJARSCT)},
-  year    = {2024},
-  url     = {https://ijarsct.co.in/Paper15404.pdf}
+
+%% ==================================================================
+%% TIER 3 — NON-ACADEMIC SOURCES
+%% (industry blogs, whitepapers, government documents,
+%%  market research, platform documentation, forum posts)
+%% ==================================================================
+
+%% ── Polkadot / Parity Technical Documentation ────────────────────
+
+@techreport{wood2016,
+  author      = {Wood, G.},
+  title       = {{Polkadot: Vision for a heterogeneous multi-chain framework}},
+  institution = {Web3 Foundation},
+  year        = {2016},
+  note        = {White Paper},
+  url         = {https://polkadot.network/whitepaper}
 }
 
-@mastersthesis{mauro2022,
-  author = {Mauro, N.},
-  title  = {{Smart contracts for decentralized business models in the electricity market: a consumer protection perspective}},
-  school = {European Master in Law and Economics (EMLE)},
-  year   = {2022},
-  url    = {https://emle.org/wp-content/uploads/2023/01/EMLE_thesis_Mauro_Noemi.pdf}
+@misc{wood2022,
+  author       = {Wood, G.},
+  title        = {{XCM: The cross-consensus message format}},
+  year         = {2022},
+  howpublished = {Polkadot Blog},
+  url          = {https://www.polkadot.network/blog/xcm-the-cross-consensus-message-format}
 }
 
-@misc{zhengZEtAl2019,
-  author       = {Zheng, Z. and others},
-  title        = {{An Overview on Smart Contracts: Challenges, Advances and Platforms}},
-  year         = {2019},
-  howpublished = {arXiv:1912.10370},
-  url          = {https://arxiv.org/pdf/1912.10370}
+@techreport{wood2024,
+  author      = {Wood, G.},
+  title       = {{JAM: The Join-Accumulate Machine (Gray Paper)}},
+  institution = {Web3 Foundation},
+  year        = {2024},
+  note        = {Version 0.7.1+, updated through 2025},
+  url         = {https://wiki.polkadot.com/learn/learn-jam-chain/}
+}
+
+@misc{habermeierEtAl2021,
+  author       = {Habermeier, R. and others},
+  title        = {{Polkadot's messaging scheme}},
+  year         = {2021},
+  howpublished = {Web3 Foundation Research, Medium},
+  url          = {https://medium.com/web3foundation/polkadots-messaging-scheme-b1ec560908b7}
+}
+
+@misc{parityTechnologiesInk3_2022,
+  author       = {{Parity Technologies}},
+  title        = {{ink! 3.0: Parity's Rust-based language for WASM smart contracts gets a major update}},
+  year         = {2022},
+  howpublished = {Parity Blog},
+  url          = {https://www.parity.io/blog/ink-3-0-paritys-rust-based-language-gets-a-major-update}
+}
+
+@misc{parityTechnologiesInk_2022,
+  author       = {{Parity Technologies}},
+  title        = {{What is Parity's ink!?}},
+  year         = {2022},
+  howpublished = {Parity Blog},
+  url          = {https://www.parity.io/blog/what-is-paritys-ink}
+}
+
+@misc{parityUpgrade2025,
+  author       = {{Parity Technologies}},
+  title        = {{Polkadot Upgrade 2025: What You Need to Know}},
+  year         = {2025},
+  howpublished = {Parity Blog},
+  url          = {https://www.parity.io/blog/polkadot-upgrade-2025-what-you-need-to-know}
+}
+
+@misc{polkadotNetwork2025,
+  author       = {{Polkadot Network}},
+  title        = {{Polkadot Roundup 2025}},
+  year         = {2025},
+  howpublished = {Medium},
+  url          = {https://medium.com/polkadot-network/polkadot-roundup-2025-3c3c71c7e9c4}
+}
+
+@misc{polkadotParachainSlots,
+  author       = {{Parity Technologies}},
+  title        = {{Polkadot Parachain Slots}},
+  year         = {2021},
+  howpublished = {Polkadot Blog},
+  url          = {https://polkadot.com/blog/polkadot-parachain-slots/},
+  note         = {Describes Polkadot's support for up to 100 parachain slots and additive parallel throughput}
 }
 
 @misc{inkAlliance2026,
@@ -795,13 +856,21 @@
   url          = {https://forum.polkadot.network/t/discontinuation-of-ink-rust-smart-contract-language/16849}
 }
 
-@misc{buterin2025,
-  author       = {Buterin, V.},
-  title        = {{Long term L1 execution layer proposal: replace the EVM with RISC-V}},
+@misc{snowfork2025a,
+  author       = {{Snowfork}},
+  title        = {{Snowbridge V2 Is Live!}},
   year         = {2025},
-  howpublished = {Ethereum Magicians Forum},
-  note         = {Posted April 20, 2025; coverage via CoinDesk},
-  url          = {https://www.coindesk.com/tech/2025/04/21/vitalik-buterin-proposes-replacing-ethereums-evm-with-risc-v}
+  howpublished = {Polkadot Forum},
+  note         = {Posted November 7, 2025},
+  url          = {https://forum.polkadot.network/t/snowbridge-v2-is-live/15844}
+}
+
+@misc{snowfork2025b,
+  author       = {{Snowfork}},
+  title        = {{Snowbridge 2025/2026 Stabilized}},
+  year         = {2025},
+  howpublished = {Polkassembly Proposal \#3313},
+  url          = {https://polkadot.polkassembly.io/post/3313}
 }
 
 @misc{r0gue2025,
@@ -813,18 +882,117 @@
   url          = {https://r0gue.medium.com/ink-solidity-abi-on-polkavm-c675c854efd3}
 }
 
-
-%% ==================================================
-%% Decentralized Content Distribution Networks
-%% ==================================================
-
-@inproceedings{goyalEtAl2019,
-  author    = {Goyal, P. and others},
-  title     = {{Secure Incentivization for Decentralized Content Delivery}},
-  booktitle = {USENIX Workshop on Hot Topics in Edge Computing (HotEdge 2019)},
-  year      = {2019},
-  url       = {https://www.usenix.org/system/files/hotedge19-paper-goyal_0.pdf}
+@misc{buterin2025,
+  author       = {Buterin, V.},
+  title        = {{Long term L1 execution layer proposal: replace the EVM with RISC-V}},
+  year         = {2025},
+  howpublished = {Ethereum Magicians Forum},
+  note         = {Posted April 20, 2025; coverage via CoinDesk},
+  url          = {https://www.coindesk.com/tech/2025/04/21/vitalik-buterin-proposes-replacing-ethereums-evm-with-risc-v}
 }
+
+%% ── Industry Research and Ecosystem Reports ──────────────────────
+
+@techreport{tokeninsight2021,
+  author      = {{TokenInsight Research}},
+  title       = {{2021 Polkadot Ecosystem Research Report}},
+  institution = {TokenInsight},
+  year        = {2021},
+  url         = {https://downloads.coindesk.com/research/2021-Polkadot-Ecosystem-Research-Report.pdf}
+}
+
+@techreport{krakenIntelligence2021,
+  author      = {{Kraken Intelligence}},
+  title       = {{Polkadot \& Kusama Parachains Primer}},
+  institution = {Kraken},
+  year        = {2021},
+  url         = {https://cognizium.io/uploads/resources/Kraken%2520Intelligence%2520-%2520Polkadot%2520and%2520Kusama%2520Parachains%2520Primer%2520-%25202021%2520Sep.pdf}
+}
+
+@techreport{baliga2020,
+  author      = {Baliga, A.},
+  title       = {{Understanding Blockchain Consensus Models}},
+  institution = {Persistent Systems},
+  year        = {2020},
+  url         = {https://www.persistent.com/wp-content/uploads/2017/04/WP-Understanding-Blockchain-Consensus-Models.pdf}
+}
+
+@techreport{munsonEtAl2022,
+  author      = {Munson, M. and others},
+  title       = {{Blockchain Content Fabric for Multi-Chain Content Ownership and Distribution}},
+  institution = {Eluvio},
+  year        = {2022},
+  url         = {https://eluv.io/3e39198441b1d578bc0f.pdf}
+}
+
+@misc{munson2019,
+  author       = {Munson, M.},
+  title        = {{A Blockchain Controlled Content Fabric}},
+  year         = {2019},
+  howpublished = {Video Services Forum},
+  url          = {https://static.vsf.tv/Meetings/2019/2019_DC/Munson_BlockchainFabric.pdf}
+}
+
+@techreport{moncadaEtAl2021,
+  author      = {Moncada, R. and others},
+  title       = {{DLT-enabled Platforms: Distribution and Management of Media Content}},
+  institution = {Mediaverse Project},
+  year        = {2021},
+  url         = {https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}
+}
+
+@techreport{castweet2019,
+  author      = {{Castweet Team}},
+  title       = {{Castweet -- A Multi-broadcast Platform Based on Blockchain Incentives for Everyone}},
+  institution = {Castweet},
+  year        = {2019},
+  note        = {Whitepaper},
+  url         = {https://resources.cryptocompare.com/asset-management/17402/1728919640132.pdf}
+}
+
+@techreport{steem2025,
+  author      = {{Steem Team}},
+  title       = {{Steem, an incentivized, blockchain-based, public content platform}},
+  institution = {Steem},
+  year        = {2025},
+  note        = {Whitepaper},
+  url         = {https://steem.com/SteemWhitePaper.pdf}
+}
+
+@techreport{gogelEtAl2021,
+  author      = {Gogel, D. and others},
+  title       = {{DeFi Beyond the Hype: The Emerging World of Decentralized Finance}},
+  institution = {Wharton Blockchain and Digital Asset Project},
+  year        = {2021},
+  url         = {https://wifpr.wharton.upenn.edu/wp-content/uploads/2021/05/DeFi-Beyond-the-Hype.pdf}
+}
+
+@misc{communipass2026,
+  author       = {{CommuniPass}},
+  title        = {{Creator Monetization in 2026: The 5 Models That Actually Generate Recurring Revenue}},
+  year         = {2026},
+  howpublished = {CommuniPass Blog},
+  url          = {https://communipass.com/blog/creator-monetization-in-2026-the-5-models-that-actually-generate-recurring-revenues/}
+}
+
+@misc{coinbaseX402_2025,
+  author       = {{Coinbase} and {x402 Foundation}},
+  title        = {{x402 Protocol: HTTP-native blockchain micropayments}},
+  year         = {2025},
+  howpublished = {CoinPaprika},
+  url          = {https://coinpaprika.com/education/x402-ecosystem-instant-blockchain-payments-for-apis-and-ai-agents/}
+}
+
+@misc{storyFoundation2025,
+  author       = {{Story Foundation}},
+  title        = {{Story Mainnet Launch}},
+  year         = {2025},
+  howpublished = {CoinDesk},
+  note         = {Posted February 13, 2025},
+  url          = {https://www.coindesk.com/tech/2025/02/13/story-protocol-launches-to-let-people-to-register-ip-and-get-paid-for-it/}
+}
+
+%% ── Market Research ───────────────────────────────────────────────
 
 @techreport{marketsandMarkets2025,
   author      = {{MarketsandMarkets}},
@@ -852,50 +1020,56 @@
   url         = {https://www.mordorintelligence.com/industry-reports/digital-rights-management-drm-market}
 }
 
+@techreport{iresearch3602025,
+  author      = {{360iResearch}},
+  title       = {{Blockchain for Content Monetization Market Size 2025-2030}},
+  institution = {360iResearch},
+  year        = {2025},
+  note        = {Market Research Report},
+  url         = {https://www.360iresearch.com/library/intelligence/blockchain-for-content-monetization}
+}
 
-%% ==================================================
-%% Polkadot Ecosystem Evolution
-%% ==================================================
+%% ── Government and Regulatory Documents ──────────────────────────
 
-@techreport{wood2024,
-  author      = {Wood, G.},
-  title       = {{JAM: The Join-Accumulate Machine (Gray Paper)}},
-  institution = {Web3 Foundation},
+@techreport{smartContractsAlliance2016,
+  author      = {{Smart Contracts Alliance}},
+  title       = {{Smart Contracts: 12 Use Cases for Business \& Beyond}},
+  institution = {Chamber of Digital Commerce},
+  year        = {2016},
+  url         = {https://d3h0qzni6h08fz.cloudfront.net/Smart-Contracts-12-Use-Cases-for-Business-and-Beyond_Chamber-of-Digital-Commerce.pdf}
+}
+
+@techreport{smartContractsAlliance2018,
+  author      = {{Smart Contracts Alliance}},
+  title       = {{Smart Contracts: Is the Law Ready?}},
+  institution = {Chamber of Digital Commerce},
+  year        = {2018},
+  url         = {https://lowellmilkeninstitute.law.ucla.edu/wp-content/uploads/2018/08/Smart-Contracts-Whitepaper.pdf}
+}
+
+@techreport{busch2022,
+  author      = {Busch, K.},
+  title       = {{Web3: A Proposed Blockchain-Based, Decentralized Web}},
+  institution = {Congressional Research Service},
+  year        = {2022},
+  number      = {IF12075},
+  url         = {https://www.congress.gov/crs_external_products/IF/PDF/IF12075/IF12075.2.pdf}
+}
+
+@techreport{uspto2024,
+  author      = {{USPTO}},
+  title       = {{Non-Fungible Tokens and Intellectual Property: A report to Congress}},
+  institution = {U.S. Patent and Trademark Office},
   year        = {2024},
-  note        = {Version 0.7.1+, updated through 2025},
-  url         = {https://wiki.polkadot.com/learn/learn-jam-chain/}
+  url         = {https://www.copyright.gov/policy/nft-study/Joint-USPTO-USCO-Report-on-NFTs-and-Intellectual-Property.pdf}
 }
 
-@misc{parityUpgrade2025,
-  author       = {{Parity Technologies}},
-  title        = {{Polkadot Upgrade 2025: What You Need to Know}},
-  year         = {2025},
-  howpublished = {Parity Blog},
-  url          = {https://www.parity.io/blog/polkadot-upgrade-2025-what-you-need-to-know}
-}
-
-@misc{polkadotNetwork2025,
-  author       = {{Polkadot Network}},
-  title        = {{Polkadot Roundup 2025}},
-  year         = {2025},
-  howpublished = {Medium},
-  url          = {https://medium.com/polkadot-network/polkadot-roundup-2025-3c3c71c7e9c4}
-}
-
-
-%% ==================================================
-%% Regulatory Landscape
-%% ==================================================
-
-@article{guadamuz2025,
-  author  = {Guadamuz, A.},
-  title   = {{The EU's Artificial Intelligence Act and copyright}},
-  journal = {The Journal of World Intellectual Property},
-  year    = {2025},
-  volume  = {28},
-  pages   = {213--219},
-  doi     = {10.1111/jwip.12330},
-  url     = {https://onlinelibrary.wiley.com/doi/10.1111/jwip.12330}
+@techreport{eurojust2024,
+  author      = {{Eurojust}},
+  title       = {{Non-Fungible Tokens and Intellectual Property Rights -- Can the use of NFTs lead to IP infringements?}},
+  institution = {European Union Agency for Criminal Justice Cooperation},
+  year        = {2024},
+  url         = {https://www.eurojust.europa.eu/sites/default/files/assets/eurojust-nfts-intellectual-property-rights-flyer.pdf}
 }
 
 @techreport{europeanParliament2026,
@@ -916,4 +1090,66 @@
   url         = {https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica}
 }
 
+@techreport{reggianini2025,
+  author      = {Reggianini, E.},
+  title       = {{Standardizing On-chain IP Rights Management}},
+  institution = {BlockStand},
+  year        = {2025},
+  url         = {https://blockstand.eu/blockstand/uploads/2025/05/Standardizing-On-chain-IP-Rights-Management_Reggianini.pdf}
+}
 
+%% ── Legal Practice Publications ───────────────────────────────────
+
+@misc{dreyerEtAl2021,
+  author       = {Dreyer, A. and others},
+  title        = {{Can I mint an NFT with that?: Avoiding right of publicity and trademark litigation risks in the brave new world of NFTs}},
+  year         = {2021},
+  howpublished = {Skadden Publications},
+  url          = {https://www.skadden.com/-/media/files/publications/2021/05/canimintannftwiththatavoidingrightofpublicityandtr.pdf}
+}
+
+@misc{gattoEtAl2021,
+  author       = {Gatto, J. and others},
+  title        = {{NFT License Breakdown: Exploring Different Marketplaces and Associated License Issues}},
+  year         = {2021},
+  howpublished = {Law of the Ledger},
+  url          = {https://www.lawoftheledger.com/wp-content/uploads/sites/15/2021/09/NFT-License-Breakdown-Article-0921.pdf}
+}
+
+%% ── Platform Fee and Revenue Data ────────────────────────────────
+
+@misc{musicBizResearch2024,
+  author       = {{Music Business Research}},
+  title        = {{The Music Streaming Economy Part 14: The Artists' Share of the Music Streaming Pie}},
+  year         = {2024},
+  howpublished = {Music Business Research Blog},
+  url          = {https://musicbusinessresearch.wordpress.com/2024/09/16/the-music-streaming-economy-part-14-the-artists-share-of-the-music-streaming-pie/},
+  note         = {Accessed May 2026}
+}
+
+@misc{youtubePartnerProgram,
+  author       = {{Google LLC}},
+  title        = {{YouTube Partner Program: How ad revenue is shared}},
+  year         = {2025},
+  howpublished = {YouTube Help Center},
+  url          = {https://support.google.com/youtube/answer/72902},
+  note         = {Accessed May 2026. YouTube retains 45\% of ad revenue; creators receive 55\%}
+}
+
+@misc{spotifyForArtists,
+  author       = {{Spotify AB}},
+  title        = {{Understanding Spotify Royalties}},
+  year         = {2025},
+  howpublished = {Spotify for Artists Support},
+  url          = {https://support.spotify.com/us/artists/article/understanding-spotify-royalties/},
+  note         = {Accessed May 2026. Spotify pays approximately 70\% of revenue to rights holders}
+}
+
+@misc{appleForArtists,
+  author       = {{Apple Inc.}},
+  title        = {{Apple Music Insights Royalty Rate}},
+  year         = {2025},
+  howpublished = {Apple for Artists Support},
+  url          = {https://artists.apple.com/support/1124-apple-music-insights-royalty-rate},
+  note         = {Accessed May 2026. Apple Music pays approximately 52\% to labels; platform retains approximately 48\%}
+}
