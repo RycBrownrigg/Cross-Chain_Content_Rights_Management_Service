@@ -31,7 +31,7 @@
 
 \chapter{Research Questions and Objectives}\label{chap:research-questions}
 
-This chapter states the research questions and objectives that underpin our study. We formulated them during Phase~1 and refined them in Phase~2 after the gap analysis of Chapter~\ref{chap:background}.
+This chapter presents the research questions and objectives that underpin our study. We formulated them during Phase~1 and refined them in Phase~2 following the gap analysis of Chapter~\ref{chap:background}.
 
 \section{Primary Research Question}\label{sec:primary-research-question}
 
@@ -41,11 +41,11 @@ The primary research question of our work is:
 \textbf{How can a shared-security, multi-chain framework built on Polkadot's Cross-Consensus Messaging (XCM) and FRAME pallet primitives deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?}
 \end{quote}
 
-The question has two components: \textbf{design feasibility} (whether such a system can be built using the available Polkadot SDK primitives) and \textbf{measurement} (what operational properties it exhibits once built). We treat them as mutually constraining; a design that is feasible to construct yet demonstrates subpar performance is not a viable solution, nor is one that performs well in benchmarking but cannot be implemented in practice. The primary concern is framed as an \textbf{achievability} question rather than a hypothesis test, consistent with the measurement-focused evaluation philosophy established in Section~\ref{subsec:evaluation-philosophy}.
+The question has two components: \textbf{design feasibility} (whether such a system can be built using the available Polkadot SDK primitives) and \textbf{measurement} (what operational properties it exhibits once built). We treat them as mutually constraining; a design that is feasible to build yet performs poorly is not viable, nor is one that performs well in benchmarks but cannot be implemented in practice. The primary concern is framed as an \textbf{achievability} question rather than a hypothesis test, consistent with the measurement-focused evaluation philosophy established in Section~\ref{subsec:evaluation-philosophy}.
 
 \section{Sub-Questions}\label{sec:sub-questions}
 
-We decompose the primary research question into five sub-questions. Table~\ref{tab:sub-questions} presents each with its motivation and the literature gaps it addresses.
+We decompose the primary research question into five sub-questions. Table~\ref{tab:sub-questions} presents each sub-question, its motivation, and the literature gaps it addresses.
 
 \begin{longtable}{@{}L{0.04\linewidth} L{0.40\linewidth} L{0.07\linewidth} L{0.41\linewidth}@{}}
 \caption{Research Sub-Questions}\label{tab:sub-questions}\\
@@ -67,13 +67,13 @@ We decompose the primary research question into five sub-questions. Table~\ref{t
 \bottomrule
 \endlastfoot
 
-SQ1 & To what extent can XCM carry recurring subscription renewal messages and rich rights metadata across Polkadot parachains and external networks, and what atomic success rates and cross-chain finality times are achievable? & G2, G3 & Existing cross-chain protocols lack native recurring payments and strip rights metadata. SQ1 asks whether existing XCM primitives suffice or whether custom extensions are needed. \\
+SQ1 & To what extent can XCM carry recurring subscription renewal messages and rich rights metadata across Polkadot parachains and external networks, and what atomic success rates and cross-chain finality times are achievable? & G2, G3 & Existing cross-chain protocols lack native recurring payments and strip rights metadata. SQ1 asks whether XCM v3 primitives can approximate subscription renewal behavior without custom extensions; the XCM v5 \texttt{Schedule} instruction was specified but not production-ready during the implementation window. \\
 \addlinespace
 SQ2 & What design patterns can minimize access verification latency while maintaining decentralization, and how do the resulting metrics compare across varying validator configurations? & G5 & The decentralization-latency trade-off is poorly characterized quantitatively. SQ2 asks for a direct measurement on a working Polkadot parachain with explicit numerical comparisons against centralized alternatives. \\
 \addlinespace
 SQ3 & Can a single on-chain rights object simultaneously enforce subscription auto-renewal, pay-per-view consumption limits, and permanent ownership with automated royalty distribution across chains, and what are the resulting creator cost savings? & G7 & No existing system offers all three monetization models as first-class access modes of a single unified primitive. Story Protocol's PIL can be configured to approximate them but requires separate license-token types and does not natively model subscription renewal. SQ3 asks whether a unified primitive can be built and whether its economics justify the effort. \\
 \addlinespace
-SQ4 & What authorization model is appropriate for cross-chain rights operations that decouple the payer from the beneficiary, and how does it perform under adversarial conditions? & (added Phase~5) & Added in response to Finding~B from the security audit. Cross-chain extrinsics decoupling payer from beneficiary pose unique authorization concerns absent from local-only extrinsics. \\
+SQ4 & What authorization model is appropriate for cross-chain rights operations that decouple the payer from the beneficiary, and how does it perform under adversarial conditions? & (added Phase~5) & Added in response to a finding from the security audit that cross-chain extrinsics (which decouple the transaction payer from the rights beneficiary) introduce authorization vulnerabilities absent in single-chain calls (Section~\ref{subsec:security-audit}, Finding~B). SQ4 formalizes this concern and asks which authorization model eliminates it. \\
 \addlinespace
 SQ5 & Under realistic creator audience distributions, does the CCRMS model produce demonstrably better creator outcomes than centralized, bridge-based, or marketplace alternatives, and under what conditions? & (added Phase~5) & Added during the Monte Carlo simulation. SQ5 clarifies that the economic question is conditional (``yes, for creators with these characteristics'') rather than a simple yes-or-no. \\
 \end{longtable}
@@ -150,10 +150,8 @@ SQ4 (Security and authorization) & (added Phase~5) & RO3 & Security audit; autho
 SQ5 (Economic viability) & RO6 & RO4 & Monte Carlo simulation; comparative benchmark & Section~\ref{sec:economic-results}; Section~\ref{subsec:comparative-analysis} \\
 \end{longtable}
 
-Two cells in the table need acknowledgment. The ``Primary Objective'' for SQ4 is marked ``(added Phase~5)'' because of a sub-question added after the original objectives were finalized. There is no direct Phase~2 link; however, RO3 (unified rights pallet) provided context for the security finding. RO5 (zero-knowledge proof hooks) is not in the table because it was not implemented, but it is kept in Section~\ref{sec:research-objectives} (RO5) as an unachieved future objective and reiterated in Chapter~\ref{chap:conclusion}.
+SQ4 and SQ5 were added in Phase~5 (no direct Phase~2 objective link); RO5 was not implemented and is deferred to future work in Chapter~\ref{chap:conclusion}.
 
 \section{Summary}\label{sec:chapter-3-summary}
 
-This chapter has presented the primary research question, its five sub-questions, and the six research objectives aligned with them. The questions are founded upon the gaps identified in Chapter~\ref{chap:background}. Table~\ref{tab:sub-questions} provides an explicit mapping from each subsidiary question to the objectives it aims to address, the methodologies used to gather evidence, and the chapters in which the work is documented.
-
-Two of the sub-questions (SQ4 on security and authorization, and SQ5 on economic viability) were incorporated during Phase~5 in response to findings from implementation and evaluation. This is consistent with the iterative prototyping methodology and exemplifies the principle of design science research, whereby the search process itself generates knowledge that may modify the initial framing of the work.
+The five sub-questions and six research objectives are grounded in the gaps identified in Chapter~\ref{chap:background} and mapped to evaluation methods and reporting chapters in Table~\ref{tab:sub-questions}. SQ4 (security) and SQ5 (economic viability) were added in Phase~5, consistent with the DSR principle that the search process itself may modify the initial framing.

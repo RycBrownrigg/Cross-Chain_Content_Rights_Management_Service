@@ -29,17 +29,22 @@
 
 \chapter{Conclusion and Future Work}\label{chap:conclusion}
 
-This closing chapter restates the contributions, summarizes the principal findings, identifies the most important threads of future work, and offers a brief closing reflection.
+This closing chapter restates the contributions, summarizes the key findings, identifies the most important threads for future work, and offers a brief closing reflection.
 
 \section{Summary of Contributions}\label{sec:summary-of-contributions}
 
-Section~\ref{sec:contributions} introduced our four contribution categories. We summarize them briefly here:
+Section~\ref{sec:contributions} stated four contributions. We expand each here.
 
 \begin{enumerate}
-\item \textbf{The artifact:} (pallets, runtime, ink! contract, node, benchmark, and simulation scripts) released under the MIT license as open source, intended as a starting point for further research.
-\item \textbf{The formal documentation:} seven implementation specifications that address the pallet, XCM message flows, security threat model, royalty algorithm, precompile interface, NFT nesting model, and Snowbridge integration. These documents are intended as design knowledge rather than code documentation: they elucidate what the artifact accomplishes and the rationale behind each design decision.
-\item \textbf{The empirical findings:} all 11 KPIs met their targets (Chapter~\ref{chap:results}); the Monte Carlo simulation produced the audience-dependent creator revenue result discussed in Section~\ref{subsec:economic-crossover}; the security audit yielded eight findings (one Medium and one Low remediated); and the Snowbridge end-to-end demonstration validates forward compatibility with Ethereum bridging.
-\item \textbf{A worked example of DSR applied to a multi-component blockchain prototype:} the integration of pallet implementation, smart contract development, cross-chain interoperability, and economic simulation within a DSR framework is inadequately represented in the current body of DSR literature. Future researchers developing similar systems may consider this dissertation as a valuable reference template.
+
+\item \textbf{A feasibility result for the unified rights primitive.} The central contribution shows that subscription, pay-per-view, and ownership can be encoded as native access modes of a single on-chain token --- not as configurations of a licensing primitive, but as state transitions enforced by a unified access check. It uses three storage maps (\texttt{Subscriptions}, \texttt{ViewPacks}, \texttt{Owners}) with a single check and shared royalty logic; all tests and KPIs confirm correct enforcement. No cryptographic or consensus mechanisms are needed. This closes gap G7 and is the main academic contribution.
+
+\item \textbf{Quantified decentralization--latency and revenue trade-offs.} Prior work endorsed decentralization qualitatively or measured only centralized performance. This dissertation quantifies the trade-offs directly. The latency overhead is $67{,}000\times$ and the throughput penalty is $270\times$ against a centralized Express.js baseline; the Herfindahl-Hirschman Index improvement is approximately 300-fold (Polkadot HHI $\sim$33 vs.\ centralized DRM at 10,000). The Monte Carlo simulation shows CCRMS yields a 16.8\% higher mean revenue than the centralized baseline overall (Table~\ref{tab:monte-carlo}), with the advantage concentrated among creators with 10,000 or more followers. Both are novel in blockchain content rights systems.
+
+\item \textbf{A cross-chain rights artifact demonstrating XCM sufficiency.} The CCRMS parachain --- \texttt{pallet-content-rights}, \texttt{pallet-rights-verifier}, an ink!\ 6 wrapper contract, an EVM read-only precompile, and benchmark and simulation scripts --- demonstrates that XCM v3 with payer--beneficiary decoupling is sufficient for all five authenticated cross-chain rights operations without custom protocol extensions. Seven implementation specifications (pallet design, XCM message flows, security threat model, royalty algorithm, precompile interface, NFT nesting model, and Snowbridge integration) provide design knowledge intended to support future replication and extension. The artifact and specifications are released open source under the MIT license.
+
+\item \textbf{A DSR worked example for multi-component blockchain prototypes.} The full DSR cycle --- problem identification, design, instantiation, evaluation, and communication --- is applied to a system with FRAME pallets, ink!\ contracts, XCM, Snowbridge, and Monte Carlo simulation. This combination is rarely seen in existing DSR literature, which typically focuses on single-component blockchain systems. Future researchers building similar multi-layer blockchain prototypes can use this dissertation as a methodological reference.
+
 \end{enumerate}
 
 \section{Principal Findings}\label{sec:principal-findings}
@@ -47,17 +52,17 @@ Section~\ref{sec:contributions} introduced our four contribution categories. We 
 Six principal findings emerge from the work:
 
 \begin{enumerate}
-\item \textbf{The architecture works.} All planned functionality is implemented; all KPIs are met; all 56 unit tests pass on every commit.
-\item \textbf{The major architectural decisions aged well.} The pallet-first decision was vindicated by the January 2026 ink! discontinuation; the RMRK 2.0 to \texttt{pallet-nfts} pivot, the unified rights token model, and the cross-chain operation pattern are likewise vindicated to varying degrees. In retrospect, we would not change any of the major decisions.
-\item \textbf{The economic advantage is conditional on the creator's audience size.} CCRMS wins for creators with 10,000+ followers but loses to centralized platforms for creators with fewer than $\sim$2,000 followers because algorithmic discovery dominates. The headline number (CCRMS earns more on average) is true, but the conditional version is the more accurate framing for individual creator decisions.
+\item \textbf{The primary research question is answered in the affirmative.} A Polkadot parachain with XCM v3 and FRAME pallets can deliver a unified rights token supporting all three monetization models. All planned functionality is implemented, all 11 KPIs are met, and all 56 unit tests pass on every commit.
+\item \textbf{The major architectural decisions aged well.} The pallet-first decision was validated by the January 2026 ink! discontinuation; the RMRK 2.0 to \texttt{pallet-nfts} pivot, the unified rights token model, and the cross-chain operation pattern are also vindicated. In retrospect, we would not change these decisions.
+\item \textbf{The economic advantage depends on audience size.} CCRMS benefits creators with 10,000+ followers but is less competitive than centralized platforms for those with under $\sim$2,000 followers due to algorithmic discovery. While CCRMS earns more on average, the conditional framing better reflects individual creator decisions.
 \item \textbf{Cross-chain operation is operationally feasible but latency-bound.} XCM v3 is sufficient; cross-chain finality measured on a pre-Polkadot~2.0 toolchain serves as an upper bound, not a fundamental limit.
-\item \textbf{Standards reimplementation is sometimes preferable to standards adoption} when the reference implementation is unmaintained; the RMRK 2.0 pivot is the exemplar.
-\item \textbf{Forward compatibility is a defensive engineering goal.} Configuring the runtime to accept Ethereum-originated XCM messages at minimal additional cost in Phase~4 enabled the Snowbridge integration to succeed without pallet-level modifications.
+\item \textbf{Standards reimplementation is sometimes preferable to standards adoption} when the reference implementation is unmaintained; the RMRK 2.0 pivot exemplifies this.
+\item \textbf{Forward compatibility is a defensive engineering goal.} Configuring the runtime to accept Ethereum-originated XCM messages at minimal additional cost in Phase~4 enabled the Snowbridge integration to succeed without any pallet-level modifications.
 \end{enumerate}
 
 \section{Future Work}\label{sec:future-work}
 
-11 threads of future work emerged from the research. Table~\ref{tab:future-work} summarizes each; Appendix~\ref{app:future-work} provides full descriptions.
+11 threads of future work emerged from the research. Appendix~\ref{app:future-work} provides full descriptions.
 
 \begin{longtable}{@{}L{0.06\linewidth} L{0.26\linewidth} L{0.14\linewidth} L{0.48\linewidth}@{}}
 \caption{Future Work Summary}\label{tab:future-work}\\
@@ -104,8 +109,8 @@ Six principal findings emerge from the work:
 
 \section{Closing Reflection}\label{sec:closing-reflection}
 
-CCRMS began with a premise: that creators deserve more of the value they generate and that blockchain technology offers a credible path to delivering it. We tested the premise by building a working prototype, measuring its operational properties, and simulating its economic outcomes. The premise held, but it was also \textbf{refined}: the Monte Carlo simulation contradicts the naive form (``decentralization is universally better for creators'') and supports the conditional form (``decentralization is better for creators who have outgrown the discovery value of centralized platforms''). An honest conditional is more valuable than a universal claim.
+CCRMS started with the idea that creators deserve more value, and blockchain offers a way to achieve this. We built a prototype, tested its operations, and simulated its economic effects. The premise held but was refined: Monte Carlo simulations show that decentralization is better for creators who have outgrown centralized platforms' discovery value, not universally. An honest, conditional claim is more valuable than a universal one.
 
-The Polkadot ecosystem changed substantially during the implementation window (Polkadot~2.0 moved to production, Snowbridge V2 went live, ink! was discontinued, JAM reached testnet, Story Protocol launched), and any of these could have invalidated the work under different architectural decisions. None did, because we chose conservatively: favoring maintained primitives, minimizing reliance on non-essential components, and preferring deployable patterns over speculative future features. In retrospect, the dissertation is a study in \textbf{defensive engineering applied to a fast-moving research domain}, and a case for \textbf{conservatively chosen, carefully documented architectural decisions as the most durable deliverable}.
+The Polkadot ecosystem evolved significantly during implementation, with major updates like Polkadot~2.0, Snowbridge V2, and others. None invalidated our work because we chose conservatively --- favoring stable primitives, minimizing reliance on non-essential parts, and preferring proven deployment patterns. This highlights a study in \textbf{defensive engineering} and \textbf{conservative, well-documented architecture} as the most durable approach.
 
-CCRMS is a prototype in one corner of one blockchain ecosystem, addressing one aspect of one industry's structural problems. It is not the future of content rights management, and we do not claim it is. But it demonstrates that the future of content rights management can be built on open, decentralized, cryptographically verifiable infrastructure, and it provides a starting point for others to continue the work.
+CCRMS is a prototype in a single blockchain ecosystem, addressing a specific industry's structural issues. It isn't the future of content rights management, nor do we claim it to be. However, it shows that content rights management can be built on open, decentralized, cryptographically verifiable infrastructure, serving as a starting point for others to build upon.

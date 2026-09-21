@@ -1,4 +1,4 @@
-\begin{thebibliography}{122}
+\begin{thebibliography}{130}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -31,6 +31,14 @@ S.~J. Alotaibi.
   identity management system based on the Internet of Things}.
 \newblock \emph{International Journal of Distributed Systems Technology},
   14\penalty0 (1):\penalty0 1--22, 2023.
+
+\bibitem[{Amazon.com, Inc.}(2025)]{audibleAcx}
+{Amazon.com, Inc.}
+\newblock {ACX Royalty Rates}.
+\newblock Audiobook Creation Exchange (ACX), 2025.
+\newblock URL \url{https://www.acx.com/royalties}.
+\newblock Accessed May 2026. Exclusive distribution plan pays 40\% royalty to
+  rights holders; Audible retains 60\%.
 
 \bibitem[Ante(2020)]{ante2020}
 L.~Ante.
@@ -77,6 +85,11 @@ P.~Banerjee et~al.
   Using Blockchain}.
 \newblock arXiv:2009.11033, 2020.
 \newblock URL \url{https://arxiv.org/pdf/2009.11033}.
+
+\bibitem[Bass et~al.(2021)Bass, Clements, and Kazman]{bassEtAl2021}
+Len Bass, Paul Clements, and Rick Kazman.
+\newblock \emph{{Software Architecture in Practice}}.
+\newblock Addison-Wesley, 4th edition, 2021.
 
 \bibitem[Bigiotti et~al.(2025)Bigiotti, Mostarda, Navarra, Pinna, Sestili,
   Tonelli, and Vaccargiu]{bigiottiEtAl2025}
@@ -451,6 +464,14 @@ S.~L. Madapati and N.~R. Pradhan.
   blockchain-enabled framework with performance evaluation}.
 \newblock \emph{Frontiers in Artificial Intelligence}, 8, 2025.
 
+\bibitem[{Magic Eden}(2025)]{magicEdenFees}
+{Magic Eden}.
+\newblock {Magic Eden Marketplace Fees}.
+\newblock Magic Eden Help Center, 2025.
+\newblock URL \url{https://help.magiceden.io}.
+\newblock Accessed May 2026. Magic Eden charges a 2\% marketplace fee on NFT
+  sales.
+
 \bibitem[Mao et~al.(2022)]{maoEtAl2022}
 H.~Mao et~al.
 \newblock {A Survey on Cross-Chain Technology: Challenges, Development, and
@@ -504,6 +525,12 @@ R.~Moncada et~al.
 \newblock Technical report, Mediaverse Project, 2021.
 \newblock URL
   \url{https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}.
+
+\bibitem[Moore(2014)]{moore2014}
+Geoffrey~A. Moore.
+\newblock \emph{{Crossing the Chasm: Marketing and Selling Disruptive Products
+  to Mainstream Customers}}.
+\newblock HarperBusiness, 3rd edition, 2014.
 
 \bibitem[{Mordor Intelligence}(2026)]{mordorIntelligence2026}
 {Mordor Intelligence}.
@@ -573,6 +600,14 @@ M.~Murray.
   \url{https://musicbusinessresearch.wordpress.com/2024/09/16/the-music-streaming-economy-part-14-the-artists-share-of-the-music-streaming-pie/}.
 \newblock Accessed May 2026.
 
+\bibitem[{OpenSea}(2025)]{openSeaFees}
+{OpenSea}.
+\newblock {OpenSea Fees}.
+\newblock OpenSea, 2025.
+\newblock URL \url{https://opensea.io/fees}.
+\newblock Accessed May 2026. OpenSea charges a 2.5\% protocol fee on secondary
+  sales; creator royalties are set separately by the collection creator.
+
 \bibitem[Orero et~al.(2023)]{oreroEtAl2023}
 P.~Orero et~al.
 \newblock {The Visible Subtitler: Blockchain Technology for Right Management
@@ -615,6 +650,13 @@ O.~Osemwegie.
 \newblock Parity Blog, 2025.
 \newblock URL
   \url{https://www.parity.io/blog/polkadot-upgrade-2025-what-you-need-to-know}.
+
+\bibitem[Parnas(1972)]{parnas1972}
+David~L. Parnas.
+\newblock {On the criteria to be used in decomposing systems into modules}.
+\newblock \emph{Communications of the ACM}, 15\penalty0 (12):\penalty0
+  1053--1058, 1972.
+\newblock \doi{10.1145/361598.361623}.
 
 \bibitem[Patil et~al.(2022)]{patilEtAl2022}
 S.~S. Patil et~al.
@@ -665,6 +707,11 @@ K.~Ren, N.-M. Ho, D.~Loghin, T.-T. Nguyen, B.~C. Ooi, Q.-T. Ta, and F.~Zhu.
 \newblock \emph{IEEE Transactions on Knowledge and Data Engineering},
   35\penalty0 (12):\penalty0 12750--12769, 2023.
 \newblock \doi{10.1109/TKDE.2023.3275220}.
+
+\bibitem[Rogers(2003)]{rogersEverett2003}
+Everett~M. Rogers.
+\newblock \emph{{Diffusion of Innovations}}.
+\newblock Free Press, 5th edition, 2003.
 
 \bibitem[Salman et~al.(2023)]{salmanEtAl2023}
 B.~Salman et~al.
@@ -779,6 +826,15 @@ R.~Tao.
 K.~Upadhyay et~al.
 \newblock {Paradigm Shift from Paper Contracts to Smart Contracts}.
 \newblock 2021.
+
+\bibitem[{U.S.\ Department of Justice and Federal Trade
+  Commission}(2010)]{dojFTC2010}
+{U.S.\ Department of Justice and Federal Trade Commission}.
+\newblock {Horizontal Merger Guidelines}.
+\newblock Technical report, U.S.\ Department of Justice, 2010.
+\newblock URL
+  \url{https://www.justice.gov/atr/horizontal-merger-guidelines-08192010}.
+\newblock Accessed September 2026.
 
 \bibitem[{USPTO}(2024)]{uspto2024}
 {USPTO}.

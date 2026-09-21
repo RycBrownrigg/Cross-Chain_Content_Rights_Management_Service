@@ -32,11 +32,11 @@
 
 \chapter{Evaluation and Testing}\label{chap:evaluation}
 
-This chapter describes the evaluation methodology employed to assess CCRMS against the research questions outlined in Chapter~\ref{chap:research-questions}. Emphasis is placed on \textbf{how} the system was evaluated; the results are presented in Chapter~\ref{chap:results}. This chapter encompasses the evaluation approach, the four-layer testing architecture, the eight test scenarios, the 11 KPIs, the testing infrastructure, and the validity considerations that inform our interpretation of the findings. The measurement-focused philosophy articulated in Section~\ref{subsec:evaluation-philosophy} informs our methodology: KPI targets serve as reference points rather than pass/fail criteria.
+This chapter outlines the evaluation methodology used to assess CCRMS against the research questions in Chapter~\ref{chap:research-questions}. It focuses on \textbf{how} the system was evaluated; the results are presented in Chapter~\ref{chap:results}. This chapter covers the evaluation approach, the four-layer testing architecture, the eight test scenarios, the 11 KPIs, the testing infrastructure, and the validity considerations that inform our interpretation of the findings.
 
 \section{Evaluation Approach}\label{sec:eval-approach}
 
-Our evaluation methodology incorporates unit testing, integration testing, performance benchmarking, security assessment, comparative analysis against a centralized baseline, and Monte Carlo simulation. This comprehensive approach is essential because the research questions span the technical, economic, and security domains, and no single method can address all three. We triangulate quantitative metrics with qualitative insights derived from literature synthesis. Table~\ref{tab:eval-mapping} maps each evaluation activity in relation to the specific research sub-questions it addresses.
+Our evaluation methodology spans unit testing, integration testing, performance benchmarking, security assessment, comparative analysis against a centralized baseline, and Monte Carlo simulation, covering the technical, economic, and security domains of the research questions. Table~\ref{tab:eval-mapping} maps each evaluation activity to the specific research sub-questions it addresses.
 
 \begin{longtable}{@{}L{0.28\linewidth} L{0.36\linewidth} L{0.30\linewidth}@{}}
 \caption{Mapping of Evaluation Activities to Research Sub-Questions}\label{tab:eval-mapping}\\
@@ -69,11 +69,9 @@ SQ4 (Security and authorization) & Security audit, authorization unit tests & Re
 SQ5 (Economic viability) & Monte Carlo creator revenue simulation & Literature comparison \\
 \end{longtable}
 
-Each KPI (Section~\ref{sec:kpis}) has a specified target derived from the Phase~2 methodology; however, these targets are regarded as reference points rather than definitive pass/fail criteria. All 11 KPIs met their targets; the methodology's validity would have been maintained even if some targets had not been met.
-
 \section{Testing Layers}\label{sec:testing-layers}
 
-We organize testing into four layers, each executed at the lowest applicable level of abstraction. Figure~\ref{fig:testing-layers} summarises the stack; the subsections below describe each layer.
+We organize testing into four layers, each executed at the lowest applicable level of abstraction. Figure~\ref{fig:testing-layers} summarizes the stack; the subsections below describe each layer.
 
 \begin{figure}[htbp]
 \vspace{\baselineskip}
@@ -113,17 +111,10 @@ We organize testing into four layers, each executed at the lowest applicable lev
 \label{fig:testing-layers}
 \end{figure}
 
-\textbf{Layer 1: Unit tests} (56 tests in a mock runtime). The suite encompasses 23 functional tests, ten security tests, 11 XCM tests, five royalty propagation verifications, five auto-renewal tests, and two metadata query tests. We run them with \texttt{cargo test}; all 56 tests pass on every commit in approximately three seconds. The unit layer provides the most accurate indications of individual extrinsic correctness but does not cover cross-chain interactions, network latency, or sustained load testing.
-
-\textbf{Layer 2: XCM simulator tests.} The \texttt{xcm-simulator} framework dispatches XCM messages between two parachains in-process, without the need to deploy a Zombienet network. This design isolates cross-chain logic from operational complexity: a simulator failure indicates a message construction or XCM configuration, whereas a Zombienet failure may be due to network conditions or block timing.
-
-\textbf{Layer 3: Zombienet end-to-end tests.} Live multi-chain tests on a Rococo-local relay chain with two validators (Alice, Bob) and two CCRMS parachains (Para~A, Para~B) connected via HRMP. JavaScript scripts in \texttt{scripts/perf/} submit extrinsics via \texttt{@polkadot/api}, measure wall-clock time from submission to block inclusion, and record results as JSON. This layer provides the definitive evidence for cross-chain latency and exercises sustained-load and stress scenarios.
-
-\textbf{Layer 4: Snowbridge end-to-end tests.} Extends the Zombienet topology with the full Snowbridge stack, comprising four parachains, Geth, Lodestar, 16 Solidity Gateway contracts, and two relayer processes. Tests confirm the functionality of the complete Ethereum-to-Polkadot bridge pathway. Two 1~ETH transactions were successfully bridged during Phase~4. This layer necessitates approximately 40 minutes of beacon synchronization and is engaged infrequently, primarily for comprehensive bridge validation.
 
 \section{Performance Testing Framework}\label{sec:perf-framework}
 
-Seven automated scripts in \texttt{scripts/perf/} cover various aspects of system behavior, each generating machine-readable JSON output. Table~\ref{tab:benchmarks} summarizes the benchmark categories.
+Seven automated scripts in \texttt{scripts/perf/} cover various aspects of system behavior and each produce machine-readable JSON output. Table~\ref{tab:benchmarks} summarizes the benchmark categories.
 
 \begin{longtable}{@{}L{0.16\linewidth} L{0.28\linewidth} L{0.50\linewidth}@{}}
 \caption{Benchmark Scripts}\label{tab:benchmarks}\\
@@ -159,16 +150,16 @@ Resource monitoring & \texttt{resource-monitor.mjs} & CPU, memory, and disk usag
 \addlinespace
 Reliability & \texttt{reliability-test.mjs} & Baseline uptime, MTTR after SIGTERM, state persistence, recovery uptime \\
 \addlinespace
-Comparative & \texttt{centralized-drm-benchmark/} & Same six operations on Express.js + SQL.js under identical conditions \\
+Comparative & \texttt{centralized-drm-}\allowbreak\texttt{benchmark/} & Same six operations on Express.js + SQL.js under identical conditions \\
 \end{longtable}
 
-A separate Monte Carlo simulation (\texttt{monte-carlo-revenue.mjs}) models 1,000 creators across 10,000 iterations under four platform configurations (centralized 30--45\% fees, Web3 marketplace 5--10\%, bridge-based 8--15\%, CCRMS 1--5\%), incorporating algorithmic discovery, organic growth, and monthly churn. This provides the primary evidence for research question SQ5. We document the methodology in \texttt{scripts/perf/results/monte-carlo-findings.md}.
+A separate Monte Carlo simulation (\texttt{monte-carlo-revenue.mjs}) models 1,000 creators over 10,000 iterations across four platform configurations (centralized 30--45\% fees, Web3 marketplace 5--10\%, bridge-based 8--15\%, CCRMS 1--5\%), incorporating algorithmic discovery, organic growth, and monthly churn. This simulation provides the primary evidence for research question SQ5. We document the methodology in \texttt{scripts/perf/results/monte-carlo-findings.md}.
 
-All scripts are reproducible: each is an independent Node.js program with explicit parameters and deterministic output paths, archived as timestamped JSON in \texttt{scripts/perf/results/}. Zombienet topologies and SDK versions are version-controlled.
+All scripts are reproducible: each is an independent Node.js program with explicit parameters and deterministic output paths, and each is archived as timestamped JSON in \texttt{scripts/perf/results/}.
 
 \section{Test Scenarios}\label{sec:test-scenarios}
 
-We designed eight test scenarios to cover the full range of evaluation activities. Table~\ref{tab:scenarios} summarizes each scenario; the corresponding scripts live in \texttt{scripts/perf/}.
+We designed eight test scenarios to cover the full range of evaluation activities. Table~\ref{tab:scenarios} summarizes each scenario, and the corresponding scripts are located in \texttt{scripts/perf/}.
 
 \begin{longtable}{@{}L{0.03\linewidth} L{0.17\linewidth} L{0.45\linewidth} L{0.28\linewidth}@{}}
 \caption{Test Scenarios}\label{tab:scenarios}\\
@@ -207,11 +198,11 @@ We designed eight test scenarios to cover the full range of evaluation activitie
 8 & Comparative analysis & Re-implement the same six operations in Express.js + SQL.js (in-memory SQLite); run identical benchmarks against both. & Document the performance cost of decentralization \\
 \end{longtable}
 
-The comparative benchmark is intentionally minimal, using Express.js for HTTP and SQL.js for in-process SQLite. A more comprehensive, centralized implementation incorporating caching, replication, and distributed databases would exhibit lower performance than our baseline but would remain significantly faster than CCRMS. The minimal version serves as a near-optimal reference point for comparison and precludes any implication of manipulation.
+The comparative benchmark is intentionally minimal, using Express.js for HTTP and SQL.js for in-process SQLite. A more comprehensive, centralized implementation with caching, replication, and distributed databases would perform worse than our baseline but would still be significantly faster than CCRMS. The minimal version serves as a near-optimal reference point for comparison and precludes any implication of manipulation.
 
 \section{Metrics and Key Performance Indicators}\label{sec:kpis}
 
-Our evaluation employs 11 key performance indicators (KPIs) across four domains: technical, economic, security, and reliability. Each KPI is defined by its description, measurement methodology, originating source (the test scenario or activity responsible for generating it), and a target value. These targets are derived from the Phase~2 evaluation methodology and are regarded as reference points rather than strict pass/fail criteria.
+Our evaluation uses 11 key performance indicators (KPIs) across four domains: technical, economic, security, and reliability. Each KPI includes a description, measurement methodology, originating source (the test scenario or activity that generates it), and a target value. These targets were set as stated design objectives during Phase~2 planning, informed by commercial comparators rather than by published academic benchmarks; they are treated throughout as reference points rather than strict pass/fail criteria. The inclusion latency target of two block intervals reflects the 6-second parachain block time of the test environment; the uptime target of 85\% is sized for a single-collator Zombienet topology, not a production service-level agreement.
 
 \begin{longtable}{@{}L{0.03\linewidth} L{0.22\linewidth} L{0.36\linewidth} L{0.17\linewidth} L{0.16\linewidth}@{}}
 \caption{KPI Definitions}\label{tab:kpi-defs}\\
@@ -256,50 +247,7 @@ Our evaluation employs 11 key performance indicators (KPIs) across four domains:
 11 & \textbf{Decentralization ratio} & Performance cost vs centralized baseline & Documented & Comparative analysis \\
 \end{longtable}
 
-\begin{longtable}{@{}L{0.03\linewidth} L{0.22\linewidth} L{0.18\linewidth} L{0.33\linewidth} L{0.18\linewidth}@{}}
-\caption{KPI Results Summary}\label{tab:kpi-results}\\
-\toprule
-\textbf{\#} & \textbf{KPI} & \textbf{Target} & \textbf{Measured} & \textbf{Status} \\
-\midrule
-\endfirsthead
-
-\multicolumn{5}{l}{\emph{Table~\ref{tab:kpi-results} continued from previous page}}\\
-\toprule
-\textbf{\#} & \textbf{KPI} & \textbf{Target} & \textbf{Measured} & \textbf{Status} \\
-\midrule
-\endhead
-
-\midrule
-\multicolumn{5}{r}{\emph{Continued on next page}}\\
-\endfoot
-
-\bottomrule
-\endlastfoot
-
-1 & Throughput & $>$10 TPS & \textbf{26.2 TPS} sustained & \textbf{Pass} \\
-\addlinespace
-2 & Inclusion latency & $<$12~s & \textbf{$\sim$6~s} (1 block) & \textbf{Pass} \\
-\addlinespace
-3 & XCM latency & $<$10 blocks & \textbf{3--5 blocks} & \textbf{Pass} \\
-\addlinespace
-4 & Block utilization & $<$75\% & \textbf{12.9\%} at 300 txs & \textbf{Pass} \\
-\addlinespace
-5 & Storage efficiency & $<$500 bytes & \textbf{191 bytes}/content, \textbf{112 bytes}/subscriber & \textbf{Pass} \\
-\addlinespace
-6 & Uptime & $>$85\% & \textbf{90\%} & \textbf{Pass} \\
-\addlinespace
-7 & MTTR & $<$60~s & \textbf{$\sim$15--20~s} & \textbf{Pass} \\
-\addlinespace
-8 & State persistence & 100\% & \textbf{100\%} & \textbf{Pass} \\
-\addlinespace
-9 & Security findings & 0 Critical/High & \textbf{0 Critical, 0 High, 0 unresolved Medium} & \textbf{Pass} \\
-\addlinespace
-10 & Test coverage & $>$80\% & \textbf{84\%} (16/19 error variants) & \textbf{Pass} \\
-\addlinespace
-11 & Decentralization ratio & Documented & \textbf{$270\times$ slower, qualitatively superior} & \textbf{Documented} \\
-\end{longtable}
-
-All 11 KPIs achieved their respective targets. The security audit identified eight findings (see Table~\ref{tab:challenges}, Appendix~\ref{app:security}): two vulnerabilities were remediated (B, E), three design properties were accepted (A, C, D), and three observations relating to positive reliability were noted (F, G, H). Chapter~\ref{chap:discussion} offers an interpretation of these results.
+The target value and measurement source for each KPI are defined in Table~\ref{tab:kpi-defs} above. Measured values and outcomes for all 11 KPIs are reported in Chapter~\ref{chap:results} (Table~\ref{tab:kpi-results}). The security audit identified eight findings (see Table~\ref{tab:challenges}, Appendix~\ref{app:security}): two vulnerabilities were remediated (B, E), three design properties were accepted (A, C, D), and three observations regarding positive reliability were noted (F, G, H). Chapter~\ref{chap:results} presents the full KPI outcomes and discusses each in relation to the research questions; Chapter~\ref{chap:discussion} interprets the findings.
 
 \section{Testing Infrastructure}\label{sec:test-infra-ch6}
 
@@ -323,7 +271,7 @@ All 11 KPIs achieved their respective targets. The security audit identified eig
 \bottomrule
 \endlastfoot
 
-Machine & macOS Darwin 25.3.0, Apple Silicon \\
+Machine & macOS Tahoe 26.5.2, Apple Silicon \\
 Relay chain & Rococo-local, 2 validators (alice, bob) \\
 Parachain A & Content Rights (parachain 100), 1 collator \\
 Parachain B & Consumer chain (parachain 200), 1 collator \\
@@ -335,21 +283,21 @@ Block time & $\sim$6 seconds (parachain) \\
 Node binary & \texttt{parachain-template-node} (release build) \\
 Polkadot SDK version & stable2512 (December 2024) \\
 Test scripts & \texttt{scripts/perf/*.mjs} (Node.js, \texttt{@polkadot/api} library) \\
-Centralized benchmark & \texttt{centralized-drm-benchmark/} (Express.js + SQL.js) \\
+Centralized benchmark & \texttt{centralized-drm-}\allowbreak\texttt{benchmark/} (Express.js + SQL.js) \\
 \end{longtable}
 
-We designed the test environment to be minimalistic, comprising a single development machine that operates a local Zombienet network. This methodology simplifies the configuration process and removes dependency on external infrastructure, although it has implications for the interpretation of the results, as discussed in Section~\ref{sec:validity}. The benchmark scripts and raw JSON outputs are maintained under version control within the repository, thereby allowing any reader with access to the Polkadot SDK toolchain to independently re-execute them.
+The single-machine topology simplifies setup and eliminates reliance on external infrastructure, with implications for interpreting the results discussed in Section~\ref{sec:validity}. Benchmark scripts and raw JSON outputs are version-controlled, allowing any reader with access to the Polkadot SDK toolchain to independently re-execute them.
 
 \section{Validity and Limitations}\label{sec:validity}
 
-\textbf{Internal validity.} We conduct all benchmarks multiple times and report the average results; maintain a consistent test environment across all runs; apply an identical methodology to CCRMS and the centralized baseline; and execute the deterministic unit test suite on each commit. Therefore, any variation across runs can be attributed to the system under test rather than environmental fluctuations.
+\textbf{Internal validity.} We run all benchmarks multiple times and report the average results; maintain a consistent test environment across all runs; apply the same methodology to CCRMS and the centralized baseline; and run the deterministic unit test suite on each commit.
 
-\textbf{External validity.} This represents the dimension in which our evaluation is most limited. Four constraints are applicable: (1) we take measurements on a local Zombienet environment with two relay-chain validators and without real network latency, thus the figures serve as upper bounds within the test environment rather than predictive metrics for production; (2) the Snowbridge integration uses a local Ethereum stack instead of a public testnet, avoiding variability in block times, MEV, contention, and beacon chain reorganizations; (3) because of the maturation gap of Polkadot~2.0, the latency figures reflect a pre-2.0 toolchain, and several measurements are expected to improve significantly in a production Polkadot~2.0 environment; (4) our scale is modest, comprising up to 200 concurrent accounts and a few hundred content items, and empirical verification of linear storage growth at production scale has not yet been conducted.
+\textbf{External validity.} This is the dimension in which our evaluation is most limited. Four constraints apply: (1) we measure in a local Zombienet environment with two relay-chain validators and no real network latency, so the figures serve as upper bounds within the test environment rather than predictive metrics for production; (2) the Snowbridge integration uses a local Ethereum stack rather than a public testnet, avoiding variability in block times, MEV, contention, and beacon chain reorganizations; (3) because of the maturation gap of Polkadot~2.0, the latency figures reflect a pre-2.0 toolchain, and several measurements are expected to improve significantly in a production Polkadot~2.0 environment; (4) our scale is modest, comprising up to 200 concurrent accounts and a few hundred content items, and empirical verification of linear storage growth at production scale has not yet been conducted.
 
-\textbf{Construct validity.} The figure of 26.2 TPS quantifies the successful inclusion rate under sustained load and constitutes an essential yet insufficient element of user-perceived performance, which also relies on wallet user experience, mempool latency, and RPC responsiveness. The baseline uptime of 90\% assesses single-collator block production and does not account for multi-collator production availability. The Monte Carlo simulation evaluates \textbf{expected creator revenue under a probabilistic model of platform behavior}, rather than actual revenue in operational environments; the validity of this construct is contingent upon the input parameter ranges (derived from publicly available data on YouTube, Spotify, and OpenSea) and the underlying model assumptions (such as algorithmic discovery, churn, and fees), which are explicitly documented in the findings.
+\textbf{Construct validity.} The figure of 26.2 TPS quantifies the successful inclusion rate under sustained load but is insufficient to assess user-perceived performance, which also depends on wallet user experience, mempool latency, and RPC responsiveness. The baseline uptime of 90\% assesses single-collator block production and does not account for multi-collator production availability. The Monte Carlo simulation evaluates expected revenue using a probabilistic model; the input parameter sources and assumptions are documented in Section~\ref{subsec:monte-carlo}.
 
-\textbf{Threats to validity.} (a)~\textbf{Selection bias:} the eight test scenarios may not encompass production conditions such as high subscriber concurrency on a single content item, large multi-collator topologies, or extended multi-month uptime. (b)~\textbf{Measurement instrument bias:} any bug in \texttt{@polkadot/api} or \texttt{system.blockWeight} would propagate into our results; while the library is extensively used, it is not devoid of bugs. (c)~\textbf{Confirmation bias:} the author was responsible for designing, implementing, and evaluating the system; this risk is mitigated through the use of externally referenced KPI targets and by disclosure of all scripts and raw results. (d)~\textbf{Single-author validation:} no external code review, third-party security audit, or benchmark validation has been conducted; we recognize this as a significant limitation and intend to address it as future work (Section~\ref{subsec:future-work-external-validation}).
+\textbf{Threats to validity.} (a)~\textbf{Selection bias:} the eight test scenarios may not capture production conditions such as high subscriber concurrency on a single content item, large multi-collator topologies, or extended multi-month uptime. (b)~\textbf{Measurement instrument bias:} any bug in \texttt{@polkadot/api} or \texttt{system.blockWeight} would propagate into our results; although the library is widely used, it is not bug-free. (c)~\textbf{Confirmation bias:} the author was responsible for designing, implementing, and evaluating the system; this risk is mitigated by using externally referenced KPI targets and by disclosing all scripts and raw results. (d)~\textbf{Single-author validation:} no external code review, third-party security audit, or benchmark validation has been conducted; we recognize this as a significant limitation and intend to address it in future work (Section~\ref{subsec:future-work-external-validation}).
 
 \section{Summary}\label{sec:chapter-6-summary}
 
-The evaluation employs four testing layers, eight test scenarios, seven automated benchmarks, a Monte Carlo simulation, and 11 KPIs grounded in a measurement-focused philosophy. Section~\ref{sec:validity} acknowledges the primary validity constraints. Chapter~\ref{chap:results} presents the results.
+The evaluation uses four testing layers, eight test scenarios, seven automated benchmarks, a Monte Carlo simulation, and 11 KPIs grounded in a measurement-focused philosophy. Section~\ref{sec:validity} outlines the primary validity constraints. Chapter~\ref{chap:results} presents the results.

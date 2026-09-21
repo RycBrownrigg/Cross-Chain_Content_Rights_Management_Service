@@ -24,7 +24,7 @@
 
 \section{Solidity Interface: \texttt{ContentRightsPrecompile}}\label{sec:solidity-interface}
 
-The EVM precompile described in Section~\ref{subsec:ink-contract} exposes the following Solidity interface. Solidity contracts deployed on \texttt{pallet-revive} can call these methods to read CCRMS rights state without crossing the EVM/Substrate boundary at write time.
+The EVM precompile (Section~\ref{sec:pallet-impl}) exposes the following Solidity interface. Solidity contracts deployed on \texttt{pallet-revive} can call these methods to read CCRMS rights state without crossing the EVM/Substrate boundary at write time.
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=left,numberstyle=\tiny\color{gray}]
 interface IContentRights {
