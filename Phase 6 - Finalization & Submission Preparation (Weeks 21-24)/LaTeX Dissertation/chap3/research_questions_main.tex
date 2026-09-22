@@ -38,7 +38,7 @@ This chapter presents the research questions and objectives that underpin our st
 The primary research question of our work is:
 
 \begin{quote}
-\textbf{How can a shared-security, multi-chain framework built on Polkadot's Cross-Consensus Messaging (XCM) and FRAME pallet primitives deliver a unified rights token that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?}
+\textbf{How can a shared-security, multi-chain framework built on Polkadot's Cross-Consensus Messaging (XCM) and FRAME pallet primitives deliver a unified rights record that natively supports recurring subscriptions, pay-per-view micro-transactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?}
 \end{quote}
 
 The question has two components: \textbf{design feasibility} (whether such a system can be built using the available Polkadot SDK primitives) and \textbf{measurement} (what operational properties it exhibits once built). We treat them as mutually constraining; a design that is feasible to build yet performs poorly is not viable, nor is one that performs well in benchmarks but cannot be implemented in practice. The primary concern is framed as an \textbf{achievability} question rather than a hypothesis test, consistent with the measurement-focused evaluation philosophy established in Section~\ref{subsec:evaluation-philosophy}.
@@ -104,7 +104,7 @@ We pursue the five sub-questions through six research objectives. Table~\ref{tab
 
 RO1 & Design and prototype XCM extensions for recurring and metadata-rich rights transfers & SQ1, SQ2 \\
 \addlinespace
-RO2 & Implement a unified rights token (originally ink!, revised to FRAME pallet) with access-verification latency measurement & SQ2, SQ3 \\
+RO2 & Implement a unified rights record (originally ink!, revised to FRAME pallet) with access-verification latency measurement & SQ2, SQ3 \\
 \addlinespace
 RO3 & Merge subscription, PPV, and purchase logic into one composable rights pallet & SQ3, SQ4 \\
 \addlinespace

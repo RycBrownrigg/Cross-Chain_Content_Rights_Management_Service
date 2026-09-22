@@ -38,7 +38,7 @@ This chapter outlines the research methodology we used to develop CCRMS and the 
 
 \subsection{Design Science Research Framing}\label{subsec:dsr-framing}
 
-CCRMS is fundamentally a systems-building project with a primary artifact: a working software prototype. The most appropriate methodological framework is therefore \textbf{design science research (DSR)}, as defined by \citet{hevnerEtAl2004}. Our dissertation aligns with Hevner's seven DSR guidelines as follows: (1) \emph{design as an artifact:} the CCRMS parachain and seven implementation specifications; (2) \emph{problem relevance:} the commercial and academic gaps identified in Chapter~\ref{chap:background}; (3) \emph{design evaluation:} eleven KPIs covered in Chapters~\ref{chap:evaluation}--\ref{chap:results}; (4) \emph{research contributions:} the artifact, the design knowledge captured in the specifications, and the empirical measurements; (5) \emph{research rigor:} established Polkadot SDK primitives, standard Rust testing, and peer-reviewed Monte Carlo methodology; (6) \emph{design as a search process:} nine significant pivots documented in Section~\ref{sec:challenges-solutions}; (7) \emph{communication of research:} this dissertation and an open-source code release.
+CCRMS is fundamentally a systems-building project with a primary artifact: a working software prototype. The most appropriate methodological framework is therefore \textbf{design science research (DSR)}, as defined by \citet{hevnerEtAl2004}. Our dissertation aligns with Hevner's seven DSR guidelines as follows: (1) \emph{design as an artifact:} the CCRMS parachain and seven implementation specifications; (2) \emph{problem relevance:} the commercial and academic gaps identified in Chapter~\ref{chap:background}; (3) \emph{design evaluation:} eleven KPIs covered in Chapters~\ref{chap:evaluation}--\ref{chap:results}; (4) \emph{research contributions:} the artifact, the design knowledge captured in the specifications, and the empirical measurements; (5) \emph{research rigor:} established Polkadot SDK primitives, standard Rust testing, and standard Monte Carlo methodology; (6) \emph{design as a search process:} nine significant pivots documented in Section~\ref{sec:challenges-solutions}; (7) \emph{communication of research:} this dissertation and an open-source code release.
 
 DSR is particularly appropriate here because it treats both the artifact and the design knowledge it produces as coequal contributions.
 
@@ -54,7 +54,7 @@ Our evaluation uses a mixed-methods approach: quantitative measurements include 
 
 We adopt a \textbf{measurement-focused philosophy}: the goal is to document and analyze the system's performance, efficiency, security, and economic viability rather than to verify that it meets predetermined targets. This measurement-centric approach preserves academic rigor regardless of whether specific results meet hypothetical benchmarks, treats unexpected results as valuable rather than embarrassing, encourages truthful reporting, and establishes a baseline for future researchers.
 
-Each of the eleven KPIs in Section~\ref{sec:kpis} has a target derived from the Phase~2 methodology, but we treat those targets as reference points rather than pass/fail criteria. In practice, all eleven met their targets; the methodology would have remained valid even if some had not.
+Each of the eleven KPIs in Section~\ref{sec:kpis} has a target derived from the Phase~2 methodology, but we treat those targets as reference points rather than pass/fail criteria. The outcome column in Table~\ref{tab:kpi-results} is therefore headed ``Target met?'' with Yes/No values rather than Pass/Fail. In practice, all eleven met their targets; the methodology would have remained valid even if some had not.
 
 \subsection{Methodology Pivots}\label{subsec:methodology-pivots}
 
@@ -64,11 +64,11 @@ The implementation required nine pivots from the Phase~4 plan --- substituting Z
 
 This section outlines the conceptual design. Section~\ref{sec:pallet-impl} provides the implementation details.
 
-\subsection{The Unified Rights Token Concept}\label{subsec:unified-rights-token}
+\subsection{The Unified Rights Record Concept}\label{subsec:unified-rights-token}
 
 This subsection addresses SQ3: it demonstrates that subscription, pay-per-view, and permanent ownership can serve as first-class access modes for a single on-chain record, rather than as separate platform categories.
 
-The principal intellectual contribution of CCRMS is the \textbf{unified rights token}: a single on-chain asset that can represent three distinct modes of content access (an active subscription, a remaining pay-per-view balance, or permanent ownership) for a single piece of content from a single creator, all governed by a single set of rules.
+The principal intellectual contribution of CCRMS is the \textbf{unified rights record}: a single on-chain asset that can represent three distinct modes of content access (an active subscription, a remaining pay-per-view balance, or permanent ownership) for a single piece of content from a single creator, all governed by a single set of rules.
 
 The unified token directly closes gap G7 (Table~\ref{tab:gaps}): a single content registration supports all three access modes concurrently, resolved by a unified priority check.
 
@@ -132,7 +132,7 @@ A single content item can offer all three models concurrently, each with indepen
     \texttt{transfer\_ownership}}
 };
 \end{tikzpicture}
-\caption{The three monetization models natively supported by the unified rights token (addresses SQ3). A single content registration may offer all three models concurrently; \texttt{check\_access} resolves in priority order: Ownership $>$ Subscription $>$ PPV.}
+\caption{The three monetization models natively supported by the unified rights record (addresses SQ3). A single content registration may offer all three models concurrently; \texttt{check\_access} resolves in priority order: Ownership $>$ Subscription $>$ PPV.}
 \label{fig:three-models}
 \end{figure}
 
@@ -183,13 +183,13 @@ The nesting pattern is inspired by RMRK 2.0, the composable NFT specification fo
 \label{fig:nft-nesting}
 \end{figure}
 
-One significant constraint is that the \texttt{Children} storage entry is a \texttt{BoundedVec} (a fixed-capacity collection type in FRAME that enforces an explicit upper bound at the type level), limiting child NFTs to fifty per parent. This limit is required by FRAME's weight benchmarking system, which precomputes the maximum computational cost of each operation before dispatch, to calculate transaction fees accurately. The examination of this constraint is detailed in Appendix~\ref{sec:children-bound}, and mitigation is treated as future work in Section~\ref{subsec:bounded-vec-future}.
+One significant constraint is that the \texttt{Children} storage entry is a \texttt{BoundedVec} (a fixed-capacity collection type in FRAME that enforces an explicit upper bound at the type level), limiting each content item to fifty child NFTs. Because each first-time purchase mints one for the buyer and expired subscriptions never release theirs, this caps a content item at fifty subscribers and owners over its lifetime. The bound is not intrinsic to the design; holders are already recorded in the three rights maps (Appendix~\ref{sec:e-child-cap}). The examination of this constraint is detailed in Appendix~\ref{sec:children-bound}, and mitigation is described in Appendix~\ref{sec:e-child-cap}.
 
 \subsection{Cross-Chain Communication Model}\label{subsec:cross-chain-model}
 
 This model addresses SQ1 (XCM rights operations across chains) and SQ4 (payer--beneficiary authorization): the two properties that make cross-chain rights management nontrivial are the decoupling of payment from rights receipt and the trustless verification of remote rights state.
 
-Cross-chain operation is the mechanism by which the unified rights token model enables portable digital ownership: a user who acquires rights on one blockchain should be able to use them on another without losing access or repurchasing. The model has two conceptual properties.
+Cross-chain operation is the mechanism by which the unified rights record model enables portable digital ownership: a user who acquires rights on one blockchain should be able to use them on another without losing access or repurchasing. The model has two conceptual properties.
 
 \textbf{Payer--beneficiary decoupling.} Each cross-chain rights operation distinguishes between the funding account and the rights recipient account. In a local call, the payer and the beneficiary are the same (the caller); in a cross-chain call, the dispatch origin is the sovereign account of the remote parachain, and the beneficiary is a separate user account. This configuration allows a remote parachain to acquire rights on behalf of its users without requiring those users to be present on CCRMS.
 
@@ -243,7 +243,7 @@ The model also extends beyond Polkadot via \textbf{Snowbridge}, a trust-minimize
 
 The pallet-first decision directly shapes the answers to SQ2 (latency versus decentralization) and SQ3 (unified primitive): placing business logic in a FRAME pallet rather than in smart contracts reduces execution overhead and eliminates the chain-extension boundary that would otherwise constrain write operations.
 
-The most significant architectural decision was to centralize the business logic within a \textbf{FRAME pallet} rather than in smart contracts. This decision was made during Phase~4 for three reasons: the operational maturity gap between FRAME pallets and \texttt{pallet-revive}; the unavailability of the chain extension mechanism, which the original contract-first approach relied on for write operations; and a pallet-first design that uses standard Polkadot wallets without EVM-style adaptation. Appendix~\ref{sec:contract-first-pivot} provides detailed documentation of this decision; Appendix~\ref{sec:ink-discontinuation} notes that it was unexpectedly validated by the discontinuation of ink! development in January 2026.
+The most significant architectural decision was to centralize the business logic within a \textbf{FRAME pallet} rather than in smart contracts. This decision was made during Phase~4 for three reasons: the operational maturity gap between FRAME pallets and \texttt{pallet-revive}; the unavailability of the chain extension mechanism, which the original contract-first approach relied on for write operations; and a pallet-first design that uses standard Polkadot wallets without EVM-style adaptation. Appendix~\ref{sec:contract-first-pivot} documents this decision; the January 2026 ink! discontinuation announcement (Appendix~\ref{sec:ink-discontinuation}) confirmed the engineering rationale.
 
 \subsection{Layered Architecture}\label{subsec:layered-architecture}
 
@@ -275,7 +275,7 @@ The system is organized into six distinct, independently replaceable layers: (1)
      {\footnotesize \texttt{rights\_manager} ink!\ wrapper contract; \texttt{ContentRightsPrecompile} (EVM read-only access)}};
 \node[layer, fill=purple!18, below=3pt of l5] (l6)
     {\textbf{Layer 6 --- Cross-Chain}\\
-     {\footnotesize XCM v3 inter-parachain messaging; Snowbridge trust-minimised Polkadot--Ethereum bridge}};
+     {\footnotesize XCM v3 inter-parachain messaging; Snowbridge trust-minimized Polkadot--Ethereum bridge}};
 \end{tikzpicture}
 \caption{CCRMS six-layer architecture (addresses SQ1 and SQ2). Each layer is independently replaceable: Layer~5 (smart contracts) may be removed, Layer~6 (XCM) may upgrade from v3 to v5, and Layer~1 (relay chain) may migrate to JAM, without modifying the business logic in Layer~3.}
 \label{fig:layered-architecture}
@@ -283,4 +283,4 @@ The system is organized into six distinct, independently replaceable layers: (1)
 
 \section{Summary}\label{sec:chapter-4-summary}
 
-This chapter framed CCRMS within the design science research paradigm and presented the six conceptual design decisions that govern implementation: the unified rights token (closing gap G7), the three monetization models, NFT-based tokenization via \texttt{pallet-nfts}, the cross-chain payer--beneficiary model, the pallet-first architecture, and the six-layer system structure. Chapter~\ref{chap:implementation} covers implementation details.
+This chapter framed CCRMS within the design science research paradigm and presented the six conceptual design decisions that govern implementation: the unified rights record (closing gap G7), the three monetization models, NFT-based tokenization via \texttt{pallet-nfts}, the cross-chain payer--beneficiary model, the pallet-first architecture, and the six-layer system structure. Chapter~\ref{chap:implementation} covers implementation details.

@@ -27,15 +27,35 @@
 
 \section[Finding B: Authorization Gap]{Security Audit Finding B:\texorpdfstring{\\}{ }Authorization Gap in \texttt{xcm\_transfer\_ownership}}\label{sec:d-finding-b}
 
-The original implementation performed only \texttt{ensure\_signed(origin)} and then looked up \texttt{Ownership[content\_id, from]}, burned the seller's NFT, and minted a new one for \texttt{to}. No check confirmed that the dispatch caller had any relationship to the \texttt{from} account, so any signed account could call the extrinsic with arbitrary \texttt{from} and \texttt{to} arguments and transfer ownership from any user to itself. We rated the vulnerability Medium severity. Our remediation was \texttt{ensure!(authorizer == from,\allowbreak\ Error::<T>::Unauthorized)}, committed alongside unit test \texttt{security\_xcm\_transfer\_\allowbreak ownership\_\allowbreak any\_account\_\allowbreak can\_steal}.
+The original implementation performed only \texttt{ensure\_signed(origin)} and then looked up \texttt{Ownership[content\_id, from]}, burned the seller's NFT, and minted a new one for \texttt{to}. No check confirmed that the dispatch caller had any relationship to the \texttt{from} account, so any signed account could call the extrinsic with arbitrary \texttt{from} and \texttt{to} arguments and transfer ownership from any user to itself.
+
+We rate this finding \textbf{High}. Exploitation requires only a signed account with sufficient balance for transaction fees, no relationship to the victim, and no prior state; the impact is unauthorized transfer of a permanent, transferable ownership right. We initially recorded the finding as Medium on the grounds that the affected extrinsic is reachable only through the cross-chain path in normal operation, but Finding~A establishes that the \texttt{xcm\_*} extrinsics are also callable locally by any signed account, which removes that mitigation.
+
+Our remediation was \texttt{ensure!(authorizer == from,\allowbreak\ Error::<T>::Unauthorized)}, committed alongside unit test \texttt{security\_xcm\_transfer\_\allowbreak ownership\_\allowbreak any\_account\_\allowbreak can\_steal}.
+
+This remediation is deliberately conservative. Because an XCM \texttt{Transact} with \texttt{SovereignAccount} origin dispatches under the sending parachain's sovereign account, the equality check cannot be satisfied by a remote caller, so \texttt{xcm\_transfer\_ownership} no longer supports genuine cross-chain transfers and is equivalent to \texttt{transfer\_ownership} invoked locally. We accepted the loss of functionality in preference to a delegated-authority model that we could not verify within the implementation window; Appendix~\ref{sec:e-delegation} describes the capability-based alternative.
 
 \section{Security Audit Finding E: View Pack Overwrite}\label{sec:d-finding-e}
 
 The original \texttt{purchase\_views} always overwrote \texttt{ViewPacks[content\_id, buyer]} with a new \texttt{ViewPackInfo}, so a user holding 10 unused views who purchased 5 more would end up with 5, not 15. Our remediation made purchases additive: if a view pack already exists, new views are added to the existing balance.
 
+This remediation covers the local \texttt{purchase\_views} path only. The XCM path (\texttt{xcm\_purchase\_views}) still overwrites \texttt{ViewPacks} unconditionally and mints a fresh child NFT on each call, orphaning the previous child. Extending the fix to the XCM path is deferred to future work.
+
 \section{Accepted Design Findings (A, C, D)}\label{sec:d-accepted}
 
-\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; production should restrict to an explicit allowlist. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
+\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; the \texttt{XcmExecuteFilter}, \texttt{XcmTeleportFilter}, and \texttt{XcmReserveTransferFilter} are similarly set to \texttt{Everything}, and \texttt{FixedWeightBounds} is used in place of measured XCM weights; production should restrict all four to explicit allowlists. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
+
+\section{Finding I: Zero-View Denial of Service}\label{subsec:finding-i}
+
+\textbf{Severity:} Medium
+
+\textbf{Description.} \texttt{purchase\_views} accepts \texttt{num\_views = 0}, charges \texttt{ppv\_price} $\times$ 0 = 0, and still mints a child NFT. \texttt{consume\_view} then fails with \texttt{NoViewsRemaining}, so the slot is never released. Fifty throwaway accounts can permanently block all future sales of any content item for the cost of transaction fees alone.
+
+\textbf{Impact.} Denial of service: any user can exhaust the fifty-child cap on any content item, preventing all future purchases at negligible cost. This is the exploit path for the fifty-child bound discussed in Section~\ref{sec:limitations}.
+
+\textbf{Remediation.} Add \texttt{ensure!(num\_views > 0, Error::<T>::InsufficientPayment)} at the start of \texttt{purchase\_views} and \texttt{xcm\_purchase\_views}. A dedicated \texttt{ZeroViews} error variant would improve clarity.
+
+\textbf{Status:} Open.
 
 \section{Error Variant Coverage}\label{sec:d-coverage}
 

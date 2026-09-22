@@ -3,7 +3,7 @@
 %%
 %% Chapter 9: Conclusion and Future Work
 %%
-%% Closes the dissertation: summarises the four contribution categories
+%% Closes the dissertation: summarizes the four contribution categories
 %% from Chapter 1, distils six principal findings, presents 11 threads of
 %% future work (Table 9.1, with full descriptions in Appendix E), and
 %% offers a closing reflection on the premise and its refinement.
@@ -20,9 +20,10 @@
 %%   app:future-work (Appendix E)
 %%
 %% Phantom labels embedded in Table 9.1 rows (referenced from earlier
-%% chapters): subsec:future-work-external-validation (row 9.3.1),
-%% subsec:bounded-vec-future (row 9.3.4),
-%% subsec:audience-validation-future (row 9.3.5)
+%% chapters): sec:e-production (row E.1),
+%% sec:e-child-cap (row E.4),
+%% sec:e-delegation (row E.8),
+%% subsec:audience-validation-future (row E.5)
 %%
 %% Citations: none.
 %% ======================================================================
@@ -39,9 +40,9 @@ Section~\ref{sec:contributions} stated four contributions. We expand each here.
 
 \item \textbf{A feasibility result for the unified rights primitive.} The central contribution shows that subscription, pay-per-view, and ownership can be encoded as native access modes of a single on-chain token --- not as configurations of a licensing primitive, but as state transitions enforced by a unified access check. It uses three storage maps (\texttt{Subscriptions}, \texttt{ViewPacks}, \texttt{Owners}) with a single check and shared royalty logic; all tests and KPIs confirm correct enforcement. No cryptographic or consensus mechanisms are needed. This closes gap G7 and is the main academic contribution.
 
-\item \textbf{Quantified decentralization--latency and revenue trade-offs.} Prior work endorsed decentralization qualitatively or measured only centralized performance. This dissertation quantifies the trade-offs directly. The latency overhead is $67{,}000\times$ and the throughput penalty is $270\times$ against a centralized Express.js baseline; the Herfindahl-Hirschman Index improvement is approximately 300-fold (Polkadot HHI $\sim$33 vs.\ centralized DRM at 10,000). The Monte Carlo simulation shows CCRMS yields a 16.8\% higher mean revenue than the centralized baseline overall (Table~\ref{tab:monte-carlo}), with the advantage concentrated among creators with 10,000 or more followers. Both are novel in blockchain content rights systems.
+\item \textbf{Quantified decentralization--latency and revenue trade-offs.} Prior work endorsed decentralization qualitatively or measured only centralized performance. This dissertation quantifies the trade-offs directly. The latency overhead is $67{,}000\times$ and the throughput penalty is $270\times$ against a centralized Express.js baseline; the Herfindahl-Hirschman Index improvement is approximately 600-fold (Polkadot HHI $\sim$16.7, based on approximately 600 active validators as of September~2026, vs.\ centralized DRM at 10,000). The Monte Carlo simulation shows CCRMS yields a 16.8\% higher mean revenue than the centralized baseline overall (Table~\ref{tab:monte-carlo}), with the advantage concentrated among creators with 10,000 or more followers. Both are novel in blockchain content rights systems.
 
-\item \textbf{A cross-chain rights artifact demonstrating XCM sufficiency.} The CCRMS parachain --- \texttt{pallet-content-rights}, \texttt{pallet-rights-verifier}, an ink!\ 6 wrapper contract, an EVM read-only precompile, and benchmark and simulation scripts --- demonstrates that XCM v3 with payer--beneficiary decoupling is sufficient for all five authenticated cross-chain rights operations without custom protocol extensions. Seven implementation specifications (pallet design, XCM message flows, security threat model, royalty algorithm, precompile interface, NFT nesting model, and Snowbridge integration) provide design knowledge intended to support future replication and extension. The artifact and specifications are released open source under the MIT license.
+\item \textbf{A cross-chain rights artifact demonstrating XCM sufficiency.} The CCRMS parachain --- \texttt{pallet-content-rights}, \texttt{pallet-rights-verifier}, an ink!\ 6 wrapper contract, an EVM read-only precompile, and benchmark and simulation scripts --- demonstrates that XCM v3 with payer--beneficiary decoupling is sufficient for all five authenticated cross-chain rights operations without custom protocol extensions. Seven implementation specifications (pallet design, XCM message flows, security threat model, royalty algorithm, precompile interface, NFT nesting model, and Snowbridge integration --- the latter covering the integration and its debugging findings, not end-to-end Ethereum-to-CCRMS compatibility, which remains untested) provide design knowledge intended to support future replication and extension. The artifact and specifications are released open source under the MIT license.
 
 \item \textbf{A DSR worked example for multi-component blockchain prototypes.} The full DSR cycle --- problem identification, design, instantiation, evaluation, and communication --- is applied to a system with FRAME pallets, ink!\ contracts, XCM, Snowbridge, and Monte Carlo simulation. This combination is rarely seen in existing DSR literature, which typically focuses on single-component blockchain systems. Future researchers building similar multi-layer blockchain prototypes can use this dissertation as a methodological reference.
 
@@ -52,17 +53,17 @@ Section~\ref{sec:contributions} stated four contributions. We expand each here.
 Six principal findings emerge from the work:
 
 \begin{enumerate}
-\item \textbf{The primary research question is answered in the affirmative.} A Polkadot parachain with XCM v3 and FRAME pallets can deliver a unified rights token supporting all three monetization models. All planned functionality is implemented, all 11 KPIs are met, and all 56 unit tests pass on every commit.
-\item \textbf{The major architectural decisions aged well.} The pallet-first decision was validated by the January 2026 ink! discontinuation; the RMRK 2.0 to \texttt{pallet-nfts} pivot, the unified rights token model, and the cross-chain operation pattern are also vindicated. In retrospect, we would not change these decisions.
-\item \textbf{The economic advantage depends on audience size.} CCRMS benefits creators with 10,000+ followers but is less competitive than centralized platforms for those with under $\sim$2,000 followers due to algorithmic discovery. While CCRMS earns more on average, the conditional framing better reflects individual creator decisions.
-\item \textbf{Cross-chain operation is operationally feasible but latency-bound.} XCM v3 is sufficient; cross-chain finality measured on a pre-Polkadot~2.0 toolchain serves as an upper bound, not a fundamental limit.
+\item \textbf{The primary research question is answered in the affirmative:} a Polkadot parachain with XCM v3 and FRAME can deliver the unified rights record. Issuance and access work; Findings~B and~I still constrain ownership transfer and the child cap. Ten of eleven KPIs in Table~\ref{tab:kpi-results} are met; KPI~9 is an author-audit interpretation only (Section~\ref{sec:chapter-7-summary}).
+\item \textbf{The major architectural decisions aged well.} The pallet-first decision was well-founded in light of the January 2026 ink! discontinuation; the RMRK 2.0 to \texttt{pallet-nfts} pivot, the unified rights record model, and the cross-chain operation pattern are also vindicated. In retrospect, we would not change these decisions.
+\item \textbf{The economic advantage depends on audience size.} CCRMS benefits creators with 10,000+ followers but is less competitive than centralized platforms for those with under $\sim$3,600 followers due to algorithmic discovery (the transition begins near 2,000 followers). While CCRMS earns more on average, the conditional framing better reflects individual creator decisions. Because this advantage lies in audience sizes the current prototype cannot yet serve (Section~\ref{sec:limitations}), lifting the holder bound is a prerequisite for it to apply in practice. Therefore the Monte Carlo result characterizes the intended design; it is not an empirical property of the bounded prototype.
+\item \textbf{Cross-chain operations are operationally feasible, but latency-bound.} XCM~v3 is sufficient for issuance-style rights operations on local HRMP. The destination-chain inclusion delay was measured in a single-collator configuration that did not enable Async Backing; it is an upper bound for that environment, not a fundamental limit. Ethereum interoperability is a configured runtime path plus a local ETH~$\to$~AssetHub transfer; the rights pallet was not on that path.
 \item \textbf{Standards reimplementation is sometimes preferable to standards adoption} when the reference implementation is unmaintained; the RMRK 2.0 pivot exemplifies this.
-\item \textbf{Forward compatibility is a defensive engineering goal.} Configuring the runtime to accept Ethereum-originated XCM messages at minimal additional cost in Phase~4 enabled the Snowbridge integration to succeed without any pallet-level modifications.
+\item \textbf{Forward compatibility is a defensive engineering goal.} Configuring the runtime to accept Ethereum-originated XCM messages at minimal additional cost in Phase~4 completed the Snowbridge integration configuration; the gindex and \texttt{forkVersions} debugging findings (Appendix~\ref{app:challenges}) are a useful engineering result, though the Ethereum-to-CCRMS path itself remains untested.
 \end{enumerate}
 
 \section{Future Work}\label{sec:future-work}
 
-11 threads of future work emerged from the research. Appendix~\ref{app:future-work} provides full descriptions.
+11 threads of future work emerged from the research. Appendix~\ref{app:future-work} provides full descriptions. The cross-chain secondary market is out of scope in the current prototype; Appendix~\ref{sec:e-delegation} describes the capability-based delegation approach for restoring \texttt{xcm\_transfer\_ownership} over XCM.
 
 \begin{longtable}{@{}L{0.06\linewidth} L{0.26\linewidth} L{0.14\linewidth} L{0.48\linewidth}@{}}
 \caption{Future Work Summary}\label{tab:future-work}\\
@@ -84,27 +85,27 @@ Six principal findings emerge from the work:
 \bottomrule
 \endlastfoot
 
-9.3.1\phantomsection\label{subsec:future-work-external-validation} & Production deployment & Near-term & Deploy to public testnet/mainnet; obtain third-party security audit \\
+E.1\phantomsection\label{sec:e-production} & Production deployment & Near-term & Deploy to public testnet/mainnet; obtain third-party security audit \\
 \addlinespace
-9.3.2 & Polkadot~2.0 migration & Near-term & Target newer SDK release (no pallet changes); compress latency via Async Backing, Agile Coretime, Elastic Scaling \\
+E.2 & Polkadot~2.0 migration & Near-term & Target newer SDK release (no pallet changes); compress latency via Async Backing, Agile Coretime, Elastic Scaling \\
 \addlinespace
-9.3.3 & Smart contract layer migration & Near-term & Choose among Solidity rewrite, \texttt{wrevive} adoption, or contract removal (ink! discontinued Jan 2026) \\
+E.3 & Smart contract layer migration & Near-term & Choose among Solidity rewrite, \texttt{wrevive} adoption, or contract removal (ink! discontinued Jan 2026) \\
 \addlinespace
-9.3.4\phantomsection\label{subsec:bounded-vec-future} & 50-child cap mitigation & Near-term & Raise bound + re-benchmark, replace with membership map, or introduce hierarchical nesting \\
+E.4\phantomsection\label{sec:e-child-cap} & 50-child cap mitigation & Near-term & Replace the bounded \texttt{Children} vector with a counter or remove it; prerequisite for the economic findings to apply at scale \\
 \addlinespace
-9.3.5\phantomsection\label{subsec:audience-validation-future} & User study & Near-term & Build minimal wallet/CLI; test with Web3 creators and consumers (highest-priority research extension) \\
+E.5\phantomsection\label{subsec:audience-validation-future} & User study & Near-term & Build minimal wallet/CLI; test with Web3 creators and consumers (highest-priority research extension) \\
 \addlinespace
-9.3.6 & Bridged-payment final hop & Near-term & Configure \texttt{PaymentCurrency} for foreign Ether or add swap step \\
+E.6 & Bridged-payment final hop & Near-term & Configure \texttt{PaymentCurrency} for foreign Ether or add swap step \\
 \addlinespace
-9.3.7 & Resale royalties & Medium-term & Add optional \texttt{resale\_royalty\_basis\_points}; requires on-chain marketplace for price verification \\
+E.7 & Resale royalties & Medium-term & Add optional \texttt{resale\_royalty\_basis\_points}; requires on-chain marketplace for price verification \\
 \addlinespace
-9.3.8 & Capability-based delegation & Medium-term & Relax Finding~B remediation with time-limited delegate authorization \\
+E.8\phantomsection\label{sec:e-delegation} & Capability-based delegation & Medium-term & Relax Finding~B remediation with time-limited delegate authorization \\
 \addlinespace
-9.3.9 & Monte Carlo extensions & Medium-term & Add creator psychology, network effects, longitudinal and regulatory modeling \\
+E.9 & Monte Carlo extensions & Medium-term & Add creator psychology, network effects, longitudinal and regulatory modeling \\
 \addlinespace
-9.3.10 & Formal verification & Long-term & Apply Isabelle/HOL techniques to authorization model, royalty algorithm, cross-chain pattern \\
+E.10 & Formal verification & Long-term & Apply Isabelle/HOL techniques to authorization model, royalty algorithm, cross-chain pattern \\
 \addlinespace
-9.3.11 & JAM transition & Long-term & Migrate to JAM when mainnet launches (mid-to-late 2026); no rebuild required \\
+E.11 & JAM transition & Long-term & Migrate to JAM (no mainnet date announced as of mid-2026; multi-client implementations completing early milestones); no rebuild required \\
 \end{longtable}
 
 \section{Closing Reflection}\label{sec:closing-reflection}

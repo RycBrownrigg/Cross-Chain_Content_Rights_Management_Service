@@ -3,7 +3,7 @@
 %%
 %% Appendix A: Implementation Challenge Narratives
 %%
-%% Expanded narratives for the nine technical challenges summarised in
+%% Expanded narratives for the nine technical challenges summarized in
 %% Table 5.3. Each section follows a Challenge / Response / Lesson
 %% structure. The narratives cover: the pivot from the frozen RMRK 2.0
 %% pallets to direct use of pallet-nfts; the pivot from a contract-first
@@ -37,7 +37,7 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \section{The Pivot from RMRK 2.0 to \texttt{pallet-nfts}}\label{sec:rmrk-to-pallet-nfts}
 
-\textbf{Challenge.} The original Phase~3 design envisioned using the RMRK 2.0 nested-NFT specification, implemented atop the \texttt{rmrk-substrate} pallet suite. RMRK 2.0 precisely offers the parent-child nesting semantics that the CCRMS unified rights token model requires. Reusing an established standard is intended to reduce implementation risk. However, during initial investigations in Phase~4, we discovered that the \texttt{rmrk-substrate} pallets were frozen on Polkadot SDK version 0.9.36 and relied on the now-deprecated \texttt{pallet-uniques} instead of the modern \texttt{pallet-nfts}. Our efforts to compile \texttt{rmrk-substrate} against the current Polkadot SDK monorepo were unsuccessful because of incompatible storage schemas and removed traits.
+\textbf{Challenge.} The original Phase~3 design envisioned using the RMRK 2.0 nested-NFT specification, implemented atop the \texttt{rmrk-substrate} pallet suite. RMRK 2.0 precisely offers the parent-child nesting semantics that the CCRMS unified rights record model requires. Reusing an established standard is intended to reduce implementation risk. However, during initial investigations in Phase~4, we discovered that the \texttt{rmrk-substrate} pallets were frozen on Polkadot SDK version 0.9.36 and relied on the now-deprecated \texttt{pallet-uniques} instead of the modern \texttt{pallet-nfts}. Our efforts to compile \texttt{rmrk-substrate} against the current Polkadot SDK monorepo were unsuccessful because of incompatible storage schemas and removed traits.
 
 \textbf{Response.} We decided to replicate RMRK 2.0's nesting semantics directly on top of \texttt{pallet-nfts} without depending on any RMRK pallets. This involved designing a parent-child storage layout (the dual \texttt{Children} and \texttt{Parent} index), implementing the lifecycle helpers (\texttt{mint\_and\_nest\_child}, the burn and re-mint patterns in \texttt{transfer\_ownership}), and tagging child NFTs with a \texttt{rights\_type} attribute via \texttt{pallet\_nfts::set\_attribute}. The implementation took longer than reusing \texttt{rmrk-substrate} would have, but the result is fully integrated with the modern Polkadot SDK and depends only on actively maintained pallets.
 
@@ -49,7 +49,7 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \textbf{Response.} We inverted the architecture. The pallet (\texttt{pallet-content-rights}) became the definitive source of truth for all business logic, whereas the ink! contract (\texttt{rights\_manager}) was retained as a streamlined user-facing interface that mirrors the pallet's API but holds no independent storage. We developed a custom EVM precompile (\texttt{ContentRightsPrecompile}) to provide read-only access to pallet state for Solidity-based clients, replacing the original chain extension design.
 
-\textbf{Lesson.} The pallet-first design proved unexpectedly resilient to the January 2026 discontinuation of ink! development (Appendix~\ref{sec:ink-discontinuation}). The decision was made for engineering reasons, but it incidentally conferred robustness against an industry change we could not have foreseen.
+\textbf{Lesson.} The pallet-first decision proved well-founded. The pivot was driven by engineering constraints, and it was taken against the backdrop of the January 2026 announcement that ink! development would be discontinued, which removed any expectation that the contract layer would mature. The episode illustrates that architectural decisions reducing dependence on any single non-essential component become more valuable as the ecosystem evolves.
 
 \section{The Snowbridge Fork-Version Configuration Issue}\label{sec:snowbridge-fork-version}
 
@@ -95,9 +95,9 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \textbf{Challenge.} Batches of 100 \texttt{subscribe} calls to the same content item failed midway with \texttt{MaxChildrenReached}. The \texttt{Children} storage entry is limited to 50 child NFTs by \texttt{BoundedVec<\_, ConstU32<50>{}>}.
 
-\textbf{Response.} We documented the constraint as a known limitation, updated benchmark scripts to rotate content items, and treat the 50-child cap as a research-prototype constraint for future work.
+\textbf{Response.} We documented the constraint as a known limitation and updated benchmark scripts to rotate content items. Subsequent analysis showed the bound to be stricter than a concurrency limit. Children are minted per buyer and released only when a view pack is exhausted, so expired subscriptions permanently occupy their slots. The bound therefore limits a content item to fifty subscribers and owners over its lifetime. Its implications for the economic results are discussed in Section~\ref{sec:limitations}.
 
-\textbf{Lesson.} Bounded FRAME collections trade benchmarkability for capacity limits. The appropriate bound is a trade-off between worst-case weight and maximum expected workload.
+\textbf{Lesson.} Bounded FRAME collections trade benchmarkability for capacity limits, and a bound that suits a benchmark may conflict with the target workload. Bounds should be checked against the audience sizes the system is meant to serve, and redundant indexes should be removed rather than bounded.
 
 \section[ink! Discontinuation]{The ink! Discontinuation and Its Implications}\label{sec:ink-discontinuation}
 

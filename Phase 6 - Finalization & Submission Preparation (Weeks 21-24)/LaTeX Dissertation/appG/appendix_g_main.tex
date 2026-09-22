@@ -1,0 +1,161 @@
+%% ======================================================================
+%% appG/appendix_g_main.tex
+%%
+%% Appendix G: Monte Carlo Simulation Parameters and Sensitivity
+%%
+%% Documents the full parameter set and sensitivity results for the
+%% Monte Carlo revenue simulation. Includes stochastic parameters,
+%% platform parameters, eight-parameter sensitivity grid, CCRMS fee
+%% sweep, discovery boost sweep, fine-grained crossover buckets,
+%% and reproduction notes.
+%%
+%% External labels referenced:
+%%   sec:economic-results (Chapter 7), tab:mc-headline (Chapter 7)
+%%
+%% Citations: none.
+%% ======================================================================
+
+\chapter{Monte Carlo Simulation Parameters and Sensitivity}\label{app:monte-carlo}
+
+This appendix documents the full parameter set and sensitivity results for the Monte Carlo revenue simulation described in Section~\ref{sec:economic-results}. The simulation is seeded (xoshiro128**, seed~42) and exactly reproducible from the published repository.
+
+The headline run used 1,000 creators $\times$ 10,000 iterations. The sensitivity and sweep results below used 200 creators $\times$ 2,000 iterations with the same seed; the baseline advantage reads 17.0\% against the 16.8\% in the headline results due to the smaller grid.
+
+\section*{G.1 Stochastic Parameters}
+
+Table~\ref{tab:mc-params-creator-app} documents the per-creator stochastic parameters drawn each iteration.
+
+\begin{table}[h]
+\centering
+\caption{Monte Carlo Stochastic Parameters (per creator, per iteration)}\label{tab:mc-params-creator-app}
+\begin{tabular}{@{}p{0.42\linewidth} p{0.52\linewidth}@{}}
+\toprule
+\textbf{Parameter} & \textbf{Distribution} \\
+\midrule
+Base audience     & Log-normal ($\mu = 1{,}000$, $\sigma = 2$) \\
+Content price     & Uniform (\$1--\$50) \\
+Subscription adoption & Beta ($\alpha = 2$, $\beta = 5$), mean $\approx 28.6\%$ \\
+PPV conversion    & Beta ($\alpha = 1$, $\beta = 10$), mean $\approx 9.1\%$ \\
+Secondary-sale probability & Exponential ($\lambda = 0.1$), capped at 1.0 \\
+Stream weights    & Subscription 50\%, PPV 30\%, secondary 20\% \\
+Subscription period & 12 months \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:mc-params-platform-app} documents the per-platform parameters drawn uniformly once per iteration.
+
+\begin{table}[h]
+\centering
+\caption{Monte Carlo Platform Parameters (drawn uniformly once per iteration)}\label{tab:mc-params-platform-app}
+\begin{tabular}{@{}p{0.20\linewidth} p{0.13\linewidth} p{0.18\linewidth} p{0.17\linewidth} p{0.13\linewidth}@{}}
+\toprule
+\textbf{Platform} & \textbf{Fee} & \textbf{Discovery added} & \textbf{Monthly churn} & \textbf{Cost/tx} \\
+\midrule
+Centralized      & 30--45\% & +500--3,000 & 2--5\%   & \$0.000 \\
+Web3 marketplace & 7.5--15\% & +100--800  & 5--10\%  & \$0.005 \\
+Bridge-based     & 8--15\%  & +50--400   & 6--12\%  & \$0.020 \\
+CCRMS            & 1--5\%   & +0--200    & 4--8\%   & \$0.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Discovery is additive rather than multiplicative: a flat bonus of 500--3,000 followers matters substantially at 200 followers and marginally at 50,000, which is what produces the audience-size crossover.
+
+The CCRMS fee of 1--5\% is a conservative allowance for protocol or treasury fees rather than a measured cost; Polkadot fees are not levied as a share of revenue, and the model charges CCRMS per-transaction costs separately.
+
+\section*{G.2 Eight-Parameter Sensitivity Grid}
+
+Table~\ref{tab:sensitivity-grid} varies each input parameter independently. The headline result is insensitive to pricing and conversion parameters and sensitive to the audience distribution.
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity of CCRMS Advantage to Individual Parameter Changes}\label{tab:sensitivity-grid}
+\begin{tabular}{@{}p{0.40\linewidth} p{0.22\linewidth} p{0.30\linewidth}@{}}
+\toprule
+\textbf{Parameter varied} & \textbf{Range tested} & \textbf{Advantage over centralized} \\
+\midrule
+Audience $\mu$          & 500 $\to$ 5,000      & $-0.2\%$ to $+36.3\%$ \\
+Audience $\sigma$       & 1.0 $\to$ 3.0        & $-26.3\%$ to $+39.1\%$ \\
+Content price floor     & \$0.50 $\to$ \$5     & $+17.0\%$ (unchanged) \\
+Content price ceiling   & \$20 $\to$ \$200     & $+17.0\%$ (unchanged) \\
+Subscription adoption $\alpha$ & 1 $\to$ 5    & $+20.2\%$ to $+12.3\%$ \\
+PPV conversion $\alpha$ & 0.5 $\to$ 3          & $+16.8\%$ to $+18.2\%$ \\
+Resale $\lambda$        & 0.05 $\to$ 0.5       & $+17.1\%$ to $+15.8\%$ \\
+Subscription period     & 1 $\to$ 24 months    & $+26.0\%$ to $+14.4\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.3 CCRMS Fee Sweep}
+
+Table~\ref{tab:fee-sweep} sweeps the CCRMS fee assumption. The mean-revenue advantage persists for any CCRMS fee below approximately 17\%, more than three times the top of the assumed 1--5\% range.
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity of CCRMS Advantage to Fee Assumption}\label{tab:fee-sweep}
+\begin{tabular}{@{}p{0.22\linewidth} p{0.35\linewidth} p{0.22\linewidth}@{}}
+\toprule
+\textbf{CCRMS fee} & \textbf{Advantage over centralized} & \textbf{Win rate} \\
+\midrule
+1--5\% (baseline) & $+17.0\%$ & 28.1\% \\
+5\%               & $+14.6\%$ & 26.9\% \\
+10\%              & $+8.5\%$  & 23.6\% \\
+15\%              & $+2.5\%$  & 19.8\% \\
+17\%              & $+0.1\%$  & 18.1\% \\
+20\%              & $-3.5\%$  & 15.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.4 Discovery Boost Sweep}
+
+Table~\ref{tab:discovery-sweep} sweeps the centralized discovery bonus. The advantage reverses at approximately 1.9 times the assumed value, so discovery is the more influential assumption of the two.
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity of CCRMS Advantage to Centralized Discovery Assumption}\label{tab:discovery-sweep}
+\begin{tabular}{@{}p{0.32\linewidth} p{0.34\linewidth} p{0.22\linewidth}@{}}
+\toprule
+\textbf{Centralized discovery} & \textbf{Advantage over centralized} & \textbf{Win rate} \\
+\midrule
+0.25$\times$ (+125--750)        & $+36.3\%$ & 61.8\% \\
+0.5$\times$ (+250--1,500)       & $+29.2\%$ & 42.9\% \\
+1$\times$ (+500--3,000, baseline) & $+17.0\%$ & 28.1\% \\
+1.5$\times$ (+750--4,500)       & $+6.9\%$  & 21.4\% \\
+2$\times$ (+1,000--6,000)       & $-1.6\%$  & 17.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.5 Fine-Grained Crossover Buckets}
+
+Table~\ref{tab:crossover-fine} shows the audience-size transition at fine resolution, establishing that the 50\% crossover falls near 3,600 followers.
+
+\begin{table}[h]
+\centering
+\caption{Fine-Grained CCRMS Win Rate Near the Crossover Audience Size}\label{tab:crossover-fine}
+\begin{tabular}{@{}p{0.32\linewidth} p{0.35\linewidth}@{}}
+\toprule
+\textbf{Base audience} & \textbf{Win rate vs centralized} \\
+\midrule
+1,500--2,000  & 16.3\% \\
+2,000--2,500  & 25.1\% \\
+2,500--3,000  & 34.3\% \\
+3,000--3,200  & 41.4\% \\
+3,200--3,400  & 45.1\% \\
+3,400--3,600  & 48.2\% \\
+3,600--3,800  & 51.9\% \\
+4,000--5,000  & 63.4\% \\
+7,500--10,000 & 94.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.6 Reproduction Notes}
+
+To reproduce the fee sweep: set \texttt{PLATFORMS.ccrms.feeLow} and \texttt{feeHigh} to the same fixed value in \texttt{scripts/perf/monte-carlo-revenue.mjs} and re-run.
+
+To reproduce the discovery sweep: multiply \texttt{PLATFORMS.centralized.discoveryAddLow} and \texttt{discoveryAddHigh} by the desired factor.
+
+Both sweeps use \texttt{nCreators: 200, nIterations: 2\_000} and \texttt{createRng(42)}, matching the existing \texttt{sensitivityAnalysis()} grid.

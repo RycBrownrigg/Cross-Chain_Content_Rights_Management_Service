@@ -3,7 +3,7 @@
 %%
 %% Appendix E: Future Work Details
 %%
-%% Expanded descriptions for the 11 future-work threads summarised in
+%% Expanded descriptions for the 11 future-work threads summarized in
 %% Table 9.1. Each section elaborates on priority, scope, and the
 %% implementation challenges for one thread. Priorities span near-term
 %% production readiness (deployment, Polkadot 2.0 migration, contract
@@ -38,7 +38,7 @@ The most significant future work is deployment to a public testnet or mainnet. T
 
 \section{Migration to Polkadot 2.0 Features}\label{sec:e-polkadot-2}
 
-Async Backing, Agile Coretime, and Elastic Scaling were all delivered to production by October 2025, after the implementation window closed. Migration would not require any pallet-level changes (the runtime would target a newer SDK release) but would compress single-chain and cross-chain latency, allow the parachain to acquire block production capacity on demand, and increase throughput proportionally via multi-core scheduling. XCM v5 support for multi-hop messages is included in the same release.
+Although Polkadot~2.0 features (Agile Coretime, Asynchronous Backing, Elastic Scaling) were available in the \texttt{stable2512} SDK (December~2025) used throughout the project, the local Zombienet configuration did not enable them; the throughput figures in Section~\ref{subsec:throughput} therefore reflect a single-collator setup rather than the capabilities of the full Polkadot~2.0 stack. Migration would not require any pallet-level changes (the runtime would target an updated chain specification) but would compress single-chain and cross-chain latency, allow the parachain to acquire block production capacity on demand, and increase throughput proportionally via multi-core scheduling. XCM v5 support for multi-hop messages is included in the same release.
 
 \section{Migration Paths for the Smart Contract Layer}\label{sec:e-contract-migration}
 
@@ -46,7 +46,11 @@ The January 2026 ink! discontinuation leaves \texttt{rights\_manager} without up
 
 \section{The 50-Child Cap}\label{sec:e-child-cap}
 
+The \texttt{Children} vector duplicates information already held in \texttt{Subscriptions}, \texttt{ViewPacks}, and \texttt{Ownership} (holders) and in \texttt{Parent} (nesting), so the simplest mitigation is to remove it or replace it with a counter.
+
 Three mitigation paths: raise the bound and re-benchmark (trades worst-case extrinsic weight for capacity); replace the bounded vector with a counter plus a separate membership map (removes the cap but loses single-read enumeration); introduce hierarchical ``rights bucket'' NFTs (more complex query patterns but unbounded fan-out). Any production deployment expecting highly popular content items would need to address the cap as a priority.
+
+Whichever path is chosen, subscription expiry should also release or burn the associated child NFT, so that capacity reflects current rather than historical holders.
 
 \section[User Study and Consumer Application]{User Study and Consumer-Facing Application}\label{sec:e-user-study}
 
@@ -74,4 +78,4 @@ Following \citet{maricEtAl2025} on Isabelle/HOL verification of cross-chain brid
 
 \section{JAM Transition}\label{sec:e-jam}
 
-JAM (the Join-Accumulate Machine) represents Polkadot's architectural successor to the existing relay chain. The testnet was launched in January 2026 with the participation of 43 implementation teams; the mainnet is scheduled for deployment in mid-to-late 2026. CCRMS does not incorporate any JAM-specific features, and our implementation specifications provide sufficiently detailed architectural decisions to facilitate potential future migration without necessitating a complete rebuild.
+JAM (the Join-Accumulate Machine) represents Polkadot's architectural successor to the existing relay chain. The testnet was launched in January 2026 with the participation of multiple implementation teams; no mainnet date has been announced as of mid-2026, with multi-client implementations completing early milestones across several language runtimes. CCRMS does not incorporate any JAM-specific features, and our implementation specifications provide sufficiently detailed architectural decisions to facilitate potential future migration without necessitating a complete rebuild.

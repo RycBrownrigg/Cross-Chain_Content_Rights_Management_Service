@@ -71,7 +71,7 @@ SQ5 (Economic viability) & Monte Carlo creator revenue simulation & Literature c
 
 \section{Testing Layers}\label{sec:testing-layers}
 
-We organize testing into four layers, each executed at the lowest applicable level of abstraction. Figure~\ref{fig:testing-layers} summarizes the stack; the subsections below describe each layer.
+We organize testing into four layers, each executed at the lowest applicable level of abstraction. Figure~\ref{fig:testing-layers} summarizes the stack; each layer is described below.
 
 \begin{figure}[htbp]
 \vspace{\baselineskip}
@@ -153,7 +153,7 @@ Reliability & \texttt{reliability-test.mjs} & Baseline uptime, MTTR after SIGTER
 Comparative & \texttt{centralized-drm-}\allowbreak\texttt{benchmark/} & Same six operations on Express.js + SQL.js under identical conditions \\
 \end{longtable}
 
-A separate Monte Carlo simulation (\texttt{monte-carlo-revenue.mjs}) models 1,000 creators over 10,000 iterations across four platform configurations (centralized 30--45\% fees, Web3 marketplace 5--10\%, bridge-based 8--15\%, CCRMS 1--5\%), incorporating algorithmic discovery, organic growth, and monthly churn. This simulation provides the primary evidence for research question SQ5. We document the methodology in \texttt{scripts/perf/results/monte-carlo-findings.md}.
+A separate Monte Carlo simulation (\texttt{monte-carlo-revenue.mjs}) models 1,000 creators over 10,000 iterations across four platform configurations (centralized 30--45\% fees, Web3 marketplace 5--10\%, bridge-based 8--15\%, CCRMS 1--5\%), incorporating algorithmic discovery and monthly churn. This simulation provides the primary evidence for research question SQ5. We document the methodology in \texttt{scripts/perf/results/monte-carlo-findings.md}.
 
 All scripts are reproducible: each is an independent Node.js program with explicit parameters and deterministic output paths, and each is archived as timestamped JSON in \texttt{scripts/perf/results/}.
 
@@ -247,7 +247,7 @@ Our evaluation uses 11 key performance indicators (KPIs) across four domains: te
 11 & \textbf{Decentralization ratio} & Performance cost vs centralized baseline & Documented & Comparative analysis \\
 \end{longtable}
 
-The target value and measurement source for each KPI are defined in Table~\ref{tab:kpi-defs} above. Measured values and outcomes for all 11 KPIs are reported in Chapter~\ref{chap:results} (Table~\ref{tab:kpi-results}). The security audit identified eight findings (see Table~\ref{tab:challenges}, Appendix~\ref{app:security}): two vulnerabilities were remediated (B, E), three design properties were accepted (A, C, D), and three observations regarding positive reliability were noted (F, G, H). Chapter~\ref{chap:results} presents the full KPI outcomes and discusses each in relation to the research questions; Chapter~\ref{chap:discussion} interprets the findings.
+The target value and measurement source for each KPI are defined in Table~\ref{tab:kpi-defs} above. Measured values and outcomes for all 11 KPIs are reported in Chapter~\ref{chap:results} (Table~\ref{tab:kpi-results}). The security audit identified nine findings (see Table~\ref{tab:security-findings}, Appendix~\ref{app:security}): two vulnerabilities remediated (B, E), one open denial-of-service path (I), three accepted design properties (A, C, D), and three positive reliability observations (F, G, H). Chapter~\ref{chap:results} presents the full KPI outcomes and discusses each in relation to the research questions; Chapter~\ref{chap:discussion} interprets the findings.
 
 \section{Testing Infrastructure}\label{sec:test-infra-ch6}
 
@@ -281,7 +281,7 @@ Ethereum & Geth v1.17.1 + Lodestar v1.35.0 (Snowbridge tests only) \\
 Zombienet provider & Native \\
 Block time & $\sim$6 seconds (parachain) \\
 Node binary & \texttt{parachain-template-node} (release build) \\
-Polkadot SDK version & stable2512 (December 2024) \\
+Polkadot SDK version & stable2512 (December 2025) \\
 Test scripts & \texttt{scripts/perf/*.mjs} (Node.js, \texttt{@polkadot/api} library) \\
 Centralized benchmark & \texttt{centralized-drm-}\allowbreak\texttt{benchmark/} (Express.js + SQL.js) \\
 \end{longtable}
@@ -294,9 +294,9 @@ The single-machine topology simplifies setup and eliminates reliance on external
 
 \textbf{External validity.} This is the dimension in which our evaluation is most limited. Four constraints apply: (1) we measure in a local Zombienet environment with two relay-chain validators and no real network latency, so the figures serve as upper bounds within the test environment rather than predictive metrics for production; (2) the Snowbridge integration uses a local Ethereum stack rather than a public testnet, avoiding variability in block times, MEV, contention, and beacon chain reorganizations; (3) because of the maturation gap of Polkadot~2.0, the latency figures reflect a pre-2.0 toolchain, and several measurements are expected to improve significantly in a production Polkadot~2.0 environment; (4) our scale is modest, comprising up to 200 concurrent accounts and a few hundred content items, and empirical verification of linear storage growth at production scale has not yet been conducted.
 
-\textbf{Construct validity.} The figure of 26.2 TPS quantifies the successful inclusion rate under sustained load but is insufficient to assess user-perceived performance, which also depends on wallet user experience, mempool latency, and RPC responsiveness. The baseline uptime of 90\% assesses single-collator block production and does not account for multi-collator production availability. The Monte Carlo simulation evaluates expected revenue using a probabilistic model; the input parameter sources and assumptions are documented in Section~\ref{subsec:monte-carlo}.
+\textbf{Construct validity.} The figure of 26.2 TPS quantifies the successful inclusion rate under sustained load but is insufficient to assess user-perceived performance, which also depends on wallet user experience, mempool latency, and RPC responsiveness. The baseline uptime of 90\% assesses single-collator block production and does not account for multi-collator production availability. The Monte Carlo simulation evaluates expected revenue using a probabilistic model; the input parameter sources and assumptions are documented in Appendix~\ref{app:monte-carlo}.
 
-\textbf{Threats to validity.} (a)~\textbf{Selection bias:} the eight test scenarios may not capture production conditions such as high subscriber concurrency on a single content item, large multi-collator topologies, or extended multi-month uptime. (b)~\textbf{Measurement instrument bias:} any bug in \texttt{@polkadot/api} or \texttt{system.blockWeight} would propagate into our results; although the library is widely used, it is not bug-free. (c)~\textbf{Confirmation bias:} the author was responsible for designing, implementing, and evaluating the system; this risk is mitigated by using externally referenced KPI targets and by disclosing all scripts and raw results. (d)~\textbf{Single-author validation:} no external code review, third-party security audit, or benchmark validation has been conducted; we recognize this as a significant limitation and intend to address it in future work (Section~\ref{subsec:future-work-external-validation}).
+\textbf{Threats to validity.} (a)~\textbf{Selection bias:} the eight test scenarios may not capture production conditions such as high subscriber concurrency on a single content item, large multi-collator topologies, or extended multi-month uptime. (b)~\textbf{Measurement instrument bias:} any bug in \texttt{@polkadot/api} or \texttt{system.blockWeight} would propagate into our results; although the library is widely used, it is not bug-free. (c)~\textbf{Confirmation bias:} the author was responsible for designing, implementing, and evaluating the system; this risk is mitigated by using externally referenced KPI targets and by disclosing all scripts and raw results. (d)~\textbf{Single-author validation:} no external code review, third-party security audit, or benchmark validation has been conducted; we recognize this as a significant limitation and intend to address it in future work (Appendix~\ref{app:future-work}, E.1).
 
 \section{Summary}\label{sec:chapter-6-summary}
 
