@@ -13,6 +13,12 @@
 %%   C.1 Solidity Interface: ContentRightsPrecompile (lstlisting)
 %%   C.2 Canonical XCM Message for Cross-Chain Rights Operations
 %%       (lstlisting, JavaScript form as submitted via @polkadot/api)
+%%   C.3 Repository Directory Layout
+%%   C.4 Dispatchable Extrinsics Reference (17 extrinsics; view function
+%%       access_rights_of noted after the table)
+%%   C.5 Pallet Storage Layout Reference (10 storage items)
+%%
+%% Code state: repository commit 5cb09cd.
 %%
 %% External labels referenced:
 %%   subsec:ink-contract (5.2.4), subsec:xcm-flows (5.3.1)
@@ -51,6 +57,8 @@ interface IContentRights {
 }
 \end{lstlisting}
 
+\texttt{checkAccess} returns 0 for a subscription, 1 for pay-per-view, 2 for ownership and 3 for no access, using the same priority as \texttt{check\_access}; the precompile maps each EVM address to a CCRMS account before reading storage.
+
 \section[Canonical XCM Message]{Canonical XCM Message for Cross-Chain Rights Operations}\label{sec:xcm-message-structure}
 
 The canonical XCM message follows the three-instruction pattern \texttt{WithdrawAsset} $\to$ \texttt{BuyExecution} $\to$ \texttt{Transact}. It is constructed on the sending parachain (Para~B) and sent to CCRMS via \texttt{polkadotXcm.send}; the \texttt{Transact} instruction carries the encoded call to one of the \texttt{xcm\_*} extrinsics (Section~\ref{subsec:xcm-flows}), which CCRMS dispatches from Para~B's sovereign account. The JavaScript form below shows the message as submitted via \texttt{@polkadot/api} in the latency benchmark. It is V3-encoded; \texttt{pallet-xcm} converts it to XCM~v5, the version the runtime executes, before delivery. In v5, the \texttt{requireWeightAtMost} value becomes \texttt{fallback\_max\_weight}, which is kept only for conversion to older versions; the v5 executor weighs the call from its own dispatch information.
@@ -85,8 +93,8 @@ The CCRMS parachain repository follows the standard Polkadot SDK template struct
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=none]
 content-rights-parachain/
 |-- pallets/
-|   |-- content-rights/        # Core business logic and tests
-|   `-- rights-verifier/       # Cross-chain Merkle proof verification
+|   |-- content-rights/         # Core business logic and tests
+|   `-- rights-verifier/        # Cross-chain Merkle proof verification
 |-- runtime/
 |   `-- src/
 |       |-- lib.rs              # Runtime composition
@@ -94,8 +102,10 @@ content-rights-parachain/
 |       `-- precompiles.rs      # Custom EVM precompile
 |-- contracts/
 |   `-- rights_manager/         # ink! 6 contract
+|-- integration-tests/          # xcm-simulator scenario tests
 |-- node/                       # Collator binary
 |-- scripts/                    # Benchmarking, testing, deployment
+|-- zombienet/, zombienet*.toml # Local network configurations
 `-- docs/                       # Setup and integration documentation
 \end{lstlisting}
 
@@ -135,7 +145,7 @@ Table~\ref{tab:extrinsics} lists all 17 dispatchable extrinsics of \texttt{palle
 \addlinespace
 5 & \texttt{purchase\_ownership} & Purchase permanent ownership \\
 \addlinespace
-6 & \texttt{check\_access} & Verify whether a user holds any active rights \\
+6 & \texttt{check\_access} & Verify whether a user holds any active rights; the result is recorded as an \texttt{AccessChecked} event \\
 \addlinespace
 7 & \texttt{xcm\_subscribe} & Cross-chain subscription with payer--beneficiary decoupling \\
 \addlinespace
@@ -151,7 +161,7 @@ Table~\ref{tab:extrinsics} lists all 17 dispatchable extrinsics of \texttt{palle
 \addlinespace
 13 & \texttt{set\_royalty\_splits} & Configure the royalty distribution table (creator-only) \\
 \addlinespace
-14 & \texttt{enable\_auto\_renew} & Enable automatic renewal for an existing subscription \\
+14 & \texttt{enable\_auto\_renew} & Enable automatic renewal for an existing subscription (content period of at least \texttt{MinAutoRenewPeriod}; Finding~M) \\
 \addlinespace
 15 & \texttt{disable\_auto\_renew} & Disable automatic renewal \\
 \addlinespace
