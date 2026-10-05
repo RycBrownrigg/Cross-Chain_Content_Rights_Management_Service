@@ -3,25 +3,24 @@
 %%
 %% Abstract (and keywords).
 %%
-%% Structured as four paragraphs: (1) motivation and research question,
-%% (2) system and evaluation method, (3) results and KPIs,
-%% (4) three principal findings.
+%% Koopman structure in four paragraphs: (1) motivation and problem,
+%% (2) research question and approach, (3) results, (4) conclusions.
 %%
-%% Written in third person per CDLT guidelines (abstract must not use
-%% first person). No citations or footnotes per guidelines.
-%% Target ≤300 words; actual length approx. 266 words.
+%% Written in first-person plural, consistent with the body (advisor
+%% override of the CDLT third-person default). No citations or footnotes.
+%% Maximum 300 words; actual length approx. 270 words (texcount).
 %% ======================================================================
 
 \begin{abstract}
 
-The content creator economy concentrates value in centralized intermediaries; no existing system delivers subscription, pay-per-view, and permanent-ownership access rights through a single cross-chain-portable primitive. This dissertation asks: \textit{how can a Polkadot parachain built on FRAME pallet primitives and XCM deliver a unified rights token natively supporting all three monetization models across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?}
+The content creator economy concentrates value in centralized intermediaries. No existing system, centralized or decentralized, provides subscription access, pay-per-view consumption, and permanent ownership through a single rights primitive that is portable across heterogeneous blockchain networks.
 
-CCRMS (Cross-Chain Content Rights Management Service) is a Polkadot parachain implementing parent--child NFT nesting on \texttt{pallet-nfts}, automatic royalty splits, and cross-chain portability via XCM and Snowbridge. The prototype is evaluated with 56 unit tests, seven performance benchmarks, a security audit, a centralized Express.js/SQLite baseline comparison, and a 10,000-iteration Monte Carlo creator revenue simulation.
+We ask how a shared-security, multi-chain framework built on Polkadot XCM and FRAME primitives can deliver a unified rights record supporting all three monetization models, and what transaction finality, cost efficiency, and creator revenue retention it can achieve. We built the Cross-Chain Content Rights Management Service (CCRMS), a Polkadot parachain prototype, and evaluated it through unit testing, performance benchmarks, a security audit, a centralized baseline comparison, and a Monte Carlo creator-revenue simulation.
 
-All 11 KPIs met their targets: 26.2~TPS sustained throughput, $\sim$6-second inclusion latency, 3--5-block cross-chain finality, 191 bytes per content item, 90\% baseline uptime, and 15--20-second MTTR. The Monte Carlo simulation yields $\sim$16.8\% higher average creator revenue than centralized platforms, but this advantage is \textbf{strongly audience-dependent}: creators above $\sim$10,000 followers benefit decisively, while those below $\sim$2,000 are better served by centralized discovery platforms.
+On a local test network, the prototype sustains at least 26.2 transactions per second, the rate our benchmark client could offer, with approximately six-second inclusion latency, and cross-chain rights operations reach the destination chain in a median of five blocks (about 30~s). In simulation, mean creator revenue is 4.4\% higher than on centralized platforms, but the median simulated creator earns less: CCRMS usually wins only for creators above roughly 6,000 followers, and the advantage disappears if its fee exceeds about 7\% or centralized discovery is about 25\% stronger than assumed. The prototype bounds the number of rights holders per content item, and this bound must be lifted before the advantage can be realized for larger audiences.
 
-Three findings advance the state of knowledge. First, a unified rights token supporting all three access models can be constructed from standard FRAME primitives without novel cryptographic mechanisms, closing literature gap G7. Second, the revenue advantage of decentralized rights management is not universal, crossing a follower threshold at approximately 2,000. Third, the work demonstrates that conservatively chosen architectural decisions---specifically the pallet-first design---provide incidental resilience against ecosystem-level changes, as evidenced by the January 2026 discontinuation of ink!\ development.
+We conclude that a unified rights record supporting all three access models can be built from standard FRAME primitives, and that the standard XCM \texttt{WithdrawAsset}~$\to$ \texttt{BuyExecution}~$\to$ \texttt{Transact} sequence, available since XCM~v3, suffices for issuance-style cross-chain rights operations without custom protocol extensions. The revenue advantage of decentralized rights management is small and not universal; it depends on audience size and on the assumed value of centralized discovery.
 
 \end{abstract}
 
-\noindent\textbf{Keywords:} cross-chain content rights, Polkadot XCM, unified rights token, creator revenue retention, design science research
+\noindent\textbf{Keywords:} cross-chain content rights, Polkadot XCM, unified rights record, creator revenue retention, design science research

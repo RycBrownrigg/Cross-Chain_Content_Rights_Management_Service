@@ -34,7 +34,7 @@
 
 \section{RO2: Implement a Unified Rights Token}
 
-\textbf{Statement.} Implement a unified rights token (originally ink!, revised to FRAME pallet in Phase~4) with off-chain indexing support and access-verification latency measurement.\newline
+\textbf{Statement.} Implement a unified rights record (originally ink!, revised to FRAME pallet in Phase~4) with off-chain indexing support and access-verification latency measurement.\newline
 \textbf{Sub-questions:} SQ2, SQ3.\newline
 \textbf{Deliverable:} \texttt{pallet-content-rights} enforcing all three monetization models with documented latency.\newline
 \textbf{Note:} Off-chain indexer (SubQuery) was not implemented; pallet events suffice for on-chain queries via polkadot-js API. Acknowledged as a limitation.
@@ -50,7 +50,7 @@
 \textbf{Statement.} Benchmark against centralized DRM, bridge-based solutions, and (originally) Ethereum L2s.\newline
 \textbf{Sub-questions:} SQ2, SQ5.\newline
 \textbf{Deliverable:} Comparative TPS, latency, and creator revenue retention analysis.\newline
-\textbf{Note:} Ethereum L2 target was substituted with Express.js + SQLite local benchmark in Phase~5. Core analysis is intact.
+\textbf{Note:} Ethereum L2 target was substituted with Express.js + SQL.js local benchmark in Phase~5. Core analysis is intact.
 
 \section{RO5: Zero-Knowledge Proof Hooks (Not Achieved)}
 
@@ -62,4 +62,4 @@
 \textbf{Statement.} Quantify creator savings through Monte Carlo simulation comparing CCRMS with centralized (30--45\% fees), Web3 marketplace, and bridge-based (8--15\% fees) alternatives.\newline
 \textbf{Sub-questions:} SQ5.\newline
 \textbf{Deliverable:} Monte Carlo simulation with documented input distributions, model assumptions, and comparative output statistics.\newline
-\textbf{Note:} Phase~2 listed this as potentially replaceable by centralized benchmarking. Phase~5 included both; RO6 is fully achieved.
+\textbf{Note:} Phase~2 listed this as potentially replaceable by centralized benchmarking. Phase~5 included both; RO6 is achieved. The bridge-based fee range proved to have no published source, so that comparison is reported in Appendix~\ref{app:monte-carlo} as illustrative only.

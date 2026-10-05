@@ -3,10 +3,10 @@
 %%
 %% Appendix E: Future Work Details
 %%
-%% Expanded descriptions for the 11 future-work threads summarised in
+%% Expanded descriptions for the 11 future-work threads summarized in
 %% Table 9.1. Each section elaborates on priority, scope, and the
 %% implementation challenges for one thread. Priorities span near-term
-%% production readiness (deployment, Polkadot 2.0 migration, contract
+%% production readiness (deployment, elastic scaling, contract
 %% layer decisions, child-cap mitigation, user study, bridged payments)
 %% through medium-term feature extensions (resale royalties, capability
 %% delegation, Monte Carlo extensions) to long-term research directions
@@ -14,7 +14,7 @@
 %%
 %% Sections:
 %%   E.1  Production Deployment
-%%   E.2  Migration to Polkadot 2.0 Features
+%%   E.2  Scaling Beyond the Prototype Configuration
 %%   E.3  Migration Paths for the Smart Contract Layer
 %%   E.4  The 50-Child Cap
 %%   E.5  User Study and Consumer-Facing Application
@@ -34,11 +34,11 @@
 
 \section{Production Deployment}\label{sec:e-production}
 
-The most significant future work is deployment to a public testnet or mainnet. This would yield realistic latency and throughput measurements under network conditions that include geographic distribution, real-world contention, and validator set diversity; multi-collator reliability data replacing the single-collator MTTR figure of 15--20 seconds; genuine cross-chain operation against other parachains; and the opportunity for third-party security audit that would address the single-author validation limitation.
+The most significant future work is deployment to a public testnet or mainnet. This would yield realistic latency and throughput measurements under network conditions that include geographic distribution, real-world contention, and validator set diversity; multi-collator reliability data replacing the single-collator recovery figure of about 18 seconds; genuine cross-chain operation against other parachains; and the opportunity for third-party security audit that would address the single-author validation limitation.
 
-\section{Migration to Polkadot 2.0 Features}\label{sec:e-polkadot-2}
+\section{Scaling Beyond the Prototype Configuration}\label{sec:e-polkadot-2}
 
-Async Backing, Agile Coretime, and Elastic Scaling were all delivered to production by October 2025, after the implementation window closed. Migration would not require any pallet-level changes (the runtime would target a newer SDK release) but would compress single-chain and cross-chain latency, allow the parachain to acquire block production capacity on demand, and increase throughput proportionally via multi-core scheduling. XCM v5 support for multi-hop messages is included in the same release.
+The prototype already runs with asynchronous backing (Section~\ref{subsec:26-tps-context}). Elastic scaling was not exercised: the runtime uses one core per parachain (block processing velocity 1), and Agile Coretime does not apply to the local test network, where parachains are registered at genesis. A production deployment would acquire coretime on the Polkadot relay chain and could assign additional cores to CCRMS through elastic scaling. This requires no pallet-level changes, but it does require raising the runtime's block processing velocity and unincluded-segment capacity, and switching to a collator that supports multiple cores; the resulting throughput gain would need to be measured rather than assumed. The runtime already executes XCM~v5; sending V5-encoded messages (for example with \texttt{PayFees} in place of \texttt{BuyExecution}) would change only how Para~B constructs messages, not the pallet.
 
 \section{Migration Paths for the Smart Contract Layer}\label{sec:e-contract-migration}
 
@@ -46,7 +46,11 @@ The January 2026 ink! discontinuation leaves \texttt{rights\_manager} without up
 
 \section{The 50-Child Cap}\label{sec:e-child-cap}
 
+The \texttt{Children} vector duplicates information already held in \texttt{Subscriptions}, \texttt{ViewPacks}, and \texttt{Ownership} (holders) and in \texttt{Parent} (nesting), so the simplest mitigation is to remove it or replace it with a counter.
+
 Three mitigation paths: raise the bound and re-benchmark (trades worst-case extrinsic weight for capacity); replace the bounded vector with a counter plus a separate membership map (removes the cap but loses single-read enumeration); introduce hierarchical ``rights bucket'' NFTs (more complex query patterns but unbounded fan-out). Any production deployment expecting highly popular content items would need to address the cap as a priority.
+
+Whichever path is chosen, subscription expiry should also release or burn the associated child NFT, so that capacity reflects current rather than historical holders.
 
 \section[User Study and Consumer Application]{User Study and Consumer-Facing Application}\label{sec:e-user-study}
 
@@ -60,9 +64,9 @@ Closing the gap between bridged ETH on AssetHub and a paid CCRMS rights operatio
 
 The current \texttt{transfer\_ownership} extrinsic has no creator share on secondary-market transfers. CCRMS could add an optional per-content \texttt{resale\_royalty\_basis\_points} field; the implementation challenge is verifying the declared sale price, which suggests resale royalties would work best in conjunction with an on-chain marketplace pallet that records sale prices as part of the transfer transaction.
 
-\section[Capability-Based Delegation]{Capability-Based Delegation for Cross-Chain Transfers}\label{sec:e-delegation}
+\section[Origin Aliasing and Delegation]{Origin Aliasing and Delegation for Cross-Chain Transfers}\label{sec:e-delegation}
 
-The conservative Finding~B remediation rules out delegated transfers. A future iteration could relax this with a capability-based authorization model (the owner pre-authorizes a specific delegate for a specific operation and time window), which is well-explored territory in capability-based security. The implementation challenge is the storage layout for capability records and the revocation lifecycle.
+A signed user on a sibling parachain can already transfer ownership held by their \texttt{HashedDescription}-derived account (Appendix~\ref{sec:d-finding-b}). Two gaps remain. First, the derived account differs from the user's local CCRMS account, so ownership cannot follow a user between their local and remote identities. XCM~v5 addresses this with \texttt{AliasOrigin}: if the runtime set \texttt{Aliasers} to \texttt{pallet\_xcm::AuthorizedAliasers} (with a deposit configured through \texttt{AuthorizedAliasConsideration}, currently \texttt{Disabled}), a user could call \texttt{add\_authorized\_alias} on CCRMS to authorize their Para~B location, and a message from that location could then replace its origin with the user's local account before \texttt{Transact}. Both the type and the extrinsic exist in the SDK version we used, but our runtime sets \texttt{Aliasers = Nothing}, so this route is untested. Second, a transfer by a third party on the owner's behalf, such as a marketplace, still requires delegation: the owner pre-authorizes a specific delegate for a specific operation and time window. The implementation challenge is the storage layout for delegation records and the revocation lifecycle.
 
 \section{Monte Carlo Simulation Extensions}\label{sec:e-monte-carlo}
 
@@ -74,4 +78,4 @@ Following \citet{maricEtAl2025} on Isabelle/HOL verification of cross-chain brid
 
 \section{JAM Transition}\label{sec:e-jam}
 
-JAM (the Join-Accumulate Machine) represents Polkadot's architectural successor to the existing relay chain. The testnet was launched in January 2026 with the participation of 43 implementation teams; the mainnet is scheduled for deployment in mid-to-late 2026. CCRMS does not incorporate any JAM-specific features, and our implementation specifications provide sufficiently detailed architectural decisions to facilitate potential future migration without necessitating a complete rebuild.
+JAM (the Join-Accumulate Machine) represents Polkadot's architectural successor to the existing relay chain. The testnet was launched in January 2026 with the participation of multiple implementation teams; no mainnet date has been announced as of mid-2026, with multi-client implementations completing early milestones across several language runtimes. CCRMS does not incorporate any JAM-specific features, and our implementation specifications provide sufficiently detailed architectural decisions to facilitate potential future migration without necessitating a complete rebuild.

@@ -1,0 +1,220 @@
+%% ======================================================================
+%% appG/appendix_g_main.tex
+%%
+%% Appendix G: Monte Carlo Simulation Parameters and Sensitivity
+%%
+%% Documents the full parameter set and sensitivity results for the
+%% Monte Carlo revenue simulation, after the secondary-sale rate
+%% correction (commit 52454ea). Includes stochastic parameters,
+%% platform parameters, eight-parameter sensitivity grid, CCRMS fee
+%% sweep, discovery sweep, fine-grained crossover buckets, Web3
+%% marketplace sensitivity, the prototype-as-built variant (no
+%% secondary stream), and reproduction commands. All sweep figures come
+%% from scripts/perf/monte-carlo-appendix-g.mjs.
+%%
+%% Sections:
+%%   G.1 Stochastic and platform parameters
+%%   G.2 Eight-parameter sensitivity grid
+%%   G.3 CCRMS fee sweep
+%%   G.4 Discovery sweep
+%%   G.5 Fine-grained crossover buckets
+%%   G.6 Web3 marketplace sensitivity
+%%   G.7 Prototype as built (no secondary stream)
+%%   G.8 Reproduction
+%%
+%% External labels referenced:
+%%   sec:economic-results (Chapter 7), chap:results (Chapter 7),
+%%   tab:fees, tab:monte-carlo, tab:audience-tiers, tab:breakeven, tab:ci
+%%   (Chapter 7), sec:e-resale-royalties (Appendix E)
+%%
+%% Citations: binanceResearch2023, theBlock2024.
+%% ======================================================================
+
+\chapter{Monte Carlo Simulation Parameters and Sensitivity}\label{app:monte-carlo}
+
+This appendix documents the full parameter set and sensitivity results for the Monte Carlo revenue simulation described in Section~\ref{sec:economic-results}. The simulation is seeded (xoshiro128**, seed~42) and exactly reproducible from the published repository.
+
+The headline run used 1,000 creators $\times$ 10,000 iterations. Creator attributes are redrawn in every iteration, so the simulation samples ten million independent creator-scenarios per platform rather than following 1,000 fixed creators. The sensitivity and sweep results below used 200 creators $\times$ 2,000 iterations with the same seed; on this smaller grid the baseline advantage reads 4.7\% against the 4.4\% of the headline run.
+
+\textbf{Correction.} An earlier version of the simulation set the secondary-sale rate to $\lambda = 0.1$. Because the sampler draws $-\ln(u)/\lambda$, that value gives a mean of 10, so about 90\% of draws reached the cap of 1.0 and the model assumed that roughly 95\% of each creator's audience made a secondary purchase every year. We corrected the rate to $\lambda = 10$ (mean about 0.1) in commit \texttt{52454ea}. Every figure in this dissertation uses the corrected value. The correction reduced the mean advantage of CCRMS over the centralized configuration from 16.8\% to 4.4\%.
+
+\section*{G.1 Stochastic and Platform Parameters}
+
+Table~\ref{tab:mc-params-creator-app} documents the per-creator stochastic parameters drawn each iteration.
+
+\begin{table}[h]
+\centering
+\caption{Monte Carlo Stochastic Parameters (per creator, per iteration)}\label{tab:mc-params-creator-app}
+\begin{tabular}{@{}p{0.42\linewidth} p{0.52\linewidth}@{}}
+\toprule
+\textbf{Parameter} & \textbf{Distribution} \\
+\midrule
+Base audience     & Log-normal (median $1{,}000$, $\sigma = 2$) \\
+Content price     & Uniform (\$1--\$50) \\
+Subscription adoption & Beta ($\alpha = 2$, $\beta = 5$), mean $\approx 28.6\%$ \\
+PPV conversion    & Beta ($\alpha = 1$, $\beta = 10$), mean $\approx 9.1\%$ \\
+Secondary-sale probability & Exponential (rate $\lambda = 10$, mean $\approx 0.1$), capped at 1.0 \\
+Stream weights    & Subscription 50\%, PPV 30\%, secondary 20\% \\
+Subscription period & 12 months \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:mc-params-platform-app} documents the per-platform parameters drawn uniformly once per iteration.
+
+\begin{table}[h]
+\centering
+\caption{Monte Carlo Platform Parameters (drawn uniformly once per iteration)}\label{tab:mc-params-platform-app}
+\begin{tabular}{@{}p{0.20\linewidth} p{0.13\linewidth} p{0.18\linewidth} p{0.17\linewidth} p{0.13\linewidth}@{}}
+\toprule
+\textbf{Platform} & \textbf{Fee} & \textbf{Discovery added} & \textbf{Monthly churn} & \textbf{Cost/tx} \\
+\midrule
+Centralized      & 30--45\% & +500--3,000* & 2--5\%*   & \$0.000* \\
+Web3 marketplace & 0--2.5\%$^a$ & +100--800*  & 5--10\%*  & \$0.005* \\
+Bridge-based$^b$ & 8--15\%  & +50--400   & 6--12\%  & \$0.020 \\
+CCRMS            & 1--5\%*  & +0--200*   & 4--8\%*   & \$0.001* \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+{\footnotesize $^a$~\citet{binanceResearch2023}; \citet{theBlock2024}. *~Modeling assumption; no published source. $^b$~Illustrative comparator: all parameters are assumptions; the fee range stands for bridge and swap fees plus slippage on a multi-hop route and is not drawn from a published fee schedule.}
+
+The centralized fee range is drawn from the platform sources in Table~\ref{tab:fees}. The discovery, churn and per-transaction parameters for every platform are modeling assumptions. The CCRMS fee of 1--5\% is an allowance for protocol or treasury fees rather than a measured cost; Polkadot fees are not levied as a share of revenue, and the model charges CCRMS per-transaction costs separately.
+
+The bridge-based configuration represents cross-chain distribution through third-party bridges such as Wormhole and LayerZero. Because its parameters are assumptions, its results are reported here rather than in Chapter~\ref{chap:results}, and the comparison with it is not an empirical result. With the headline settings, mean annual revenue per creator is \$16,183 (median \$2,058) and the central 95\% range of simulated total revenue is \$10.4M--\$26.8M. The CCRMS mean is 32.5\% higher, and CCRMS earns more in 74.3\% of scenarios, a margin that follows from the assumed fee ranges.
+
+Discovery is additive rather than multiplicative: a flat bonus of 500--3,000 followers matters substantially at 200 followers and marginally at 50,000. This assumption produces the audience-size crossover. With no discovery bonus on either platform, CCRMS earns more in 97.1\% of scenarios (Table~\ref{tab:discovery-sweep}); the crossover is therefore a consequence of the assumed discovery bonus, which has no published source, rather than an independent finding.
+
+\section*{G.2 Eight-Parameter Sensitivity Grid}
+
+Table~\ref{tab:sensitivity-grid} varies each input parameter independently. Price has no effect because it multiplies every platform's revenue equally. The result is sensitive to the audience distribution and to the subscription period, which sets how long the higher assumed CCRMS churn compounds.
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity of CCRMS Advantage to Individual Parameter Changes}\label{tab:sensitivity-grid}
+\begin{tabular}{@{}p{0.40\linewidth} p{0.22\linewidth} p{0.30\linewidth}@{}}
+\toprule
+\textbf{Parameter varied} & \textbf{Range tested} & \textbf{Advantage over centralized} \\
+\midrule
+Audience median         & 500 $\to$ 5,000      & $-10.8\%$ to $+21.9\%$ \\
+Audience $\sigma$       & 1.0 $\to$ 3.0        & $-34.1\%$ to $+24.4\%$ \\
+Content price floor     & \$0.50 $\to$ \$5     & $+4.7\%$ to $+4.6\%$ \\
+Content price ceiling   & \$20 $\to$ \$200     & $+4.6\%$ to $+4.7\%$ \\
+Subscription adoption $\alpha$ & 1 $\to$ 5    & $+9.3\%$ to $+0.5\%$ \\
+PPV conversion $\alpha$ & 0.5 $\to$ 3          & $+2.5\%$ to $+10.0\%$ \\
+Resale rate $\lambda$ (mean 0.2 $\to$ 0.02) & 5 $\to$ 50 & $+7.4\%$ to $+1.7\%$ \\
+Subscription period     & 1 $\to$ 24 months    & $+24.9\%$ to $-5.7\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.3 CCRMS Fee Sweep}
+
+Table~\ref{tab:fee-sweep} fixes the CCRMS fee at single values. The mean-revenue advantage disappears at a CCRMS fee of about 7\%, two percentage points above the top of the assumed 1--5\% range.
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity of CCRMS Advantage to Fee Assumption}\label{tab:fee-sweep}
+\begin{tabular}{@{}p{0.22\linewidth} p{0.35\linewidth} p{0.22\linewidth}@{}}
+\toprule
+\textbf{CCRMS fee} & \textbf{Advantage over centralized} & \textbf{Win rate} \\
+\midrule
+1--5\% (baseline) & $+4.7\%$  & 20.6\% \\
+5\%               & $+2.5\%$  & 19.2\% \\
+6\%               & $+1.4\%$  & 18.5\% \\
+7\%               & $+0.3\%$  & 17.8\% \\
+8\%               & $-0.8\%$  & 17.2\% \\
+10\%              & $-2.9\%$  & 15.7\% \\
+15\%              & $-8.3\%$  & 12.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.4 Discovery Sweep}
+
+Table~\ref{tab:discovery-sweep} scales the centralized discovery bonus. The advantage reverses at about 1.25 times the assumed value, so discovery is the most influential assumption in the model.
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity of CCRMS Advantage to Centralized Discovery Assumption}\label{tab:discovery-sweep}
+\begin{tabular}{@{}p{0.32\linewidth} p{0.34\linewidth} p{0.22\linewidth}@{}}
+\toprule
+\textbf{Centralized discovery} & \textbf{Advantage over centralized} & \textbf{Win rate} \\
+\midrule
+0$\times$ (no bonus)            & $+28.9\%$ & 97.1\% \\
+0.25$\times$ (+125--750)        & $+21.9\%$ & 49.3\% \\
+0.5$\times$ (+250--1,500)       & $+15.5\%$ & 32.5\% \\
+0.75$\times$ (+375--2,250)      & $+9.8\%$  & 25.0\% \\
+1$\times$ (+500--3,000, baseline) & $+4.7\%$ & 20.6\% \\
+1.5$\times$ (+750--4,500)       & $-4.4\%$  & 15.4\% \\
+2$\times$ (+1,000--6,000)       & $-11.9\%$ & 12.3\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.5 Fine-Grained Crossover Buckets}
+
+Table~\ref{tab:crossover-fine} shows the audience-size transition at finer resolution. The 50\% win-rate crossover and the mean-revenue crossover both fall near 6,000 followers. Above 10,000 followers, CCRMS earns more in about three quarters or more of scenarios, rising to about 92\% at 50,000--100,000.
+
+\begin{table}[h]
+\centering
+\caption{Fine-Grained CCRMS Win Rate and Mean Advantage Near the Crossover Audience Size}\label{tab:crossover-fine}
+\begin{tabular}{@{}p{0.30\linewidth} p{0.28\linewidth} p{0.30\linewidth}@{}}
+\toprule
+\textbf{Base audience} & \textbf{Win rate vs centralized} & \textbf{Mean advantage} \\
+\midrule
+1,500--2,000    & 8.7\%  & $-32.8\%$ \\
+2,000--2,500    & 14.1\% & $-25.0\%$ \\
+3,000--3,500    & 25.8\% & $-14.7\%$ \\
+4,000--4,500    & 36.7\% & $-7.9\%$ \\
+5,000--6,000    & 48.6\% & $-1.7\%$ \\
+6,000--7,000    & 57.1\% & $+1.7\%$ \\
+8,000--9,000    & 68.5\% & $+7.1\%$ \\
+10,000--12,500  & 76.4\% & $+11.2\%$ \\
+20,000--30,000  & 86.6\% & $+19.1\%$ \\
+50,000--100,000 & 91.9\% & $+24.8\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{G.6 Web3 Marketplace Sensitivity}
+
+Table~\ref{tab:web3-sensitivity} varies the unsourced Web3 marketplace parameters independently to show how the CCRMS-versus-Web3 comparison changes under different assumptions.
+
+\begin{table}[h]
+\centering
+\caption{CCRMS vs.\ Web3 Marketplace Under Varied Parameters}\label{tab:web3-sensitivity}
+\begin{tabular}{@{}p{0.48\linewidth} p{0.22\linewidth} p{0.18\linewidth}@{}}
+\toprule
+\textbf{Web3 parameter changed} & \textbf{CCRMS vs Web3 (mean)} & \textbf{CCRMS win rate} \\
+\midrule
+Baseline (fee 0--2.5\%, discovery +100--800, churn 5--10\%, \$0.005/tx) & +4.6\% & 29.1\% \\
+Discovery +0--200 (same as CCRMS) & +9.4\% & 68.1\% \\
+Discovery doubled (+200--1,600) & $-$1.0\% & 17.3\% \\
+Churn 4--8\% (same as CCRMS) & $-$6.0\% & 13.8\% \\
+Churn 8--15\% & +33.9\% & 57.3\% \\
+Cost/tx \$0.001 (same as CCRMS) & +4.5\% & 28.8\% \\
+All non-fee dynamics same as CCRMS & $-$1.8\% & 45.6\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Across these cases, CCRMS ranges from $-$6.0\% to +33.9\% relative to Web3 marketplaces, and the sign depends mainly on the assumed churn difference, which has no published source. With identical non-fee dynamics, the fee difference alone leaves CCRMS 1.8\% behind. The comparison is therefore undetermined within the assumption uncertainty.
+
+\section*{G.7 Prototype as Built (No Secondary Stream)}
+
+The model credits creators on every platform with a secondary-sale stream (20\% weight). The prototype's \texttt{transfer\_ownership} pays creators no resale royalty (Appendix~\ref{sec:e-resale-royalties}), and centralized streaming platforms have no resale market. Removing the stream for all platforms gives the configuration closest to the prototype as built. With the headline settings, the CCRMS mean advantage over the centralized configuration falls to 0.6\% and its win rate to 18.1\%; the 50\% win-rate crossover rises to about 7,000 followers; and the advantage disappears at a fixed CCRMS fee of 5\% ($-1.2\%$) or at about 1.1 times the assumed centralized discovery bonus. Against Web3 marketplaces, CCRMS is 6.9\% ahead on the mean. The full sweep results are in \texttt{results/\allowbreak monte-carlo-\allowbreak appendix-g-\allowbreak no-secondary.json}.
+
+\section*{G.8 Reproduction}
+
+From \texttt{scripts/perf/} in the repository:
+
+{\raggedright
+\begin{itemize}
+\item \texttt{node} \texttt{monte-carlo-\allowbreak revenue.mjs} reproduces the headline results (Tables~\ref{tab:monte-carlo}, \ref{tab:audience-tiers}, \ref{tab:breakeven} and~\ref{tab:ci}) and the sensitivity grid in Table~\ref{tab:sensitivity-grid}.
+\item \texttt{node} \texttt{monte-carlo-\allowbreak revenue.mjs} \texttt{-{}-no-secondary} reproduces the prototype-as-built headline figures in Section~G.7.
+\item \texttt{node} \texttt{monte-carlo-\allowbreak appendix-g.mjs} reproduces Tables~\ref{tab:fee-sweep} to~\ref{tab:web3-sensitivity}; adding \texttt{-{}-no-secondary} reproduces the Section~G.7 sweeps.
+\end{itemize}
+}
+
+The sweeps use 200 creators $\times$ 2,000 iterations and seed~42, matching the sensitivity grid.

@@ -1,36 +1,38 @@
-\begin{thebibliography}{122}
+\begin{thebibliography}{99}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[{360iResearch}(2025)]{iresearch3602025}
+\bibitem[{360iResearch}(2025)]{threeSixtyIResearch2025}
 {360iResearch}.
-\newblock {Blockchain for Content Monetization Market Size 2025-2030}.
-\newblock Technical report, 360iResearch, 2025.
+\newblock {Blockchain for Content Monetization Market by Content Type,
+  Blockchain Type, Monetization Model, Application, End-User: Global Forecast
+  2025--2030}.
+\newblock Technical report, 360iResearch, March 2025.
 \newblock URL
-  \url{https://www.360iresearch.com/library/intelligence/blockchain-for-content-monetization}.
-\newblock Market Research Report.
+  \url{https://www.giiresearch.com/report/ires1677173-blockchain-content-monetization-market-by-content.html}.
 
-\bibitem[Abbas et~al.(2022)]{abbasEtAl2022}
-H.~Abbas et~al.
-\newblock {Analysis of Polkadot: Architecture, Internals, and Contradictions}.
-\newblock In \emph{IEEE Blockchain 2022}, 2022.
-\newblock URL
-  \url{https://www.cri-lab.net/wp-content/uploads/2022/07/IEEE_Blockchain_2022__Polkadot_Architecture___Limitations.pdf}.
+\bibitem[Aguirre(2024)]{aguirreRFC105}
+F.~Aguirre.
+\newblock {RFC-0105: XCM Improved Fee Mechanism}.
+\newblock Polkadot Fellowship RFCs, 2024.
+\newblock URL \url{https://github.com/polkadot-fellows/RFCs/pull/105}.
 
-\bibitem[Abdul et~al.(2024)]{abdulEtAl2024}
-S.~S.~M. Abdul et~al.
-\newblock {CrossDeFi: A Novel Cross-Chain Communication Protocol}.
-\newblock \emph{Future Internet}, 16:\penalty0 314, 2024.
+\bibitem[{Amazon.com, Inc.}(2025)]{audibleAcx}
+{Amazon.com, Inc.}
+\newblock {ACX Royalty Rates}.
+\newblock Audiobook Creation Exchange (ACX), 2025.
+\newblock URL \url{https://www.acx.com/royalties}.
+\newblock Accessed May 2026. Exclusive distribution plan pays 40\% royalty to
+  rights holders; Audible retains 60\%.
 
-\bibitem[Alotaibi(2023)]{alotaibi2023}
-S.~J. Alotaibi.
-\newblock {Using smart contracts in the proposed blockchain framework for an
-  identity management system based on the Internet of Things}.
-\newblock \emph{International Journal of Distributed Systems Technology},
-  14\penalty0 (1):\penalty0 1--22, 2023.
+\bibitem[Anders and Shrug(2022)]{anders2022}
+Lance Anders and Shrug.
+\newblock {ERC}-4907: Rental {NFT}, an extension of {EIP}-721.
+\newblock Ethereum Improvement Proposals, no.\ 4907, March 2022.
+\newblock URL \url{https://eips.ethereum.org/EIPS/eip-4907}.
 
 \bibitem[Ante(2020)]{ante2020}
 L.~Ante.
@@ -49,34 +51,17 @@ L.~Ante.
 \newblock Accessed May 2026. Apple Music pays approximately 52\% to labels;
   platform retains approximately 48\%.
 
-\bibitem[Atzori(2017)]{atzori2017}
-M.~Atzori.
-\newblock {Blockchain Technology and Decentralized Governance: Is the State
-  Still Necessary?}
-\newblock \emph{Journal of Governance and Regulation}, 6\penalty0 (1):\penalty0
-  45--62, 2017.
-\newblock \doi{10.22495/jgr_v6_i1_p5}.
-
-\bibitem[Balcerzak et~al.(2022)]{balcerzakEtAl2022}
-A.~P. Balcerzak et~al.
-\newblock {Blockchain technology and smart contracts in decentralized
-  governance systems}.
-\newblock \emph{Administrative Sciences}, 12\penalty0 (3):\penalty0 96, 2022.
-\newblock \doi{10.3390/admsci12030096}.
-
-\bibitem[Baliga(2020)]{baliga2020}
-A.~Baliga.
-\newblock {Understanding Blockchain Consensus Models}.
-\newblock Technical report, Persistent Systems, 2020.
-\newblock URL
-  \url{https://www.persistent.com/wp-content/uploads/2017/04/WP-Understanding-Blockchain-Consensus-Models.pdf}.
-
 \bibitem[Banerjee et~al.(2020)]{banerjeeEtAl2020}
 P.~Banerjee et~al.
 \newblock {Reliable, Fair and Decentralized Marketplace for Content Sharing
   Using Blockchain}.
 \newblock arXiv:2009.11033, 2020.
 \newblock URL \url{https://arxiv.org/pdf/2009.11033}.
+
+\bibitem[Bass et~al.(2021)Bass, Clements, and Kazman]{bassEtAl2021}
+Len Bass, Paul Clements, and Rick Kazman.
+\newblock \emph{{Software Architecture in Practice}}.
+\newblock Addison-Wesley, 4th edition, 2021.
 
 \bibitem[Bigiotti et~al.(2025)Bigiotti, Mostarda, Navarra, Pinna, Sestili,
   Tonelli, and Vaccargiu]{bigiottiEtAl2025}
@@ -86,20 +71,13 @@ A.~Bigiotti, L.~Mostarda, A.~Navarra, A.~Pinna, D.~Sestili, R.~Tonelli, and
 \newblock \emph{ACM Computing Surveys}, 58\penalty0 (2):\penalty0 1--36, 2025.
 \newblock \doi{10.1145/3758089}.
 
-\bibitem[Busch(2022)]{busch2022}
-K.~Busch.
-\newblock {Web3: A Proposed Blockchain-Based, Decentralized Web}.
-\newblock Technical Report IF12075, Congressional Research Service, 2022.
-\newblock URL
-  \url{https://www.congress.gov/crs_external_products/IF/PDF/IF12075/IF12075.2.pdf}.
-
-\bibitem[Buterin(2025)]{buterin2025}
-V.~Buterin.
-\newblock {Long term L1 execution layer proposal: replace the EVM with RISC-V}.
-\newblock Ethereum Magicians Forum, 2025.
-\newblock URL
-  \url{https://www.coindesk.com/tech/2025/04/21/vitalik-buterin-proposes-replacing-ethereums-evm-with-risc-v}.
-\newblock Posted April 20, 2025; coverage via CoinDesk.
+\bibitem[Burdges et~al.(2020)Burdges, Cevallos, Czaban, Habermeier, Hosseini,
+  Lama, Alper, Luo, Shirazi, Stewart, and Wood]{burdgesEtAl2020}
+J.~Burdges, A.~Cevallos, P.~Czaban, R.~Habermeier, S.~Hosseini, F.~Lama, H.~K.
+  Alper, X.~Luo, F.~Shirazi, A.~Stewart, and G.~Wood.
+\newblock {Overview of Polkadot and its Design Considerations}.
+\newblock arXiv:2005.13456, 2020.
+\newblock URL \url{https://arxiv.org/abs/2005.13456}.
 
 \bibitem[Buzu(2021)]{buzu2021}
 I.~Buzu.
@@ -126,14 +104,12 @@ Y.~Cao, J.~Cao, D.~Bai, L.~Wen, Y.~Liu, and R.~Li.
   2025.
 \newblock \doi{10.1145/3696410.3714867}.
 
-\bibitem[{Castweet Team}(2019)]{castweet2019}
-{Castweet Team}.
-\newblock {Castweet -- A Multi-broadcast Platform Based on Blockchain
-  Incentives for Everyone}.
-\newblock Technical report, Castweet, 2019.
+\bibitem[Catangiu(2024)]{catangiuRFC100}
+A.~Catangiu.
+\newblock {RFC-0100: New XCM Instruction InitiateAssetsTransfer}.
+\newblock Polkadot Fellowship RFCs, 2024.
 \newblock URL
-  \url{https://resources.cryptocompare.com/asset-management/17402/1728919640132.pdf}.
-\newblock Whitepaper.
+  \url{https://polkadot-fellows.github.io/RFCs/approved/0100-xcm-multi-type-asset-transfer.html}.
 
 \bibitem[Chegenizadeh et~al.(2024)Chegenizadeh, Rafati~Niya, and
   Tessone]{chegenizadehEtAl2024}
@@ -144,19 +120,12 @@ M.~Chegenizadeh, S.~Rafati~Niya, and C.~J. Tessone.
   Lecture Notes in Operations Research. Springer, 2024.
 \newblock \doi{10.1007/978-3-031-68974-1_7}.
 
-\bibitem[Chen et~al.(2020)]{chenEtAl2020}
-F.~Chen et~al.
-\newblock {Blockchain for Internet of Things applications: A review and open
-  issues}.
-\newblock \emph{Journal of Network and Computer Applications}, 173:\penalty0
-  102854, 2020.
-\newblock \doi{10.1016/j.jnca.2020.102854}.
-
-\bibitem[Chen et~al.(2023)]{chenKEtAl2023}
-K.~Chen et~al.
+\bibitem[Chen et~al.(2023)Chen, Lee, Chiu, Su, Yeh, and Chao]{chenKEtAl2023}
+K.~Chen, L.-F. Lee, W.~Chiu, C.~Su, K.-H. Yeh, and H.-C. Chao.
 \newblock {A Trusted Reputation Management Scheme for Cross-Chain
   Transactions}.
-\newblock \emph{Sensors}, 23:\penalty0 6033, 2023.
+\newblock \emph{Sensors}, 23\penalty0 (13):\penalty0 6033, 2023.
+\newblock \doi{10.3390/s23136033}.
 
 \bibitem[Cherdakov et~al.(2023)Cherdakov, Kudashkin, Madhwal, and
   Yanovich]{cherdakovEtAl2023}
@@ -165,6 +134,13 @@ M.~Cherdakov, A.~Kudashkin, Y.~Madhwal, and Y.~Yanovich.
 \newblock In \emph{Proceedings of the 2023 6th International Conference on
   Blockchain Technology and Applications (ICBTA)}. ACM, 2023.
 \newblock \doi{10.1145/3651655.3651667}.
+
+\bibitem[Chua(2023)]{binanceResearch2023}
+J.~X. Chua.
+\newblock State of {NFT} marketplaces.
+\newblock Binance Research, March 2023.
+\newblock URL
+  \url{https://research.binance.com/static/pdf/state-of-nft-marketplaces.pdf}.
 
 \bibitem[Ciriello et~al.(2023)Ciriello, Torbensen, Hansen, and
   Müller-Bloch]{cirelloEtAl2023}
@@ -181,18 +157,11 @@ R.~F. Ciriello, A.~C.~G. Torbensen, M.~R.~P. Hansen, and C.~Müller-Bloch.
 \newblock URL
   \url{https://coinpaprika.com/education/x402-ecosystem-instant-blockchain-payments-for-apis-and-ai-agents/}.
 
-\bibitem[{CommuniPass}(2026)]{communipass2026}
-{CommuniPass}.
-\newblock {Creator Monetization in 2026: The 5 Models That Actually Generate
-  Recurring Revenue}.
-\newblock CommuniPass Blog, 2026.
-\newblock URL
-  \url{https://communipass.com/blog/creator-monetization-in-2026-the-5-models-that-actually-generate-recurring-revenues/}.
-
-\bibitem[Cutts(2019)]{cutts2019}
-T.~Cutts.
-\newblock {Smart Contracts and Consumers}.
-\newblock \emph{West Virginia Law Review}, 2019.
+\bibitem[{cygaar}(2022)]{cygaar2022}
+{cygaar}.
+\newblock {ERC}-5643: Subscription {NFT}s.
+\newblock Ethereum Improvement Proposals, no.\ 5643, September 2022.
+\newblock URL \url{https://eips.ethereum.org/EIPS/eip-5643}.
 
 \bibitem[Darshan et~al.(2025)Darshan, Rohan, Rajesh, Ruchitha, Kamath, and
   Manas]{darshanEtAl2025}
@@ -216,22 +185,6 @@ Z.~Deng, C.~Tang, T.~Li, P.~Abla, Q.~Chen, W.~Liang, and D.~He.
 \newblock arXiv:2505.04934, 2025.
 \newblock URL \url{https://arxiv.org/abs/2505.04934}.
 
-\bibitem[Divyashree and Mishra(2023)]{divyashreeMishra2023}
-K.~S. Divyashree and A.~Mishra.
-\newblock {Blockchain technology in financial sector and its legal
-  implications}.
-\newblock In \emph{Lecture Notes in Networks and Systems}, volume 478, pages
-  219--231. 2023.
-
-\bibitem[Dondjio and Kazamias(2024)]{dondjioKazamias2024}
-I.~Dondjio and A.~Kazamias.
-\newblock {A Blockchain Framework for Digital Asset Ownership and Transfer in
-  Succession}.
-\newblock In \emph{20th European, Mediterranean, and Middle Eastern Conference
-  on Information Systems (EMCIS 2023)}, volume 501 of \emph{Lecture Notes in
-  Business Information Processing}. Springer, 2024.
-\newblock \doi{10.1007/978-3-031-56478-9_7}.
-
 \bibitem[Dreyer et~al.(2021)]{dreyerEtAl2021}
 A.~Dreyer et~al.
 \newblock {Can I mint an NFT with that?: Avoiding right of publicity and
@@ -249,14 +202,6 @@ A.~Dreyer et~al.
 \newblock URL
   \url{https://www.eurojust.europa.eu/sites/default/files/assets/eurojust-nfts-intellectual-property-rights-flyer.pdf}.
 
-\bibitem[{European Parliament}(2026)]{europeanParliament2026}
-{European Parliament}.
-\newblock {Report on copyright and generative artificial intelligence --
-  opportunities and challenges}.
-\newblock Technical Report A10-0019/2026, European Parliament, 2026.
-\newblock URL
-  \url{https://www.europarl.europa.eu/doceo/document/A-10-2026-0019_EN.html}.
-
 \bibitem[{European Securities and Markets Authority}(2025)]{esma2025}
 {European Securities and Markets Authority}.
 \newblock {MiCA Regulation: Markets in Crypto-Assets}.
@@ -264,19 +209,6 @@ A.~Dreyer et~al.
 \newblock URL
   \url{https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica}.
 \newblock Full enforcement by July 2026.
-
-\bibitem[Feng et~al.(2019)]{fengEtAl2019}
-T.~Feng et~al.
-\newblock {Smart contract model for complex reality transaction}.
-\newblock 2019.
-
-\bibitem[Finck(2018)]{finck2018}
-M.~Finck.
-\newblock \emph{{Blockchain regulation and governance in Europe}}.
-\newblock Cambridge University Press, 2018.
-\newblock URL
-  \url{https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3351542_code3242224.pdf}.
-\newblock Excerpt available via SSRN.
 
 \bibitem[Garba et~al.(2021)]{garbaEtAl2021}
 A.~Garba et~al.
@@ -292,21 +224,6 @@ J.~Gatto et~al.
 \newblock Law of the Ledger, 2021.
 \newblock URL
   \url{https://www.lawoftheledger.com/wp-content/uploads/sites/15/2021/09/NFT-License-Breakdown-Article-0921.pdf}.
-
-\bibitem[Gogel et~al.(2021)]{gogelEtAl2021}
-D.~Gogel et~al.
-\newblock {DeFi Beyond the Hype: The Emerging World of Decentralized Finance}.
-\newblock Technical report, Wharton Blockchain and Digital Asset Project, 2021.
-\newblock URL
-  \url{https://wifpr.wharton.upenn.edu/wp-content/uploads/2021/05/DeFi-Beyond-the-Hype.pdf}.
-
-\bibitem[Gomaa(2019)]{gomaa2019}
-A.~Gomaa.
-\newblock {A DRM Solution for Online Content Using Blockchain -- A Music
-  Perspective}.
-\newblock In \emph{INFOCOMP 2019}, 2019.
-\newblock URL
-  \url{https://personales.upv.es/thinkmind/dl/conferences/infocomp/infocomp_2019/infocomp_2019_1_30_60048.pdf}.
 
 \bibitem[{Google LLC}(2025)]{youtubePartnerProgram}
 {Google LLC}.
@@ -360,12 +277,6 @@ A.~R. Hevner, S.~T. March, J.~Park, and S.~Ram.
 \newblock {Design science in information systems research}.
 \newblock \emph{MIS Quarterly}, 28\penalty0 (1):\penalty0 75--105, 2004.
 
-\bibitem[{Information (MDPI)}(2026)]{information2026}
-{Information (MDPI)}.
-\newblock {Library systems and digital-rights management: Towards a
-  blockchain-based solution for enhanced privacy and security}.
-\newblock \emph{Information}, 17\penalty0 (2):\penalty0 137, 2026.
-
 \bibitem[{ink! Alliance}(2026)]{inkAlliance2026}
 {ink! Alliance}.
 \newblock {Discontinuation of ink: Rust smart contract language}.
@@ -373,32 +284,6 @@ A.~R. Hevner, S.~T. March, J.~Park, and S.~Ram.
 \newblock URL
   \url{https://forum.polkadot.network/t/discontinuation-of-ink-rust-smart-contract-language/16849}.
 \newblock Posted January 27, 2026.
-
-\bibitem[Khan(2024)]{khan2024}
-K.~Khan.
-\newblock {Decentralized Video Streaming: Unleashing the Potential through
-  Blockchain-Powered Platforms}.
-\newblock \emph{International Journal of Modern Research in Applied Physics
-  (IJMRAP)}, 6\penalty0 (7), 2024.
-
-\bibitem[{Kraken Intelligence}(2021)]{krakenIntelligence2021}
-{Kraken Intelligence}.
-\newblock {Polkadot \& Kusama Parachains Primer}.
-\newblock Technical report, Kraken, 2021.
-\newblock URL
-  \url{https://cognizium.io/uploads/resources/Kraken%2520Intelligence%2520-%2520Polkadot%2520and%2520Kusama%2520Parachains%2520Primer%2520-%25202021%2520Sep.pdf}.
-
-\bibitem[Kulkarani et~al.(2024)]{kulkaraniEtAl2024}
-S.~Kulkarani et~al.
-\newblock {Blockchain Enabled Smart Contracts for Digital Assets}.
-\newblock \emph{International Journal of Advanced Research in Science,
-  Communication and Technology (IJARSCT)}, 2024.
-
-\bibitem[Kumar et~al.(2023)]{kumarEtAl2023}
-R.~K. Kumar et~al.
-\newblock {Revolutionizing digital ownership: Examining the perks of a
-  Polkadot-based NFT marketplace}.
-\newblock Technical report, ResearchGate, 2023.
 
 \bibitem[Kumar et~al.(2025)Kumar, Budhiraja, Jabbari, et~al.]{kumarVEtAl2025}
 V.~Kumar, I.~Budhiraja, A.~Jabbari, et~al.
@@ -416,27 +301,12 @@ S.~Lahiri et~al.
   2026.
 \newblock \doi{10.1007/s44265-026-00078-9}.
 
-\bibitem[Li et~al.(2024)]{liLEtAl2024}
-L.~Li et~al.
-\newblock {Why Blockchain-Based Digital Assets Are Owned on Decentralized
-  Metaverse Platforms?}
-\newblock In \emph{Hawaii International Conference on System Sciences (HICSS)},
-  2024.
-\newblock URL
-  \url{https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/da7d3ba9-379e-48a8-98e8-18b2bc293b1f/content}.
-
-\bibitem[Li et~al.(2025{\natexlab{a}})Li, Wen, and Wu]{liQEtAl2025}
-Q.~Li, X.~Wen, and Z.~Wu.
-\newblock {Evaluating blockchain adoption barriers in China's IP trade and
-  protection internationally}.
-\newblock \emph{Frontiers in Blockchain}, 8, 2025{\natexlab{a}}.
-
-\bibitem[Li et~al.(2025{\natexlab{b}})Li, Liu, Chen, Liu, and He]{liEtAl2025a}
+\bibitem[Li et~al.(2025)Li, Liu, Chen, Liu, and He]{liEtAl2025a}
 W.~Li, Z.~Liu, J.~Chen, Z.~Liu, and Q.~He.
 \newblock {Towards blockchain interoperability: a comprehensive survey on
   cross-chain solutions}.
 \newblock \emph{Blockchain: Research and Applications}, 6\penalty0
-  (3):\penalty0 100286, 2025{\natexlab{b}}.
+  (3):\penalty0 100286, 2025.
 
 \bibitem[Lin et~al.(2022)]{linEtAl2022}
 S.~Y. Lin et~al.
@@ -451,11 +321,20 @@ S.~L. Madapati and N.~R. Pradhan.
   blockchain-enabled framework with performance evaluation}.
 \newblock \emph{Frontiers in Artificial Intelligence}, 8, 2025.
 
-\bibitem[Mao et~al.(2022)]{maoEtAl2022}
-H.~Mao et~al.
+\bibitem[{Magic Eden}(2025)]{magicEdenFees}
+{Magic Eden}.
+\newblock {Magic Eden Marketplace Fees}.
+\newblock Magic Eden Help Center, 2025.
+\newblock URL \url{https://help.magiceden.io}.
+\newblock Accessed May 2026. Magic Eden charges a 2\% marketplace fee on NFT
+  sales.
+
+\bibitem[Mao et~al.(2023)Mao, Nie, Sun, Shen, and Yu]{maoEtAl2022}
+H.~Mao, T.~Nie, H.~Sun, D.~Shen, and G.~Yu.
 \newblock {A Survey on Cross-Chain Technology: Challenges, Development, and
   Prospect}.
-\newblock 2022.
+\newblock \emph{IEEE Access}, 11:\penalty0 45527--45546, 2023.
+\newblock \doi{10.1109/ACCESS.2022.3228535}.
 
 \bibitem[Mareckova(2024)]{mareckova2024}
 D.~Mareckova.
@@ -480,14 +359,6 @@ F.~Maric, B.~Scholz, and P.~Subotic.
 \newblock URL
   \url{https://www.marketsandmarkets.com/Market-Reports/digital-rights-management-market-152806525.html}.
 
-\bibitem[Mauro(2022)]{mauro2022}
-N.~Mauro.
-\newblock {Smart contracts for decentralized business models in the electricity
-  market: a consumer protection perspective}.
-\newblock Master's thesis, European Master in Law and Economics (EMLE), 2022.
-\newblock URL
-  \url{https://emle.org/wp-content/uploads/2023/01/EMLE_thesis_Mauro_Noemi.pdf}.
-
 \bibitem[Mendoza-Tello et~al.(2024)Mendoza-Tello, Sánchez-Lucas, and
   Orosco-Pantoja]{mendozaTelloEtAl2024}
 J.~C. Mendoza-Tello, J.~J. Sánchez-Lucas, and J.~G. Orosco-Pantoja.
@@ -497,14 +368,6 @@ J.~C. Mendoza-Tello, J.~J. Sánchez-Lucas, and J.~G. Orosco-Pantoja.
   \emph{Communications in Computer and Information Science}. Springer, 2024.
 \newblock \doi{10.1007/978-3-031-58950-8_10}.
 
-\bibitem[Moncada et~al.(2021)]{moncadaEtAl2021}
-R.~Moncada et~al.
-\newblock {DLT-enabled Platforms: Distribution and Management of Media
-  Content}.
-\newblock Technical report, Mediaverse Project, 2021.
-\newblock URL
-  \url{https://mediaverse-project.eu/wp-content/uploads/2021/09/Research-Note-Blockchain-based-Platforms_integrated.pdf}.
-
 \bibitem[{Mordor Intelligence}(2026)]{mordorIntelligence2026}
 {Mordor Intelligence}.
 \newblock {Digital Rights Management (DRM) Market -- Size, Share \& Industry
@@ -512,13 +375,6 @@ R.~Moncada et~al.
 \newblock Technical report, Mordor Intelligence, January 2026.
 \newblock URL
   \url{https://www.mordorintelligence.com/industry-reports/digital-rights-management-drm-market}.
-
-\bibitem[Moreno et~al.(2023)]{morenoEtAl2023}
-M.~F. Moreno et~al.
-\newblock {A Knowledge-Oriented Approach to Enhance Integration and
-  Communicability in the Polkadot Ecosystem}.
-\newblock arXiv:2308.00735, 2023.
-\newblock URL \url{https://arxiv.org/pdf/2308.00735}.
 
 \bibitem[Morháč et~al.(2023{\natexlab{a}})Morháč, Valaštín, Košťál,
   and Kotuliak]{morhacEtAl2023a}
@@ -573,6 +429,14 @@ M.~Murray.
   \url{https://musicbusinessresearch.wordpress.com/2024/09/16/the-music-streaming-economy-part-14-the-artists-share-of-the-music-streaming-pie/}.
 \newblock Accessed May 2026.
 
+\bibitem[{OpenSea}(2025)]{openSeaFees}
+{OpenSea}.
+\newblock {OpenSea Fees}.
+\newblock OpenSea, 2025.
+\newblock URL \url{https://opensea.io/fees}.
+\newblock Accessed May 2026. OpenSea charges a 2.5\% protocol fee on secondary
+  sales; creator royalties are set separately by the collection creator.
+
 \bibitem[Orero et~al.(2023)]{oreroEtAl2023}
 P.~Orero et~al.
 \newblock {The Visible Subtitler: Blockchain Technology for Right Management
@@ -585,14 +449,6 @@ O.~Osemwegie.
   copyright protection, monetization, and content ownership rights}.
 \newblock \emph{International Journal of Mechanical Technology and Marine
   Engineering}, 2025.
-
-\bibitem[{Parity Technologies}(2021)]{polkadotParachainSlots}
-{Parity Technologies}.
-\newblock {Polkadot Parachain Slots}.
-\newblock Polkadot Blog, 2021.
-\newblock URL \url{https://polkadot.com/blog/polkadot-parachain-slots/}.
-\newblock Describes Polkadot's support for up to 100 parachain slots and
-  additive parallel throughput.
 
 \bibitem[{Parity
   Technologies}(2022{\natexlab{a}})]{parityTechnologiesInk3_2022}
@@ -616,6 +472,21 @@ O.~Osemwegie.
 \newblock URL
   \url{https://www.parity.io/blog/polkadot-upgrade-2025-what-you-need-to-know}.
 
+\bibitem[{Parity Technologies}(2026)]{paritySdkElasticScaling}
+{Parity Technologies}.
+\newblock {Enable Elastic Scaling}.
+\newblock Polkadot SDK documentation, 2026.
+\newblock URL
+  \url{https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/enable_elastic_scaling_mvp/index.html}.
+\newblock Accessed 5~October 2026.
+
+\bibitem[Parnas(1972)]{parnas1972}
+David~L. Parnas.
+\newblock {On the criteria to be used in decomposing systems into modules}.
+\newblock \emph{Communications of the ACM}, 15\penalty0 (12):\penalty0
+  1053--1058, 1972.
+\newblock \doi{10.1145/361598.361623}.
+
 \bibitem[Patil et~al.(2022)]{patilEtAl2022}
 S.~S. Patil et~al.
 \newblock {Blockchain Based Multimedia Content Protection Using Encryption in
@@ -630,19 +501,20 @@ S.~S. Patil et~al.
 \newblock URL
   \url{https://medium.com/polkadot-network/polkadot-roundup-2025-3c3c71c7e9c4}.
 
-\bibitem[Quan et~al.(2024)]{quanEtAl2024}
-L.~Quan et~al.
-\newblock {Research and application of digital collection smart contract method
-  based on Blockchain}.
-\newblock 2024.
+\bibitem[{Polkadot OpenGov}(2025)]{polkadotref1484}
+{Polkadot OpenGov}.
+\newblock Referendum 1484: Increase validator set size to 600.
+\newblock Online, 2025.
+\newblock URL \url{https://polkadot.subsquare.io/referenda/1484}.
+\newblock Whitelisted Caller track; executed. Accessed September 2026.
 
-\bibitem[{R0GUE}(2025)]{r0gue2025}
-{R0GUE}.
-\newblock {ink! speaks Solidity on PolkaVM}.
-\newblock Medium, 2025.
-\newblock URL
-  \url{https://r0gue.medium.com/ink-solidity-abi-on-polkavm-c675c854efd3}.
-\newblock Posted August 2025.
+\bibitem[Quan et~al.(2024)Quan, Pan, and Zhong]{quanEtAl2024}
+L.~Quan, Y.~Pan, and W.~Zhong.
+\newblock {Research and Application of Digital Collection Smart Contract Method
+  Based on Blockchain}.
+\newblock In \emph{Proceedings of ICBIS 2024}, pages 34--43. Atlantis Press,
+  2024.
+\newblock \doi{10.2991/978-94-6463-419-8_6}.
 
 \bibitem[Rao et~al.(2024)Rao, Kiah, Hameed, and Memon]{raoEtAl2024}
 I.~S. Rao, M.~L.~M. Kiah, M.~M. Hameed, and Z.~A. Memon.
@@ -650,6 +522,12 @@ I.~S. Rao, M.~L.~M. Kiah, M.~M. Hameed, and Z.~A. Memon.
   research direction}.
 \newblock \emph{Cluster Computing}, 27:\penalty0 5547--5570, 2024.
 \newblock \doi{10.1007/s10586-023-04257-7}.
+
+\bibitem[{Rated Labs}(2026)]{ratedNetwork2026}
+{Rated Labs}.
+\newblock {Rated Network Explorer: Ethereum Validator and Operator Data}, 2026.
+\newblock URL \url{https://explorer.rated.network/}.
+\newblock Accessed September~2026.
 
 \bibitem[Reggianini(2025)]{reggianini2025}
 E.~Reggianini.
@@ -666,20 +544,6 @@ K.~Ren, N.-M. Ho, D.~Loghin, T.-T. Nguyen, B.~C. Ooi, Q.-T. Ta, and F.~Zhu.
   35\penalty0 (12):\penalty0 12750--12769, 2023.
 \newblock \doi{10.1109/TKDE.2023.3275220}.
 
-\bibitem[Salman et~al.(2023)]{salmanEtAl2023}
-B.~Salman et~al.
-\newblock {NFT-Based Secure Platform for Copyright Images (NFT-SPCI)}.
-\newblock \emph{Technix International Journal for Engineering Research
-  (TIJER)}, 2023.
-
-\bibitem[Sevim(2024)]{sevim2024}
-H.~O. Sevim.
-\newblock {A Survey on Trustless Cross-chain Interoperability Solutions in
-  On-chain Finance}.
-\newblock In \emph{Distributed Ledger Technology Workshop (DLT 2024)}, 2024.
-\newblock URL
-  \url{https://dlt2024.di.unito.it/wp-content/uploads/2024/05/DLT2024_paper_14.pdf}.
-
 \bibitem[Shah(2025)]{shah2025}
 A.~Shah.
 \newblock {Automating Royalties: A Framework of Smart Contracts for
@@ -687,42 +551,12 @@ A.~Shah.
 \newblock \emph{International Journal for Multidisciplinary Research (IJFMR)},
   2025.
 
-\bibitem[Shumyliak et~al.(2023)]{shumyliakEtAl2023}
-L.~Shumyliak et~al.
-\newblock {Practical Implementation of Smart Contracts for Payment of Digital
-  Goods}.
-\newblock In \emph{CEUR Workshop Proceedings}, volume 3373, 2023.
-\newblock URL \url{https://ceur-ws.org/Vol-3373/short1.pdf}.
-
-\bibitem[Singh et~al.(2024{\natexlab{a}})]{singhEtAl2024a}
+\bibitem[Singh et~al.(2024)]{singhEtAl2024a}
 R.~Singh et~al.
 \newblock {Insights into research on blockchain for smart contracts: A
   bibliometric analysis}.
-\newblock \emph{Multimedia Tools and Applications}, 83:\penalty0 1--25,
-  2024{\natexlab{a}}.
+\newblock \emph{Multimedia Tools and Applications}, 83:\penalty0 1--25, 2024.
 \newblock \doi{10.1007/s11042-023-15647-1}.
-
-\bibitem[Singh et~al.(2024{\natexlab{b}})]{singhEtAl2024b}
-R.~Singh et~al.
-\newblock {Blockchain-Based Digital Rights Management and Its Impact on English
-  Language Resources in Libraries}.
-\newblock IGI Global, 2024{\natexlab{b}}.
-\newblock URL
-  \url{https://www.igi-global.com/viewtitle.aspx?TitleId=360345&isxn=9798369396162}.
-
-\bibitem[{Smart Contracts Alliance}(2016)]{smartContractsAlliance2016}
-{Smart Contracts Alliance}.
-\newblock {Smart Contracts: 12 Use Cases for Business \& Beyond}.
-\newblock Technical report, Chamber of Digital Commerce, 2016.
-\newblock URL
-  \url{https://d3h0qzni6h08fz.cloudfront.net/Smart-Contracts-12-Use-Cases-for-Business-and-Beyond_Chamber-of-Digital-Commerce.pdf}.
-
-\bibitem[{Smart Contracts Alliance}(2018)]{smartContractsAlliance2018}
-{Smart Contracts Alliance}.
-\newblock {Smart Contracts: Is the Law Ready?}
-\newblock Technical report, Chamber of Digital Commerce, 2018.
-\newblock URL
-  \url{https://lowellmilkeninstitute.law.ucla.edu/wp-content/uploads/2018/08/Smart-Contracts-Whitepaper.pdf}.
 
 \bibitem[{Snowfork}(2025{\natexlab{a}})]{snowfork2025a}
 {Snowfork}.
@@ -737,6 +571,12 @@ R.~Singh et~al.
 \newblock {Snowbridge 2025/2026 Stabilized}.
 \newblock Polkassembly Proposal \#3313, 2025{\natexlab{b}}.
 \newblock URL \url{https://polkadot.polkassembly.io/post/3313}.
+
+\bibitem[{Solana Compass}(2026)]{solanaCompass2026}
+{Solana Compass}.
+\newblock {Solana Validators}, 2026.
+\newblock URL \url{https://solanacompass.com/validators}.
+\newblock Accessed September~2026.
 
 \bibitem[{Spotify AB}(2025)]{spotifyForArtists}
 {Spotify AB}.
@@ -762,23 +602,42 @@ R.~Singh et~al.
   \url{https://www.coindesk.com/tech/2025/02/13/story-protocol-launches-to-let-people-to-register-ip-and-get-paid-for-it/}.
 \newblock Posted February 13, 2025.
 
-\bibitem[Tao(2025)]{tao2025}
-R.~Tao.
-\newblock {The Study of Blockchain Technology for Copyright Protection and
-  Resource Sharing Models in Library Digital Resources}.
-\newblock 2025.
+\bibitem[{Superfluid}(2026)]{superfluid2026}
+{Superfluid}.
+\newblock {Superfluid Documentation: Stream Money Every Second}, 2026.
+\newblock URL \url{https://docs.superfluid.org/}.
+\newblock Accessed 5~October 2026.
 
-\bibitem[{TokenInsight Research}(2021)]{tokeninsight2021}
-{TokenInsight Research}.
-\newblock {2021 Polkadot Ecosystem Research Report}.
-\newblock Technical report, TokenInsight, 2021.
+\bibitem[{The DATA Foundation}(2026)]{datafoundation2026}
+{The DATA Foundation}.
+\newblock We're becoming {The DATA Foundation}.
+\newblock Blog post, 2026.
 \newblock URL
-  \url{https://downloads.coindesk.com/research/2021-Polkadot-Ecosystem-Research-Report.pdf}.
+  \url{https://www.datafdn.org/blog/were-becoming-the-data-foundation}.
+\newblock 25 June 2026. Accessed September 2026.
 
-\bibitem[Upadhyay et~al.(2021)]{upadhyayEtAl2021}
-K.~Upadhyay et~al.
-\newblock {Paradigm Shift from Paper Contracts to Smart Contracts}.
-\newblock 2021.
+\bibitem[{Unique Network}(2026)]{uniqueNetwork2026}
+{Unique Network}.
+\newblock Unique network documentation: Nested {NFT}s.
+\newblock Online, 2026.
+\newblock URL \url{https://docs.unique.network}.
+\newblock Accessed September 2026.
+
+\bibitem[{Unlock Protocol}(2026)]{unlockProtocol2026}
+{Unlock Protocol}.
+\newblock Unlock protocol documentation.
+\newblock Online, 2026.
+\newblock URL \url{https://docs.unlock-protocol.com}.
+\newblock Accessed September 2026.
+
+\bibitem[{U.S.\ Department of Justice and Federal Trade
+  Commission}(2010)]{dojFTC2010}
+{U.S.\ Department of Justice and Federal Trade Commission}.
+\newblock {Horizontal Merger Guidelines}.
+\newblock Technical report, U.S.\ Department of Justice, 2010.
+\newblock URL
+  \url{https://www.justice.gov/atr/horizontal-merger-guidelines-08192010}.
+\newblock Accessed September 2026.
 
 \bibitem[{USPTO}(2024)]{uspto2024}
 {USPTO}.
@@ -788,26 +647,13 @@ K.~Upadhyay et~al.
 \newblock URL
   \url{https://www.copyright.gov/policy/nft-study/Joint-USPTO-USCO-Report-on-NFTs-and-Intellectual-Property.pdf}.
 
-\bibitem[Valaštín et~al.(2024)]{valastinEtAl2024}
-V.~Valaštín et~al.
-\newblock {Protocol for Unifying Cross-Chain Liquidity on Polkadot}.
-\newblock \emph{Frontiers in Blockchain}, 2024.
-\newblock \doi{10.3389/fbloc.2024.1413840}.
-
-\bibitem[Velmovitsky et~al.(2021)]{velmovitskyEtAl2021}
-P.~E. Velmovitsky et~al.
-\newblock {Blockchain applications in health care and public health: Increased
-  transparency}.
-\newblock \emph{JMIR Medical Informatics}, 9\penalty0 (6):\penalty0 e25893,
-  2021.
-\newblock \doi{10.2196/25893}.
-
-\bibitem[Virovets et~al.(2025)]{virovetsEtAl2025}
-D.~Virovets et~al.
-\newblock {A Framework for Decentralized Payment Instrument Integration with
-  Artificial Intelligence, Big Data, and Digital Identities}.
-\newblock In \emph{CEUR Workshop Proceedings}, volume 3991, 2025.
-\newblock URL \url{https://ceur-ws.org/Vol-3991/paper33.pdf}.
+\bibitem[Venable et~al.(2016)Venable, Pries-Heje, and
+  Baskerville]{venableEtAl2016}
+J.~Venable, J.~Pries-Heje, and R.~Baskerville.
+\newblock {FEDS: A Framework for Evaluation in Design Science Research}.
+\newblock \emph{European Journal of Information Systems}, 25\penalty0
+  (1):\penalty0 77--89, 2016.
+\newblock \doi{10.1057/ejis.2014.36}.
 
 \bibitem[Wamugo(2024)]{wamugo2024}
 M.~Wamugo.
@@ -823,6 +669,19 @@ Z.~Wang, W.~Feng, M.~Huang, S.~Feng, S.~Mo, and Y.~Li.
   traceability of intellectual property transactions}.
 \newblock \emph{Sensors}, 25\penalty0 (10):\penalty0 3064, 2025.
 
+\bibitem[Watson(2024)]{theBlock2024}
+R.~Watson.
+\newblock Blur proposal suggests adding trading fees and eliminating creator
+  fee guarantees.
+\newblock The Block, November 2024.
+
+\bibitem[{Web3 Foundation}(2026)]{polkadotWikiAsyncBacking}
+{Web3 Foundation}.
+\newblock {Asynchronous Backing (Pipelining)}.
+\newblock Polkadot Wiki, 2026.
+\newblock URL \url{https://wiki.polkadot.com/learn/learn-async-backing/}.
+\newblock Accessed 5~October 2026.
+
 \bibitem[Wood(2016)]{wood2016}
 G.~Wood.
 \newblock {Polkadot: Vision for a heterogeneous multi-chain framework}.
@@ -836,6 +695,13 @@ G.~Wood.
 \newblock Polkadot Blog, 2022.
 \newblock URL
   \url{https://www.polkadot.network/blog/xcm-the-cross-consensus-message-format}.
+
+\bibitem[Wood(2023)]{woodRFC1}
+G.~Wood.
+\newblock {RFC-1: Agile Coretime}.
+\newblock Polkadot Fellowship RFCs, 2023.
+\newblock URL
+  \url{https://polkadot-fellows.github.io/RFCs/approved/0001-agile-coretime.html}.
 
 \bibitem[Wood(2024)]{wood2024}
 G.~Wood.
@@ -873,30 +739,5 @@ Z.~Yin et~al.
   Platform}.
 \newblock IACR ePrint 2022/1290, 2022.
 \newblock URL \url{https://eprint.iacr.org/2022/1290.pdf}.
-
-\bibitem[Zeggari et~al.(2022)]{zeggariEtAl2022}
-M.~Zeggari et~al.
-\newblock {An Efficient and Decentralized Blockchain-based Commercial
-  Alternative}.
-\newblock IACR ePrint 2022/1440, 2022.
-\newblock URL \url{https://eprint.iacr.org/2022/1440.pdf}.
-
-\bibitem[Zheng et~al.(2024)]{zhengHEtAl2024}
-H.~Zheng et~al.
-\newblock {Decentagram: Highly-Available Decentralized Publish/Subscribe
-  Systems}.
-\newblock 2024.
-
-\bibitem[Zheng et~al.(2019)]{zhengZEtAl2019}
-Z.~Zheng et~al.
-\newblock {An Overview on Smart Contracts: Challenges, Advances and Platforms}.
-\newblock arXiv:1912.10370, 2019.
-\newblock URL \url{https://arxiv.org/pdf/1912.10370}.
-
-\bibitem[Zhou et~al.(2021)]{zhouEtAl2021}
-Q.~Zhou et~al.
-\newblock {A Study on Blockchain Interoperability Mechanism}.
-\newblock \emph{Journal of System and Management Sciences}, 11\penalty0 (4),
-  2021.
 
 \end{thebibliography}

@@ -3,7 +3,7 @@
 %%
 %% Appendix A: Implementation Challenge Narratives
 %%
-%% Expanded narratives for the nine technical challenges summarised in
+%% Expanded narratives for the nine technical challenges summarized in
 %% Table 5.3. Each section follows a Challenge / Response / Lesson
 %% structure. The narratives cover: the pivot from the frozen RMRK 2.0
 %% pallets to direct use of pallet-nfts; the pivot from a contract-first
@@ -37,7 +37,7 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \section{The Pivot from RMRK 2.0 to \texttt{pallet-nfts}}\label{sec:rmrk-to-pallet-nfts}
 
-\textbf{Challenge.} The original Phase~3 design envisioned using the RMRK 2.0 nested-NFT specification, implemented atop the \texttt{rmrk-substrate} pallet suite. RMRK 2.0 precisely offers the parent-child nesting semantics that the CCRMS unified rights token model requires. Reusing an established standard is intended to reduce implementation risk. However, during initial investigations in Phase~4, we discovered that the \texttt{rmrk-substrate} pallets were frozen on Polkadot SDK version 0.9.36 and relied on the now-deprecated \texttt{pallet-uniques} instead of the modern \texttt{pallet-nfts}. Our efforts to compile \texttt{rmrk-substrate} against the current Polkadot SDK monorepo were unsuccessful because of incompatible storage schemas and removed traits.
+\textbf{Challenge.} The original Phase~3 design envisioned using the RMRK 2.0 nested-NFT specification, implemented atop the \texttt{rmrk-substrate} pallet suite. RMRK 2.0 precisely offers the parent-child nesting semantics that the CCRMS unified rights record model requires. Reusing an established standard is intended to reduce implementation risk. However, during initial investigations in Phase~4, we discovered that the \texttt{rmrk-substrate} pallets were frozen on Polkadot SDK version 0.9.36 and relied on the now-deprecated \texttt{pallet-uniques} instead of the modern \texttt{pallet-nfts}. Our efforts to compile \texttt{rmrk-substrate} against the current Polkadot SDK monorepo were unsuccessful because of incompatible storage schemas and removed traits.
 
 \textbf{Response.} We decided to replicate RMRK 2.0's nesting semantics directly on top of \texttt{pallet-nfts} without depending on any RMRK pallets. This involved designing a parent-child storage layout (the dual \texttt{Children} and \texttt{Parent} index), implementing the lifecycle helpers (\texttt{mint\_and\_nest\_child}, the burn and re-mint patterns in \texttt{transfer\_ownership}), and tagging child NFTs with a \texttt{rights\_type} attribute via \texttt{pallet\_nfts::set\_attribute}. The implementation took longer than reusing \texttt{rmrk-substrate} would have, but the result is fully integrated with the modern Polkadot SDK and depends only on actively maintained pallets.
 
@@ -49,13 +49,13 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \textbf{Response.} We inverted the architecture. The pallet (\texttt{pallet-content-rights}) became the definitive source of truth for all business logic, whereas the ink! contract (\texttt{rights\_manager}) was retained as a streamlined user-facing interface that mirrors the pallet's API but holds no independent storage. We developed a custom EVM precompile (\texttt{ContentRightsPrecompile}) to provide read-only access to pallet state for Solidity-based clients, replacing the original chain extension design.
 
-\textbf{Lesson.} The pallet-first design proved unexpectedly resilient to the January 2026 discontinuation of ink! development (Appendix~\ref{sec:ink-discontinuation}). The decision was made for engineering reasons, but it incidentally conferred robustness against an industry change we could not have foreseen.
+\textbf{Lesson.} The pallet-first decision proved well-founded. The pivot was driven by engineering constraints, and it was taken against the backdrop of the January 2026 announcement that ink! development would be discontinued, which removed any expectation that the contract layer would mature. The episode illustrates that architectural decisions reducing dependence on any single non-essential component become more valuable as the ecosystem evolves.
 
 \section{The Snowbridge Fork-Version Configuration Issue}\label{sec:snowbridge-fork-version}
 
 \textbf{Challenge.} During the integration of Snowbridge, the beacon relay generated Merkle inclusion proofs at incorrect tree positions (gindex 54 instead of 86 for the Electra fork), leading to the rejection of all submitted updates by the Bridge Hub's \texttt{EthereumBeaconClient} pallet.
 
-\textbf{Response.} We identified the root cause as a misinterpretation of the relay's \texttt{forkVersions} configuration field. The relay code interprets this field as a fork activation epoch rather than a version identifier. Consequently, \texttt{0x04000000} was interpreted as the integer 83,886,080, placing the active fork many epochs in the future. We resolved the issue by updating the configuration to use plain epoch numbers (\texttt{\{ "deneb": 0, "electra": 0, "fulu": 5000000 \}}).
+\textbf{Response.} The relayer's \texttt{forkVersions} field holds fork activation epochs, not 4-byte fork version identifiers. Our configuration used version identifiers, so Electra's \texttt{0x05000000} was interpreted as epoch~83,886,080. The relayer therefore treated every slot as pre-Electra and built \texttt{current\_sync\_committee} proofs at gindex~54, while the Bridge Hub light client, with Electra active from epoch~0, expected gindex~86. We replaced the identifiers with epoch numbers (\texttt{\{ "deneb": 0, "electra": 0, "fulu": 5000000 \}}, Fulu being a far-future epoch the local chain never reaches). After the change, both the relayer and the pallet computed gindex~86, and the checkpoint was accepted.
 
 \textbf{Lesson.} Cryptographic verification systems are sensitive to silent configuration discrepancies: the failure mode is ``verification fails'' with no informative error pointing to the bad value.
 
@@ -77,17 +77,17 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \section{The XCM Fee Scaling for Proof Size}\label{sec:xcm-fee-scaling}
 
-\textbf{Challenge.} Initial XCM tests configured the \texttt{BuyExecution} fee at 1B tokens. All tests failed; only at $\sim$70B tokens did they begin to pass.
+\textbf{Challenge.} Initial XCM tests set the \texttt{BuyExecution} fee at 1B tokens, and every test failed on CCRMS.
 
-\textbf{Response.} The dominant cost in the runtime's \texttt{BlockRatioFee} model is \texttt{proof\_size}, not \texttt{ref\_time}. The standard configuration imposes significantly steeper scaling for proof size, meaning even a minimal cross-chain message requires 75--100B tokens. We updated test scripts to specify 100B tokens.
+\textbf{Response.} The runtime converts weight to fee using \texttt{BlockRatioFee<1,1>}, which prices each weight dimension by its share of the block limit and charges the higher value. Our XCM configuration uses \texttt{FixedWeightBounds}, assigning every instruction a flat 1B \texttt{ref\_time} and a 64~KiB proof size (Finding~C). Three instructions therefore declare 196,608~bytes of proof size: 3.75\% of the 5~MiB PoV limit, against 0.15\% of the \texttt{ref\_time} limit. The proof-size component, about 75B tokens, sets the fee. We set test fees to 100B tokens to leave a margin for the \texttt{Transact} call's own weight.
 
-\textbf{Lesson.} Polkadot fee modeling is driven primarily by proof size, not computational effort.
+\textbf{Lesson.} Under \texttt{BlockRatioFee}, the fee is determined by whichever weight dimension accounts for the larger share of the block. Placeholder XCM weights can make proof size the fee-setting dimension even for trivial messages; benchmarked XCM weights would likely reduce the fee considerably.
 
 \section[Finding B: Authorization Gap]{Finding B: The Authorization Gap in\texorpdfstring{\\}{ }\texttt{xcm\_transfer\_ownership}}\label{sec:xcm-auth-gap}
 
 \textbf{Challenge.} During the Phase~5 security audit, we identified an authorization flaw in \texttt{xcm\_transfer\_ownership}: the initial implementation performed only \texttt{ensure\_signed(origin)} before burning/minting NFTs based on a \texttt{from} parameter, allowing any signed account to steal ownership.
 
-\textbf{Response.} We added \texttt{ensure!(authorizer == from, Error::<T>::Unauthorized)} and committed a unit test (\texttt{security\_xcm\_transfer\_ownership\_any\_account\_can\_steal}) that verifies the exploit is blocked.
+\textbf{Response.} We added \texttt{ensure!(authorizer == from, Error::<T>::Unauthorized)} and a unit test (\texttt{security\_xcm\_transfer\_ownership\_rejects\_non\_owner}) that verifies the exploit is blocked.
 
 \textbf{Lesson.} Any cross-chain extrinsic accepting a ``from'' identity parameter requires explicit authorization. Payer-beneficiary separation introduces impersonation risk absent from local-only calls.
 
@@ -95,9 +95,9 @@ The nine challenges summarized in Table~\ref{tab:challenges} are presented here 
 
 \textbf{Challenge.} Batches of 100 \texttt{subscribe} calls to the same content item failed midway with \texttt{MaxChildrenReached}. The \texttt{Children} storage entry is limited to 50 child NFTs by \texttt{BoundedVec<\_, ConstU32<50>{}>}.
 
-\textbf{Response.} We documented the constraint as a known limitation, updated benchmark scripts to rotate content items, and treat the 50-child cap as a research-prototype constraint for future work.
+\textbf{Response.} We documented the constraint as a known limitation and updated benchmark scripts to rotate content items. Subsequent analysis showed the bound to be stricter than a concurrency limit. Children are minted per buyer and released only when a view pack is exhausted, so expired subscriptions permanently occupy their slots. The bound therefore limits a content item to fifty subscribers, view-pack holders and owners over its lifetime. Its implications for the economic results are discussed in Section~\ref{sec:limitations}.
 
-\textbf{Lesson.} Bounded FRAME collections trade benchmarkability for capacity limits. The appropriate bound is a trade-off between worst-case weight and maximum expected workload.
+\textbf{Lesson.} Bounded FRAME collections trade benchmarkability for capacity limits, and a bound that suits a benchmark may conflict with the target workload. Bounds should be checked against the audience sizes the system is meant to serve, and redundant indexes should be removed rather than bounded.
 
 \section[ink! Discontinuation]{The ink! Discontinuation and Its Implications}\label{sec:ink-discontinuation}
 

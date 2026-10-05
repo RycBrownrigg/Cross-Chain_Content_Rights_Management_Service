@@ -29,61 +29,96 @@
 
 \section{The Problem}\label{sec:the-problem}
 
-The prevailing content economy is unfavorable to creators. An independent musician earning USD~100,000 in streaming revenue typically retains between USD~55,000 and USD~70,000 after platform fees and distributor commissions --- a figure that falls substantially lower for label-signed artists \citep{musicBizResearch2024}. Centralized intermediaries retain between 30 and 60 percent of gross creator revenue, varying by platform and contract structure; the per-platform breakdown used in our analysis is presented in Section~\ref{subsec:fee-analysis} (Table~\ref{tab:fees}). Fees are non-negotiable, audiences are non-portable, and content rights remain bound by the platform's terms of service throughout.
+The prevailing content economy is unfavorable to creators. An independent musician earning USD~100,000 in streaming revenue typically retains between USD~55,000 and USD~70,000 after platform fees and distributor commissions; label-signed artists retain substantially less \citep{musicBizResearch2024}. Centralized intermediaries retain between 30 and 60 percent of gross creator revenue, depending on the platform and contract structure (the per-platform breakdown is documented in Table~\ref{tab:fees}). Fees are non-negotiable, audiences are non-portable, and content rights remain bound by the platform's terms of service.
 
-Consumers face analogous fragmentation. A film bought on iTunes cannot be streamed on Amazon Prime; an Audible audiobook cannot be transferred to Google Play; a subscription started on one platform cannot move to another. Consumers do not own their purchases; they hold a platform-bound license that can be revoked, modified, or ignored. The fragmentation that constrains creators also restricts the consumers who support them.
+Consumers face similar fragmentation. A film purchased on iTunes cannot be streamed on Amazon Prime; an Audible audiobook cannot be transferred to Google Play; a subscription started on one platform cannot be moved to another. Consumers do not own their purchases; they hold a platform-bound license that can be revoked, modified, or ignored. This fragmentation that constrains creators also restricts the consumers who support them.
 
-Fragmentation extends to monetization models. Subscriptions typically live on Patreon; one-time sales on Gumroad; pay-per-view is scarcely supported at all, because the overhead of conventional payment systems makes micro-transactions uneconomic. Each platform supports one monetization model, holds its own audience, takes its own fees, and produces its own accounting reports. A creator who wants to offer all three models is forced to run three or four platforms in parallel and reconcile them by hand.
+Fragmentation extends to monetization models. Subscriptions typically live on Patreon; one-time sales on Gumroad; pay-per-view is scarcely supported because the overhead of conventional payment systems makes micro-transactions uneconomic. Each platform supports a single monetization model, has its own audience, charges its own fees, and produces its own accounting reports. A creator who wants to offer all three models is forced to run three or four platforms in parallel and reconcile them by hand.
 
-Existing blockchain alternatives address parts of the problem but not the whole. Non-fungible tokens (NFTs) provide transferable ownership but not recurring access or per-view consumption. Subscription-style decentralized platforms (such as Audius) offer recurring revenue but are confined to a single chain and audience. Cross-chain bridges move assets between ecosystems but lack rights metadata. Blockchain-based digital rights management has been examined in the academic literature specifically for the music industry \citep{cirelloEtAl2023}, with proposed solutions sharing a common limitation: they address rights metadata or royalty distribution in isolation, without combining all three monetization models into a single portable primitive. No existing system, centralized or decentralized, delivers subscription, pay-per-view, and permanent ownership from a single rights primitive portable across blockchains.
+Existing blockchain alternatives address only parts of the problem, not the whole. Non-fungible tokens (NFTs) provide transferable ownership but not recurring access or per-view consumption. Subscription-style decentralized platforms such as Audius offer recurring revenue but are confined to a single chain and audience. Cross-chain bridges move assets between ecosystems but carry no rights metadata during those transfers. Academic work on blockchain-based digital rights management has produced tamper-evident provenance schemes \citep{garbaEtAl2021, patilEtAl2022}, expert-derived design principles for royalty distribution in the music industry \citep{cirelloEtAl2023}, and on-chain licensing frameworks \citep{mendozaTelloEtAl2024}, each addressing a single dimension of the problem on a single chain. No existing system, centralized or decentralized, combines subscription access, pay-per-view consumption, and permanent ownership in a single rights primitive that is portable across blockchains.
 
-The technical primitives to resolve this (cross-chain messaging, programmable smart contracts, on-chain royalty distribution, and NFT-based rights tokenization) all exist as standalone capabilities. Hanneke et al.\ \citeyearpar{hannekeEtAl2024} characterize this class of systems as an emerging \emph{Internet of Value}, in which blockchain tokenization enables asset ownership and revenue flows that bypass centralized intermediaries entirely. Our research examines whether these primitives can be integrated into a coherent system that benefits creators over existing solutions, and the conditions under which creators would adopt it.
+The technical primitives needed to address this gap already exist as standalone capabilities: cross-chain messaging, programmable smart contracts, on-chain royalty distribution, and NFT-based rights tokenization. \citet{hannekeEtAl2024} characterize this class of systems as an emerging \emph{Internet of Value}, in which blockchain tokenization enables asset ownership and revenue flows that bypass centralized intermediaries entirely. However, no prior academic or industry work has integrated these primitives into a system that unifies all three monetization models in a single, cross-chain-portable rights record, the specific gap that Chapter~\ref{chap:background} maps across eight dimensions of prior literature (Table~\ref{tab:gaps}). The research questions that follow from this gap are formalized in Chapter~\ref{chap:research-questions}.
 
 \section{Background Context}\label{sec:background-context}
 
-This dissertation sits at the intersection of three research and engineering areas: blockchain-based digital rights management, cross-chain interoperability, and decentralized content monetization. Each is surveyed in Chapter~\ref{chap:background}; this section gives the context needed to motivate the work.
+This dissertation sits at the intersection of three active research and engineering areas: blockchain-based digital rights management, cross-chain interoperability, and decentralized content monetization. Chapter~\ref{chap:background} surveys each area in depth; this section summarizes what has been proposed in those areas and explains why no existing proposal meets the combined requirements.
 
-The global Digital Rights Management market is large and growing. Independent estimates from MarketsandMarkets, Mordor Intelligence, and Grand View Research place it at approximately USD~6.7~billion in 2025, forecast to reach USD~11--14~billion by 2030 (10--11\% CAGR), driven by streaming services, OTT platforms, rising AI-related piracy, and regulatory pressure. The blockchain-specific segment is smaller but expanding at approximately 33\% annually, projected to reach USD~2.74~billion by 2030.
+Story Protocol (now the DATA Foundation; \citealp{datafoundation2026}), launched in February 2025, is the closest industry precedent: an EVM-compatible layer-1 blockchain that records IP ownership and licensing terms on-chain and supports programmable royalty flows \citep{storyFoundation2025}. Like the academic proposals in Section~\ref{sec:the-problem}, it operates on a single chain and does not combine subscription, pay-per-view, and permanent-ownership access.
 
-Cross-chain interoperability has emerged as an active research area during the implementation window. A 2023 survey in IEEE Transactions on Knowledge and Data Engineering \citep{renEtAl2023} classifies interoperability approaches into five categories --- sidechains, notary schemes, hashed time lock contracts, relays, and blockchain-agnostic protocols --- and two further 2025 surveys \citep{dengEtAl2025, liEtAl2025a} collectively cover more than 150 sources. The Polkadot ecosystem that underpins our technical foundation completed its 2.0 upgrade during this period, introducing Async Backing, Agile Coretime, and Elastic Scaling. These features materially improve per-parachain latency and throughput. Snowbridge, the trust-minimized Polkadot--Ethereum bridge, launched V2 in November 2025 with USD~75~million in total value locked. JAM, Polkadot's next-generation relay-chain architecture, reached testnet in January 2026.
-
-In January 2026, the ink! Alliance discontinued development of ink!, the language chosen for the CCRMS contract layer; our pallet-first architecture proved resilient to the change (Appendix~\ref{sec:ink-discontinuation}). The EU AI Act copyright provisions (August 2025) and MiCA (full enforcement July 2026) create regulatory demand for cryptographic provenance and tamper-evident rights records, functions that CCRMS can provide.
+Cross-chain interoperability surveys \citep{renEtAl2023, dengEtAl2025, liEtAl2025a} examine mechanisms for moving assets between ecosystems but not the portability of rights metadata during those movements, which is the specific contribution of this dissertation's cross-chain design.
 
 \section{Research Aim and Approach}\label{sec:research-aim-and-approach}
 
-Our objective is to \textbf{design, implement, and evaluate a functional prototype of a cross-chain content rights management service that supports three monetization models: subscription, pay-per-view, and permanent ownership, using a single unified rights primitive with automatic royalty distribution and cross-chain portability}. We designate this prototype as CCRMS (the Cross-Chain Content Rights Management Service) and implement it as a Polkadot parachain.
-
-The primary research question that guides our work is:
+The primary research question, which follows from gap G7 (Table~\ref{tab:gaps}), is:
 
 \begin{quote}
-How can a shared-security, multi-chain framework built on Polkadot's Cross-Consensus Messaging (XCM) and FRAME pallet primitives deliver a unified rights token that natively supports recurring subscriptions, pay-per-view microtransactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can such a system achieve?
+How can a shared-security, multi-chain framework built on Polkadot's Cross-Consensus Messaging (XCM) and FRAME pallet primitives deliver a unified rights record that natively supports recurring subscriptions, pay-per-view microtransactions, and permanent ownership transfers across heterogeneous blockchain networks, and what levels of transaction finality, cost efficiency, and creator revenue retention can it achieve?
 \end{quote}
 
-The question comprises two distinct components: a \textbf{design feasibility} question (assessing whether the system can be constructed using available primitives) and a \textbf{measurement} question (determining the system's operational properties and comparing them to alternative options). We treat these components as mutually constraining and report their results relative to one another. A comprehensive statement of the primary question, the five sub-questions that decompose it, and the six research objectives addressing them is presented in Chapter~\ref{chap:research-questions}.
+The question has two mutually constraining components, design feasibility and measurement, which Chapter~\ref{chap:research-questions} decomposes.
 
-Our research approach is grounded in \textbf{design science research} \citep{hevnerEtAl2004} as applied to a multi-component blockchain prototype. We organize the methodology, detailed in Chapter~\ref{chap:methodology}, into iterative build-test-measure-refine cycles within a six-phase framework. Our evaluation strategy, as delineated in Chapter~\ref{chap:evaluation}, combines quantitative measures, including technical benchmarks, security audits, comparative analyses, and Monte Carlo simulations of creator revenue, with qualitative insights from literature synthesis. We frame the evaluation as \textbf{measurement-focused} rather than target-driven: our objective is to document and analyze the levels of performance, security, and economic viability achieved by the system, rather than to verify conformity with a predefined set of criteria.
+To address this question, we design, implement, and evaluate a working prototype, the Cross-Chain Content Rights Management Service (CCRMS), built as a Polkadot parachain. The prototype supports all three monetization models through a single unified rights record, enabling automatic royalty distribution and cross-chain portability via XCM. Section~\ref{subsec:polkadot-architecture} explains why Polkadot's shared-security architecture suits this design.
+
+Our research approach is grounded in design science research \citep{hevnerEtAl2004} and applied to a multi-component blockchain prototype. We organize the methodology, detailed in Chapter~\ref{chap:methodology}, into iterative build-test-measure-refine cycles within a six-phase framework. Our evaluation strategy, as delineated in Chapter~\ref{chap:evaluation}, combines quantitative measures (including technical benchmarks, security audits, comparative analyses, and Monte Carlo simulations of creator revenue) with qualitative insights from a literature synthesis. We frame the evaluation as measurement-focused rather than target-driven: our objective is to document and analyze the levels of performance, security, and economic viability achieved by the system, rather than to verify conformity with a predefined set of criteria.
 
 \section{Contributions}\label{sec:contributions}
 
-We make contributions across four categories, described in detail in Section~\ref{sec:summary-of-contributions}:
+We make three contributions, described in detail in Section~\ref{sec:summary-of-contributions}:
 
 \begin{enumerate}
-\item \textbf{A working artifact:} the CCRMS parachain implementation (Rust, ink!, and JavaScript), released as open source under the MIT license.
-\item \textbf{Formal documentation:} seven implementation specifications that explain what the artifact does and why each design decision was made.
-\item \textbf{Empirical findings:} technical performance measurements, a Monte Carlo creator-revenue result (CCRMS produces higher mean revenue, strongly conditional on audience size), and eight security audit findings, of which one Medium and one Low were remediated.
-\item \textbf{A worked example} of applying design science research to a multi-component blockchain prototype, a combination seldom exemplified in existing DSR literature.
+
+\item \textbf{A feasibility result for a cross-chain unified rights record.} A single FRAME pallet with a priority-ordered access check across three storage maps encodes subscription, pay-per-view, and permanent ownership as native modes of a single record that other parachains can acquire via XCM and, given a trusted CCRMS state root, verify by storage proof. This addresses gap G7 (Chapter~\ref{chap:background}).
+
+\item \textbf{Quantified decentralization--latency and revenue trade-offs.} The latency cost of decentralization is measured directly: CCRMS incurs a $67{,}000\times$ overhead relative to a centralized baseline. The creator-revenue advantage is small and conditional: in simulation, CCRMS out-earns centralized platforms in most scenarios only for creators above approximately 6,000 followers (the 50\% win-rate point); below 2,000 followers, its win rate falls below one in ten (8.7\% at 1,500--2,000; Table~\ref{tab:crossover-fine}).
+
+\item \textbf{A cross-chain rights artifact demonstrating XCM sufficiency.} The CCRMS parachain (two FRAME pallets, a smart contract layer, an EVM precompile, and benchmarking and simulation scripts) demonstrates that the standard three-instruction XCM sequence, available since v3, is sufficient for authenticated, issuance-style cross-chain rights operations without custom protocol extensions. The artifact is licensed under the MIT license.
+
 \end{enumerate}
 
-\section{Scope and Limitations}\label{sec:scope-and-limitations}
+\section{Scope, Claims, and Limitations}\label{sec:scope-and-limitations}
 
-This dissertation is bound in several ways that the reader should be aware of prior to engaging with the main content chapters.
+This section records what the dissertation demonstrates, what it deliberately does not claim, and the operational constraints that bound how the results should be read.
 
-\textbf{The prototype is a back-end service, not a consumer application.} We did not develop a web or mobile interface for CCRMS. Our assessment focuses on pallet- and runtime-level behavior; we do not directly evaluate user-experience factors. We recognize this as a limitation in Chapters~\ref{chap:evaluation} and~\ref{chap:discussion} and as an area for future research in Chapter~\ref{chap:conclusion}.
+The research question refers to heterogeneous blockchain networks. The evaluation covers Polkadot parachains, which are distinct runtimes sharing one relay chain, and a Snowbridge path from Ethereum to AssetHub that did not reach the rights pallet. Claims about chains outside Polkadot are therefore limited to forward-compatibility.
 
-\textbf{We take the measurements on a local development network.} Our CCRMS prototype runs in a local Zombienet topology with two relay-chain validators and single-collator parachains. In production, parachains are hosted on the Polkadot or Kusama relay chains, which have hundreds of validators, real-world network latency, and competition from many other parachains. The throughput, latency, and reliability metrics in Chapter~\ref{chap:results} should be treated as \textbf{upper bounds for the test environment}, not forecasts of real-world deployment performance.
+\subsection{Claims}\label{subsec:claims}
 
-\textbf{Our Snowbridge integration uses a local Ethereum stack.} We successfully demonstrated the bridge with two transactions, each for one ETH, bridging from a local Ethereum chain to a local AssetHub parachain. However, the entire configuration remains local; no public testnet or mainnet has been used. This integration serves as a proof of architectural feasibility rather than a production validation.
+The following results are demonstrated only within the operational scope of Section~\ref{subsec:operational-limitations}:
 
-\textbf{We have not commissioned any third-party audit, security review, or independent benchmarking.} A single author performed the implementation, test design, measurements, and interpretation in this dissertation. Deployment to production would require third-party validation before any substantive value is processed.
+\begin{enumerate}
 
-\textbf{We did not fully achieve two of the six research objectives.} RO5 (zero-knowledge proof hooks for selective regulatory disclosure) was not undertaken. The complexity of integrating a ZK proof system into a Substrate runtime, selecting a proof system, building or adopting a verifier pallet, designing the selective disclosure protocol, and producing testable proof-of-concept circuits was substantially greater than the original Phase~2 objective anticipated. We acknowledge the underestimate. RO2 (off-chain indexing) was partially implemented: the pallet's emitted events are sufficient for direct on-chain queries, but we did not deploy a separate indexer (e.g., SubQuery). We document both omissions in Chapter~\ref{chap:research-questions}, Section~\ref{sec:research-objectives}, and revisit them as future work in Chapter~\ref{chap:conclusion}.
+\item \textbf{Unified access encoding.} A FRAME pallet can encode subscription, pay-per-view, and permanent ownership as three native access modes within a single content registration, resolved by a single priority \texttt{check\_access} call. Demonstrated by the implementation and its unit test suite.
+
+\item \textbf{Standard XCM instructions suffice for rights issuance.} The sequence \texttt{WithdrawAsset}~$\to$ \texttt{BuyExecution}~$\to$ \texttt{Transact} is sufficient for issuance-style cross-parachain rights operations with payer--beneficiary decoupling in a local HRMP topology. No custom XCM extensions are required. The runtime executes XCM~v5; the benchmark message was V3-encoded (Section~\ref{subsec:xcm-flows}). After the Finding~B authorization fix, cross-chain transfer of existing ownership works when the owner signs on the sending chain and holds the right through their derived account, which we tested in the xcm-simulator only (Sections~\ref{subsec:security-audit} and~\ref{subsec:sq4-security-authorization}); we do not claim a complete cross-chain secondary market.
+
+\item \textbf{Audience-conditional revenue advantage.} Under the assumptions documented in Appendix~\ref{app:monte-carlo}, CCRMS yields higher creator revenue after fees than centralized platforms in most simulated scenarios once a creator's audience exceeds approximately 6,000 followers. The mean advantage is small (4.4\%) and disappears under modest changes to the fee or discovery assumptions. This is a design-level simulation result, not a measurement of the deployed prototype.
+
+\item In the Zombienet topology described in Section~\ref{subsec:operational-limitations}, the prototype met eight of eleven KPI targets in Table~\ref{tab:kpi-results} in every measurement; KPIs~2 and~6 are met at the median, and KPI~9 only as an author-audit interpretation (Section~\ref{sec:chapter-7-summary}). Those figures characterize the test environment.
+
+\end{enumerate}
+
+\subsection{Non-Claims}\label{subsec:non-claims}
+
+The dissertation does not claim, assert, or imply:
+
+\begin{itemize}
+
+\item \textbf{Cross-chain atomicity or auto-renewal.} XCM \texttt{Transact} does not guarantee atomicity across chains, and cross-chain recurring renewals are not implemented: XCM has no scheduling instruction, so a renewal paid from another chain would require that chain to schedule the messages (e.g., with \texttt{pallet-scheduler}).
+
+\item \textbf{The prototype can host the audience tiers that win in the simulation.} The \texttt{BoundedVec<\_, ConstU32<50>{}>} lifetime cap limits each content item to fifty subscribers, view-pack holders and owners in total, placing the high-follower audience tiers beyond the current instantiation.
+
+\end{itemize}
+
+\subsection{Operational Limitations}\label{subsec:operational-limitations}
+
+\begin{itemize}
+
+\item \textbf{The prototype is a back-end service, not a consumer application.} We did not develop a web or mobile interface for CCRMS. Our assessment covers pallet- and runtime-level behavior, not user experience.
+
+\item \textbf{We measure performance on a local development network.} The prototype runs in a local Zombienet network (a tool for simulating multi-chain Polkadot environments) with two relay-chain validators and single-collator parachains. Production relay chains have hundreds of validators, real network latency, and competing parachains, so the throughput, latency, and reliability figures in Chapter~\ref{chap:results} are \textbf{upper bounds for the test environment}, not deployment forecasts (Section~\ref{sec:limitations}).
+
+\item \textbf{Our Snowbridge integration is local and stops at AssetHub.} We transferred one ETH twice from a local Ethereum chain to a local AssetHub parachain; no public testnet or mainnet was used. The path from Ethereum to a CCRMS rights operation has not been tested end-to-end. The integration demonstrates architectural feasibility, not production validation.
+
+\item \textbf{We have not commissioned any third-party audit, security review, or independent benchmarking.} A single author conducted the implementation, test design, measurements, and interpretation (Section~\ref{sec:limitations}). Production deployment would require third-party validation first.
+
+\end{itemize}

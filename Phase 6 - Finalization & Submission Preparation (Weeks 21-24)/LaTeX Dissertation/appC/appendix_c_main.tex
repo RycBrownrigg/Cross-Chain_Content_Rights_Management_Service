@@ -24,7 +24,7 @@
 
 \section{Solidity Interface: \texttt{ContentRightsPrecompile}}\label{sec:solidity-interface}
 
-The EVM precompile described in Section~\ref{subsec:ink-contract} exposes the following Solidity interface. Solidity contracts deployed on \texttt{pallet-revive} can call these methods to read CCRMS rights state without crossing the EVM/Substrate boundary at write time.
+The EVM precompile (Section~\ref{sec:pallet-impl}) exposes the following Solidity interface. Solidity contracts deployed on \texttt{pallet-revive} can call these methods to read CCRMS rights state without crossing the EVM/Substrate boundary at write time.
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=left,numberstyle=\tiny\color{gray}]
 interface IContentRights {
@@ -53,7 +53,7 @@ interface IContentRights {
 
 \section[Canonical XCM Message]{Canonical XCM Message for Cross-Chain Rights Operations}\label{sec:xcm-message-structure}
 
-The canonical XCM message constructed by the \texttt{xcm\_*} extrinsics (Section~\ref{subsec:xcm-flows}) follows the three-instruction \texttt{WithdrawAsset} $\to$ \texttt{BuyExecution} $\to$ \texttt{Transact} pattern. The JavaScript form below illustrates the structure as submitted via \texttt{@polkadot/api}.
+The canonical XCM message follows the three-instruction pattern \texttt{WithdrawAsset} $\to$ \texttt{BuyExecution} $\to$ \texttt{Transact}. It is constructed on the sending parachain (Para~B) and sent to CCRMS via \texttt{polkadotXcm.send}; the \texttt{Transact} instruction carries the encoded call to one of the \texttt{xcm\_*} extrinsics (Section~\ref{subsec:xcm-flows}), which CCRMS dispatches from Para~B's sovereign account. The JavaScript form below shows the message as submitted via \texttt{@polkadot/api} in the latency benchmark. It is V3-encoded; \texttt{pallet-xcm} converts it to XCM~v5, the version the runtime executes, before delivery. In v5, the \texttt{requireWeightAtMost} value becomes \texttt{fallback\_max\_weight}, which is kept only for conversion to older versions; the v5 executor weighs the call from its own dispatch information.
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,numbers=left,numberstyle=\tiny\color{gray}]
 const xcmMessage = {
@@ -160,7 +160,7 @@ Table~\ref{tab:extrinsics} lists all 17 dispatchable extrinsics of \texttt{palle
 
 \section{Pallet Storage Layout Reference}\label{sec:storage-reference}
 
-Table~\ref{tab:storage} lists all 10 storage items of \texttt{pallet-content-rights}.
+Table~\ref{tab:storage} lists all 11 storage items of \texttt{pallet-content-rights}.
 
 \begin{longtable}{@{}L{0.20\linewidth} L{0.32\linewidth} L{0.42\linewidth}@{}}
 \caption{Storage Layout of \texttt{pallet-content-rights}}\label{tab:storage}\\
@@ -201,4 +201,6 @@ Table~\ref{tab:storage} lists all 10 storage items of \texttt{pallet-content-rig
 \texttt{AutoRenewIndex} & \texttt{(content\_id, user)} $\to$ \texttt{bool} & Auto-renew-enabled subscriptions \\
 \addlinespace
 \texttt{RoyaltySplits} & \texttt{content\_id} $\to$ \texttt{BoundedVec<10>} & Collaborator payout shares \\
+\addlinespace
+\texttt{RenewalQueue} & \texttt{block} $\to$ \texttt{BoundedVec<(content\_id, user), 10>} & Renewals due at each block \\
 \end{longtable}

@@ -4,19 +4,22 @@
 %% Appendix D: Security and Coverage Findings
 %%
 %% Expanded narratives and reference tables supporting Chapter 7's
-%% security and user-centric results. Covers the two remediated security
-%% vulnerabilities (Finding B authorization gap, Finding E view-pack
-%% overwrite), the three accepted design properties (Findings A, C, D),
-%% the full error-variant test coverage matrix, and the breakdown of
-%% cargo audit advisories from the transitive Polkadot SDK dependencies.
+%% security and user-centric results. Covers the four remediated security
+%% findings (B, E, J, K), the three accepted design properties (A, C, D),
+%% the open Finding I (zero-view DoS), the full error-variant test
+%% coverage matrix (17 of 20 tested), and the breakdown of cargo audit
+%% advisories from the transitive Polkadot SDK dependencies.
 %%
 %% Sections:
-%%   D.1 Security Audit Finding B: Authorization Gap
+%%   D.1 Finding B: Authorization Gap
 %%       in xcm_transfer_ownership
-%%   D.2 Security Audit Finding E: View Pack Overwrite
+%%   D.2 Finding E: View Pack Overwrite
 %%   D.3 Accepted Design Findings (A, C, D)
-%%   D.4 Error Variant Coverage (Table: 19 error variants, 16 tested)
-%%   D.5 Static Analysis Advisory Breakdown (Table: 8 advisories)
+%%   D.4 Finding I: Zero-View Denial of Service
+%%   D.5 Finding J: Child-NFT Divergence (High, Fixed)
+%%   D.6 Finding K: Auto-Renewal Starvation (Medium, Fixed)
+%%   D.7 Error Variant Coverage (Table: 20 error variants, 17 tested)
+%%   D.8 Static Analysis Advisory Breakdown (Table: 8 advisories)
 %%
 %% External labels referenced: none (self-contained appendix).
 %%
@@ -25,17 +28,52 @@
 
 \chapter{Security and Coverage Findings}\label{app:security}
 
-\section[Finding B: Authorization Gap]{Security Audit Finding B:\texorpdfstring{\\}{ }Authorization Gap in \texttt{xcm\_transfer\_ownership}}\label{sec:d-finding-b}
+\section[Finding B: Authorization Gap]{Finding B: Authorization Gap in \texttt{xcm\_transfer\_ownership}}\label{sec:d-finding-b}
 
-The original implementation performed only \texttt{ensure\_signed(origin)} and then looked up \texttt{Ownership[content\_id, from]}, burned the seller's NFT, and minted a new one for \texttt{to}. No check confirmed that the dispatch caller had any relationship to the \texttt{from} account, so any signed account could call the extrinsic with arbitrary \texttt{from} and \texttt{to} arguments and transfer ownership from any user to itself. We rated the vulnerability Medium severity. Our remediation was \texttt{ensure!(authorizer == from,\allowbreak\ Error::<T>::Unauthorized)}, committed alongside unit test \texttt{security\_xcm\_transfer\_\allowbreak ownership\_\allowbreak any\_account\_\allowbreak can\_steal}.
+The original implementation performed only \texttt{ensure\_signed(origin)} and then looked up \texttt{Ownership[content\_id, from]}, burned the seller's NFT, and minted a new one for \texttt{to}. No check confirmed that the dispatch caller had any relationship to the \texttt{from} account, so any signed account could call the extrinsic with arbitrary \texttt{from} and \texttt{to} arguments and transfer ownership from any user to itself.
 
-\section{Security Audit Finding E: View Pack Overwrite}\label{sec:d-finding-e}
+We rate this finding \textbf{High}. Exploitation requires only a signed account with sufficient balance for transaction fees, no relationship to the victim, and no prior state; the impact is unauthorized transfer of a permanent, transferable ownership right. We initially recorded the finding as Medium on the grounds that the affected extrinsic is reachable only through the cross-chain path in normal operation, but Finding~A establishes that the \texttt{xcm\_*} extrinsics are also callable locally by any signed account, which removes that mitigation.
+
+Our remediation was \texttt{ensure!(authorizer == from,\allowbreak\ Error::<T>::Unauthorized)}, committed alongside unit test \texttt{security\_xcm\_transfer\_\allowbreak ownership\_\allowbreak rejects\_non\_owner}.
+
+This remediation still permits genuine cross-chain transfers, but only by the owner's own chain-derived account. When a sibling parachain sends an XCM \texttt{Transact} from its own root, as in our benchmark, the call dispatches under that parachain's sovereign account, which can never equal \texttt{from}. When an ordinary user on the sibling chain signs \texttt{polkadotXcm.send}, \texttt{pallet-xcm} prepends \texttt{DescendOrigin(AccountId32)}, so CCRMS receives the origin \texttt{(1, [Parachain(n), AccountId32])}. The runtime's \texttt{LocationToAccountId} converts that location through \texttt{HashedDescription} into an account derived from the user's chain and key, and \texttt{Transact} with \texttt{SovereignAccount} kind dispatches under that derived account. If the derived account holds the ownership, the equality check holds remotely. Two xcm-simulator tests (commit \texttt{e258f1e}) confirm this: a signed Para~B user transfers ownership held by their derived account, and a second Para~B user attempting the same transfer is rejected with \texttt{Unauthorized} after the message executes under that user's own derived account. Three qualifications apply. First, the derived account is distinct from the same person's local CCRMS account, so ownership bought locally cannot be moved this way, and the derived account needs a CCRMS balance to pay execution fees. Second, CCRMS trusts the sending chain to prepend the correct \texttt{DescendOrigin}; a malicious or compromised sibling runtime could act as any of its own users, though not as users of another chain or of CCRMS itself. Third, the tests run in the xcm-simulator against a mock runtime aligned with the production XCM configuration; we did not repeat them on Zombienet. Appendix~\ref{sec:e-delegation} describes how XCM~v5 origin aliasing would let a remote user act as their local account.
+
+\section{Finding E: View Pack Overwrite}\label{sec:d-finding-e}
 
 The original \texttt{purchase\_views} always overwrote \texttt{ViewPacks[content\_id, buyer]} with a new \texttt{ViewPackInfo}, so a user holding 10 unused views who purchased 5 more would end up with 5, not 15. Our remediation made purchases additive: if a view pack already exists, new views are added to the existing balance.
 
+This remediation initially covered the local \texttt{purchase\_views} path only; the XCM path (\texttt{xcm\_purchase\_views}) still overwrote \texttt{ViewPacks} and minted a fresh child NFT on each call, orphaning the previous one. Commit \texttt{a20ad8c} moved both paths onto a single shared purchase function, so cross-chain purchases are now additive as well. Regression tests: \texttt{security\_purchase\_views\_adds\_to\_existing\_pack}, \texttt{xcm\_purchase\_views\_adds\_to\_existing\_pack} and \texttt{local\_then\_xcm\_purchase\_views\_share\_one\_pack}.
+
 \section{Accepted Design Findings (A, C, D)}\label{sec:d-accepted}
 
-\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; production should restrict to an explicit allowlist. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
+\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; the \texttt{XcmExecuteFilter}, \texttt{XcmTeleportFilter}, and \texttt{XcmReserveTransferFilter} are similarly set to \texttt{Everything}, and \texttt{FixedWeightBounds} is used in place of measured XCM weights; production should restrict all four to explicit allowlists (this also inflates XCM fees; Appendix~\ref{sec:xcm-fee-scaling}). We rate this Low for the prototype because the reach of \texttt{Transact} is bounded by the origin converter, not by the filter: the runtime has no superuser conversion, so a remote \texttt{Transact} dispatches only as a signed sovereign or derived account, or as a relay-chain or sibling native origin, and, except from the relay chain, must pay for execution (\texttt{AllowTopLevelPaidExecutionFrom}). With a signed origin, a remote chain can do nothing a funded local account cannot. The remaining exposure is calls whose weight cannot be bounded before dispatch, which is what \texttt{SafeCallFilter} exists to exclude. If deployed unchanged, we would rate it Medium. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
+
+\section{Finding I: Zero-View Denial of Service}\label{subsec:finding-i}
+
+\textbf{Severity:} Medium. \textbf{Status:} Fixed (commit \texttt{a20ad8c}).
+
+\textbf{Description.} \texttt{purchase\_views} accepted \texttt{num\_views = 0}, charged \texttt{ppv\_price} $\times$ 0 = 0, and still minted a child NFT. \texttt{consume\_view} then failed with \texttt{NoViewsRemaining}, so the slot was never released. Fifty throwaway accounts could permanently block all future sales of any content item for the cost of transaction fees alone.
+
+\textbf{Remediation.} Both purchase paths now call a shared function that rejects \texttt{num\_views = 0} with a new \texttt{ZeroViews} error before any payment or minting. Regression tests: \texttt{security\_zero\_views\_purchase\_rejected} and \texttt{security\_xcm\_zero\_views\_purchase\_rejected}. The fix removes the free exploit but not the bound itself; Section~\ref{sec:limitations} (item~4) and Appendix~\ref{sec:e-child-cap} cover the remaining exposure.
+
+\section[Finding J: Child-NFT Divergence]{Finding J: Child-NFT Divergence}\label{sec:d-finding-j}
+
+\textbf{Severity:} High. \textbf{Status:} Fixed (commit \texttt{221e5fa}).
+
+Collections were created with default \texttt{pallet-nfts} settings, which allow child NFTs to be transferred directly via \texttt{pallet-nfts} extrinsics. Because \texttt{pallet-content-rights} did not disable this capability, the holder could sell or transfer their child NFT through \texttt{pallet-nfts} while the \texttt{Ownership} storage map still named them; a later \texttt{transfer\_ownership} then burned the NFT from the buyer's wallet.
+
+The fix creates all collections with \texttt{TransferableItems} disabled (only the runtime's ForceOrigin (root) can re-enable it) so child NFTs cannot be moved except through \texttt{transfer\_ownership}. Burn failures now propagate as errors rather than being silently ignored.
+
+Regression tests: \texttt{child\_nft\_cannot\_be\_transferred\_via\_pallet\_nfts} and \texttt{transfer\_ownership\_works\_with\_non\_transferable\_children}.
+
+\section[Finding K: Auto-Renewal Starvation]{Finding K: Auto-Renewal Starvation and Non-Atomic Payment}\label{sec:d-finding-k}
+
+\textbf{Severity:} Medium. \textbf{Status:} Fixed (commit \texttt{221e5fa}).
+
+The \texttt{on\_initialize} hook reads the first 20 entries of \texttt{AutoRenewIndex} (in storage-hash order) every block. It skips unexpired entries at the front, and expired entries beyond them are never reached (starvation). Separately, multi-recipient royalty payments were not wrapped in a storage transaction: if one payment failed, earlier payments in the same renewal were not rolled back, leaving the pallet in a partially-paid state. The fix introduces a \texttt{RenewalQueue} keyed by expiry block: each block processes only its own bucket (at most ten renewals), and overflow spills to the following blocks, searching up to 100 blocks ahead (about 1,000 renewals per expiry window).
+
+Regression tests: the four existing auto-renewal group tests plus\\
+\texttt{enable\_auto\_renew\_fails\_when\_queue\_full}.
 
 \section{Error Variant Coverage}\label{sec:d-coverage}
 
@@ -65,11 +103,14 @@ The original \texttt{purchase\_views} always overwrote \texttt{ViewPacks[content
 \texttt{SubscriptionNotFound} & Yes & \texttt{OwnershipNotFound} & Yes \\
 \texttt{SubscriptionNotExpired} & Yes & \texttt{InvalidRoyaltySplits} & Yes \\
 \texttt{ViewPackNotFound} & Yes & \texttt{AutoRenewAlreadyEnabled} & Yes \\
-\texttt{NoViewsRemaining} & Yes & \texttt{AutoRenewNotEnabled} & Yes \\
+\texttt{NoViewsRemaining} & Yes$^\dagger$ & \texttt{AutoRenewNotEnabled} & Yes \\
 \texttt{AlreadyOwned} & Yes & \texttt{Unauthorized} & Yes \\
 \texttt{InsufficientPayment} & Yes & \texttt{NftOperationFailed} & No \\
-                                &     & \texttt{ChildAlreadyNested} & No (unreachable) \\
+\texttt{RenewalQueueFull} & Yes & \texttt{ChildAlreadyNested} & No (unreachable) \\
+\texttt{ZeroViews} & Yes & & \\
 \end{longtable}
+
+{\footnotesize $\dagger$~Defensive; tested via direct storage write.}
 
 \section{Static Analysis Advisory Breakdown}\label{sec:d-static-analysis}
 
