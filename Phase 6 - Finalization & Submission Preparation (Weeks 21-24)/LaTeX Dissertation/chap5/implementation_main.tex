@@ -65,7 +65,7 @@ Figure~\ref{fig:component-overview} shows the six implementation components and 
 %% Core pallet
 \node[core, minimum width=5.5cm, minimum height=1.3cm] (pcr) at (0, 1.6) {
     \textbf{\texttt{pallet-content-rights}}\\[3pt]
-    {\footnotesize 17 extrinsics \quad 11 storage maps \quad 22 events}
+    {\footnotesize 17 extrinsics \quad 10 storage maps \quad 22 events}
 };
 %% Underlying support pallets
 \node[dep] (pnfts) at (-2.8, -0.8) {
@@ -89,7 +89,7 @@ Figure~\ref{fig:component-overview} shows the six implementation components and 
 \label{fig:component-overview}
 \end{figure}
 
-The core of CCRMS is \texttt{pallet-content-rights}, a FRAME pallet that implements all business logic: content registration, the three monetization models (subscription, pay-per-view, and permanent ownership), on-chain royalty distribution to up to ten collaborators, automated subscription renewal via an \texttt{on\_initialize} hook that processes a \texttt{RenewalQueue} keyed by expiry block, and cross-chain variants of every financial operation. It exposes 17 dispatchable extrinsics, 11 storage items, and 22 event variants; the full reference tables are in Appendix~\ref{app:code}. \texttt{check\_access} is implemented as a signed extrinsic rather than a free runtime API, so that each call is recorded on-chain for auditability. It returns nothing to a caller on another chain; given a trusted CCRMS state root, other chains could check rights status with \texttt{pallet-rights-verifier} (Section~\ref{subsec:xcm-flows}). Content rights are represented as NFT collections using a parent--child nesting model built on \texttt{pallet-nfts}: a parent Content NFT is the canonical on-chain identity for each piece of content, and each user's access rights are a child NFT tagged with a \texttt{rights\_type} attribute (Subscription, PPV, or Ownership). The smart contract and precompile layers are stateless wrappers; all authoritative state resides in the pallet (Appendices~\ref{sec:contract-first-pivot} and~\ref{sec:ink-discontinuation}).
+The core of CCRMS is \texttt{pallet-content-rights}, a FRAME pallet that implements all business logic: content registration, the three monetization models (subscription, pay-per-view, and permanent ownership), on-chain royalty distribution to up to ten collaborators, automated subscription renewal via an \texttt{on\_initialize} hook that processes a \texttt{RenewalQueue} keyed by expiry block, and cross-chain variants of every financial operation. It exposes 17 dispatchable extrinsics, 10 storage items, and 22 event variants; the full reference tables are in Appendix~\ref{app:code}. \texttt{check\_access} is a signed extrinsic, so each call is recorded on-chain for auditability; a free, read-only view function, \texttt{access\_rights\_of}, returns the same answer without a transaction (commit \texttt{5cb09cd}). Neither enforces access by itself: a content server must query CCRMS and serve content only on a positive answer, and the prototype does not include such a server. Neither returns anything to a caller on another chain; given a trusted CCRMS state root, other chains could check rights status with \texttt{pallet-rights-verifier} (Section~\ref{subsec:xcm-flows}). Content rights are represented as NFT collections using a parent--child nesting model built on \texttt{pallet-nfts}: a parent Content NFT is the canonical on-chain identity for each piece of content, and each user's access rights are a child NFT tagged with a \texttt{rights\_type} attribute (Subscription, PPV, or Ownership). The smart contract and precompile layers are stateless wrappers; all authoritative state resides in the pallet (Appendices~\ref{sec:contract-first-pivot} and~\ref{sec:ink-discontinuation}).
 
 \section{Cross-Chain Integration}\label{sec:cross-chain-integration}
 
@@ -99,7 +99,7 @@ The core challenge in cross-chain integration is enabling remote parachains to a
 
 Cross-chain operations use XCM to enable remote parachains to acquire content rights. The runtime's XCM executor implements XCM~v5, the current version in the SDK used (the configuration imports \texttt{xcm::latest} and advertises \texttt{CurrentXcmVersion}). The benchmark sends a V3-encoded message, which \texttt{pallet-xcm} converts to the current version before delivery (Appendix~\ref{sec:xcm-message-structure}). The three instructions it uses, \texttt{WithdrawAsset}, \texttt{BuyExecution} and \texttt{Transact}, exist in every version since v3, so the sufficiency result concerns this standard instruction subset rather than an older protocol version. The pallet exposes five XCM extrinsics: \texttt{xcm\_subscribe}, \texttt{xcm\_renew\_subscription}, \texttt{xcm\_purchase\_views}, \texttt{xcm\_purchase\_ownership}, and \texttt{xcm\_transfer\_ownership} (callable locally only after Finding~B remediation; see Appendix~\ref{app:security}). Each separates the dispatch origin (\textbf{payer}) from the \textbf{beneficiary} of the rights record: when a remote parachain sends a \texttt{Transact} message, the origin is the remote parachain's sovereign account, but the rights record is issued to a distinct \texttt{beneficiary} account representing the end user on the remote chain.
 
-The runtime's XCM configuration follows the standard Cumulus pattern, with one customization: the \texttt{LocationToAccountId} chain adds \texttt{HashedDescription<\_,}\allowbreak \texttt{DescribeFamily<}\allowbreak\texttt{DescribeAllTerminal>{}>} and \texttt{GlobalConsensusParachainConvertsFor<\_,\,\_>} so the runtime can interpret Ethereum locations of the form \texttt{GlobalConsensus(Ethereum)} $\to$ \texttt{AccountKey20(0x...)}. This is required for Snowbridge (Section~\ref{subsec:snowbridge}); the full Ethereum-to-CCRMS flow is configured but has not been end-to-end tested.
+The runtime's XCM configuration follows the standard Cumulus pattern, with one customization: the \texttt{LocationToAccountId} chain adds the \texttt{HashedDescription} converter (with \texttt{DescribeFamily<\allowbreak DescribeAllTerminal>{}>}) and the \texttt{GlobalConsensus\allowbreak ParachainConvertsFor} converter, so the runtime can interpret Ethereum locations of the form \texttt{GlobalConsensus(Ethereum)} $\to$ \texttt{AccountKey20(0x...)}. This is required for Snowbridge (Section~\ref{subsec:snowbridge}); the full Ethereum-to-CCRMS flow is configured but has not been end-to-end tested.
 
 Each XCM rights operation uses the three-instruction sequence \texttt{WithdrawAsset}, \texttt{BuyExecution}, and \texttt{Transact}. This is sufficient because rights operations are stateful side effects, not asset transfers (Appendix~\ref{app:code} shows the full message structure). The endianness and fee-sizing findings (A.5, A.6 in Table~\ref{tab:challenges}) are the two most operationally significant surprises in the XCM integration.
 
@@ -123,7 +123,7 @@ The final step, using bridged Ether on AssetHub to pay for a CCRMS rights operat
 
 The CCRMS implementation encountered nine technical issues that shaped the final architecture and security posture. Table~\ref{tab:challenges} summarizes each issue, our response, and the key lesson; Appendix~\ref{app:challenges} provides full details.
 
-\begin{longtable}{@{}L{0.05\linewidth} L{0.30\linewidth} L{0.30\linewidth} L{0.30\linewidth}@{}}
+\begin{longtable}{@{}L{0.05\linewidth} L{0.31\linewidth} L{0.27\linewidth} L{0.28\linewidth}@{}}
 \caption{Implementation Challenges Summary}\label{tab:challenges}\\
 \toprule
 \textbf{\#} & \textbf{Challenge} & \textbf{Response} & \textbf{Key Lesson} \\
@@ -157,11 +157,11 @@ A.6 & XCM \texttt{BuyExecution} failed at 1B tokens; required ${\approx}$75B (10
 \addlinespace
 A.7 & \texttt{xcm\_transfer\_ownership} had no check that caller == \texttt{from} (High severity) & Added \texttt{ensure!(authorizer == from)}; unit test confirms block; cross-chain transfer disabled pending E.8 & Cross-chain extrinsics accepting identity parameters need explicit authorization \\
 \addlinespace
-A.8 & \texttt{MaxChildrenReached} at 50 subscribers per content item & Documented as known limitation; benchmark scripts rotate content items & Bounded FRAME collections trade benchmarkability for capacity limits \\
+A.8 & \texttt{MaxChildrenReached} at 50 subscribers per content item & Documented as known limitation; benchmark scripts rotated content items; cap removed in \texttt{2865ed0} & Bounded FRAME collections trade benchmarkability for capacity limits \\
 \addlinespace
 A.9 & ink! development discontinued Jan 2026 & 95\% of logic in pallet; contract layer is non-load-bearing; migration deferred & Minimize dependency on non-essential components for ecosystem resilience \\
 \end{longtable}
 
 \section{Summary}\label{sec:chapter-5-summary}
 
-Cross-chain rights operations are delivered via standard XCM instructions with payer--beneficiary decoupling, and the Snowbridge integration configured the path for Ethereum bridging, though the Ethereum-to-CCRMS flow has not been end-to-end tested. Nine challenges shaped the final architecture; the two most consequential---the RMRK-to-\texttt{pallet-nfts} pivot and the contract-first-to-pallet-first pivot---are examined in greater detail in Chapter~\ref{chap:discussion}. Full implementation details are provided in Appendix~\ref{app:code}.
+Cross-chain rights operations are delivered via standard XCM instructions with payer--beneficiary decoupling, and the Snowbridge integration configured the path for Ethereum bridging, though the Ethereum-to-CCRMS flow has not been end-to-end tested. Nine challenges shaped the final architecture; the two most consequential (the RMRK-to-\texttt{pallet-nfts} pivot and the contract-first-to-pallet-first pivot) are examined in greater detail in Chapter~\ref{chap:discussion}. Full implementation details are provided in Appendix~\ref{app:code}.

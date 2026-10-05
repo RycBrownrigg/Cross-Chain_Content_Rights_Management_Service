@@ -125,25 +125,25 @@ We organize testing into four layers, each executed at the lowest applicable lev
     node distance=3pt
 ]
 \node[layer, fill=green!18] (l1) at (0,0) {
-    \textbf{Layer 1 --- Unit Tests}\\
-    {\footnotesize 70 tests in mock runtime: 26 functional · 12 security · 13 XCM · 5 royalty · 12 auto-renewal · 2 metadata;
+    \textbf{Layer 1: Unit Tests}\\
+    {\footnotesize 73 tests in mock runtime: 26 functional · 14 security · 10 XCM · 5 royalty · 12 auto-renewal · 2 metadata · 4 error-path;
      \texttt{cargo test}; $\sim$3\,s; run on every commit.
      \emph{Does not cover:} network latency, live cross-chain routing, or sustained load.}
 };
 \node[layer, fill=blue!18, above=3pt of l1] (l2) {
-    \textbf{Layer 2 --- XCM Simulator}\\
+    \textbf{Layer 2: XCM Simulator}\\
     {\footnotesize In-process two-parachain dispatch via \texttt{xcm-simulator} (8 scenario tests); no Zombienet required.
      Isolates XCM message construction and configuration failures from block-timing and network conditions.}
 };
 \node[layer, fill=orange!18, above=3pt of l2] (l3) {
-    \textbf{Layer 3 --- Zombienet End-to-End}\\
+    \textbf{Layer 3: Zombienet End-to-End}\\
     {\footnotesize Live Rococo-local relay chain; Para~A and Para~B connected via HRMP;
      7 automated \texttt{@polkadot/api} benchmark scripts producing JSON output.
      Primary evidence source for KPIs 1--8.
      \emph{Does not cover:} real-network latency or multi-collator topologies.}
 };
 \node[layer, fill=purple!18, above=3pt of l3] (l4) {
-    \textbf{Layer 4 --- Snowbridge End-to-End}\\
+    \textbf{Layer 4: Snowbridge End-to-End}\\
     {\footnotesize Full bridge stack: 4 parachains, Geth v1.17.1, Lodestar v1.35.0, 16 Gateway contracts,
      beacon and execution relayers; $\approx$40\,min beacon synchronization.
      Validates the complete Ethereum-to-Polkadot bridge pathway; run infrequently.}
@@ -158,7 +158,7 @@ We organize testing into four layers, each executed at the lowest applicable lev
 
 Seven automated scripts in \texttt{scripts/perf/} cover various aspects of system behavior and each produce machine-readable JSON output. Table~\ref{tab:benchmarks} summarizes the benchmark categories.
 
-\begin{longtable}{@{}L{0.16\linewidth} L{0.28\linewidth} L{0.50\linewidth}@{}}
+\begin{longtable}{@{}L{0.17\linewidth} L{0.29\linewidth} L{0.48\linewidth}@{}}
 \caption{Benchmark Scripts}\label{tab:benchmarks}\\
 \toprule
 \textbf{Category} & \textbf{Script} & \textbf{What it measures} \\
@@ -203,7 +203,7 @@ All scripts are reproducible: each is an independent Node.js program with explic
 
 We designed eight test scenarios to cover the full range of evaluation activities. Table~\ref{tab:scenarios} summarizes each scenario, and the corresponding scripts are located in \texttt{scripts/perf/}.
 
-\begin{longtable}{@{}L{0.03\linewidth} L{0.17\linewidth} L{0.45\linewidth} L{0.28\linewidth}@{}}
+\begin{longtable}{@{}L{0.03\linewidth} L{0.17\linewidth} L{0.43\linewidth} L{0.28\linewidth}@{}}
 \caption{Test Scenarios}\label{tab:scenarios}\\
 \toprule
 \textbf{\#} & \textbf{Scenario} & \textbf{Description} & \textbf{Target} \\
@@ -246,7 +246,7 @@ The comparative benchmark is intentionally minimal, using Express.js for HTTP an
 
 Our evaluation uses 11 key performance indicators (KPIs) across four domains: technical, economic, security, and reliability. Each KPI includes a description, measurement methodology, originating source (the test scenario or activity that generates it), and a target value. These targets were set as stated design objectives during Phase~2 planning, informed by commercial comparators rather than by published academic benchmarks; they are treated throughout as reference points rather than strict pass/fail criteria. The inclusion latency target of two block intervals reflects the 6-second parachain block time of the test environment; the chain-growth target of 85\% is sized for a single-collator Zombienet topology.
 
-\begin{longtable}{@{}L{0.03\linewidth} L{0.22\linewidth} L{0.36\linewidth} L{0.17\linewidth} L{0.16\linewidth}@{}}
+\begin{longtable}{@{}L{0.03\linewidth} L{0.22\linewidth} L{0.30\linewidth} L{0.17\linewidth} L{0.16\linewidth}@{}}
 \caption{KPI Definitions}\label{tab:kpi-defs}\\
 \toprule
 \textbf{\#} & \textbf{KPI} & \textbf{Definition} & \textbf{Target} & \textbf{Source} \\
@@ -289,7 +289,7 @@ Our evaluation uses 11 key performance indicators (KPIs) across four domains: te
 11 & \textbf{Decentralization ratio} & Performance cost vs centralized baseline & Documented & Comparative analysis \\
 \end{longtable}
 
-The target value and measurement source for each KPI are defined in Table~\ref{tab:kpi-defs} above. Measured values and outcomes for all 11 KPIs are reported in Chapter~\ref{chap:results} (Table~\ref{tab:kpi-results}). The security audit and a subsequent code review produced eleven findings (Table~\ref{tab:security-findings}, Appendix~\ref{app:security}): five vulnerabilities remediated (B, E, I, J, K), three accepted design properties (A, C, D), and three reliability observations from the kill-restart test (F, G, H). Chapter~\ref{chap:results} presents the full KPI outcomes and discusses each in relation to the research questions; Chapter~\ref{chap:discussion} interprets the findings.
+The target value and measurement source for each KPI are defined in Table~\ref{tab:kpi-defs}. Measured values and outcomes for all 11 KPIs are reported in Chapter~\ref{chap:results} (Table~\ref{tab:kpi-results}). The security audit and a subsequent code review produced eleven findings (Table~\ref{tab:security-findings}, Appendix~\ref{app:security}): five vulnerabilities remediated (B, E, I, J, K), three accepted design properties (A, C, D), and three reliability observations from the kill-restart test (F, G, H). Chapter~\ref{chap:results} presents the full KPI outcomes and discusses each in relation to the research questions; Chapter~\ref{chap:discussion} interprets the findings.
 
 \section{Testing Infrastructure}\label{sec:test-infra-ch6}
 

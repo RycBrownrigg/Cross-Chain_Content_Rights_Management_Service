@@ -27,7 +27,7 @@
 %%   sec:ink-discontinuation (Appendix A.9),
 %%   subsec:bounded-vec-future (9.3.4 in Table 9.1)
 %%
-%% Citations: hevnerEtAl2004, chegenizadehEtAl2024
+%% Citations: hevnerEtAl2004, peffersEtAl2007, chegenizadehEtAl2024
 %% ======================================================================
 
 \chapter{Methodology and System Design}\label{chap:methodology}
@@ -38,7 +38,7 @@ This chapter outlines the research methodology we used to develop CCRMS and the 
 
 \subsection{Design Science Research Framing}\label{subsec:dsr-framing}
 
-CCRMS is fundamentally a systems-building project with a primary artifact: a working software prototype. The most appropriate methodological framework is therefore \textbf{design science research (DSR)}, as defined by \citet{hevnerEtAl2004}. Our dissertation aligns with Hevner's seven DSR guidelines as follows: (1) \emph{design as an artifact:} the CCRMS parachain and seven implementation specifications; (2) \emph{problem relevance:} the commercial and academic gaps identified in Chapter~\ref{chap:background}; (3) \emph{design evaluation:} eleven KPIs measured in artificial evaluation episodes, classified in Table~\ref{tab:dsr-eval}; (4) \emph{research contributions:} the artifact, the design knowledge captured in the specifications, and the empirical measurements; (5) \emph{research rigor:} established Polkadot SDK primitives, standard Rust testing, and standard Monte Carlo methodology; (6) \emph{design as a search process:} four design iterations (Section~\ref{subsec:methodology-pivots}); (7) \emph{communication of research:} this dissertation and an open-source code release.
+CCRMS is fundamentally a systems-building project with a primary artifact: a working software prototype. The most appropriate methodological framework is therefore \textbf{design science research (DSR)}, as defined by \citet{hevnerEtAl2004}. Our dissertation aligns with Hevner's seven DSR guidelines as follows: (1) \emph{design as an artifact:} the CCRMS parachain and seven implementation specifications; (2) \emph{problem relevance:} the commercial and academic gaps identified in Chapter~\ref{chap:background}; (3) \emph{design evaluation:} eleven KPIs measured in artificial evaluation episodes, classified in Table~\ref{tab:dsr-eval}; (4) \emph{research contributions:} the artifact, the design knowledge captured in the specifications, and the empirical measurements; (5) \emph{research rigor:} established Polkadot SDK primitives, standard Rust testing, and standard Monte Carlo methodology; (6) \emph{design as a search process:} four design iterations (Section~\ref{subsec:methodology-pivots}); (7) \emph{communication of research:} this dissertation and an open-source code release. The work also follows the six activities of the DSR process model of \citet{peffersEtAl2007}: problem identification and motivation (Chapters~\ref{chap:introduction} and~\ref{chap:background}), objectives of a solution (Chapter~\ref{chap:research-questions}), design and development (Chapters~\ref{chap:methodology} and~\ref{chap:implementation}), demonstration (the Zombienet and xcm-simulator runs), evaluation (Chapters~\ref{chap:evaluation} and~\ref{chap:results}), and communication (this dissertation and the code release).
 
 DSR is particularly appropriate here because it treats both the artifact and the design knowledge it produces as coequal contributions.
 
@@ -52,13 +52,13 @@ Our evaluation uses a mixed-methods approach: quantitative measurements include 
 
 \subsection[Evaluation Philosophy: Measurement-Focused]{Evaluation Philosophy: Measurement-Focused, Not Target-Driven}\label{subsec:evaluation-philosophy}
 
-We adopt a \textbf{measurement-focused philosophy}: the goal is to document and analyze the system's performance, efficiency, security, and economic viability rather than to verify that it meets predetermined targets. This measurement-centric approach preserves academic rigor regardless of whether specific results meet hypothetical benchmarks, treats unexpected results as valuable rather than embarrassing, encourages truthful reporting, and establishes a baseline for future researchers.
+We adopt a \textbf{measurement-focused philosophy}: the goal is to document and analyze the system's performance, efficiency, security, and economic viability rather than to verify that it meets predetermined targets. This measurement-centric approach preserves academic rigor regardless of whether specific results meet hypothetical benchmarks, treats unexpected results as findings, encourages truthful reporting, and establishes a baseline for future researchers.
 
-Each of the eleven KPIs in Section~\ref{sec:kpis} has a target derived from the Phase~2 methodology, but we treat those targets as reference points rather than pass/fail criteria. The outcome column in Table~\ref{tab:kpi-results} is therefore headed ``Target met?'' rather than Pass/Fail. In practice, eight of eleven met their targets in every measurement, KPIs~2 and~6 at the median, and KPI~9 only as interpreted (Section~\ref{sec:chapter-7-summary}); the methodology would have remained valid even if some had not.
+Each of the eleven KPIs in Section~\ref{sec:kpis} has a target derived from the Phase~2 methodology, but we treat those targets as reference points rather than pass/fail criteria. The outcome column in Table~\ref{tab:kpi-results} is therefore headed ``Target met?'' rather than Pass/Fail.
 
 \subsection{Methodology Pivots}\label{subsec:methodology-pivots}
 
-Implementation produced four design iterations: \texttt{pallet-nfts} for RMRK~2.0 (Appendix~\ref{sec:rmrk-to-pallet-nfts}), pallet-first for contract-first (Appendix~\ref{sec:contract-first-pivot}), an \texttt{on\_initialize} hook for scheduled XCM, and Zombienet for Kusama. These constitute the DSR search process. The remaining challenges were implementation defects (Appendix~A.3--A.6), a security finding (Appendix~A.7), a known limitation (Appendix~A.8), and an external event (Appendix~\ref{sec:ink-discontinuation}).
+Implementation produced four design iterations: \texttt{pallet-nfts} for RMRK~2.0 (Appendix~\ref{sec:rmrk-to-pallet-nfts}), pallet-first for contract-first (Appendix~\ref{sec:contract-first-pivot}), an \texttt{on\_initialize} hook for scheduled XCM, and Zombienet for Kusama. These constitute the DSR search process. The remaining challenges were implementation defects (Appendices~\ref{sec:snowbridge-fork-version}--\ref{sec:xcm-fee-scaling}), a security finding (Appendix~\ref{sec:xcm-auth-gap}), a known limitation (Appendix~\ref{sec:children-bound}), and an external event (Appendix~\ref{sec:ink-discontinuation}).
 
 \section{System Design}\label{sec:system-design}
 
@@ -74,7 +74,7 @@ This addresses gap G7 (Table~\ref{tab:gaps}): one content registration supports 
 
 \subsection{The Three Monetization Models}\label{subsec:three-models}
 
-The academic design challenge is to encode three semantically distinct access modes---time-bounded, counter-based, and indefinite---in a single on-chain record without cross-contamination of state across modes. The literature identifies subscription, pay-per-view, and permanent ownership as the canonical creator-economy requirements \citep{cirelloEtAl2023, mendozaTelloEtAl2024}, but addresses each in isolation; CCRMS treats their unification into a single primitive as the central design problem.
+The academic design challenge is to encode three semantically distinct access modes (time-bounded, counter-based, and indefinite) in a single on-chain record without cross-contamination of state across modes. The literature identifies subscription, pay-per-view, and permanent ownership as the canonical creator-economy requirements \citep{cirelloEtAl2023, mendozaTelloEtAl2024}, but addresses each in isolation; CCRMS treats their unification into a single primitive as the central design problem.
 
 The architecture supports three models, each motivated by a different gap in the existing landscape:
 
@@ -163,15 +163,15 @@ The nesting pattern is inspired by RMRK 2.0, the composable NFT specification fo
     {\footnotesize creator, price, subscription terms}
 };
 \node[rnode, below left=1.4cm and 0.8cm of par] (csub) {
-    \textbf{Child NFT --- User A}\\
+    \textbf{Child NFT: User A}\\
     {\footnotesize \textit{rights\_type} = Subscription}
 };
 \node[rnode, below=1.4cm of par] (cppv) {
-    \textbf{Child NFT --- User B}\\
+    \textbf{Child NFT: User B}\\
     {\footnotesize \textit{rights\_type} = PPV}
 };
 \node[rnode, below right=1.4cm and 0.8cm of par] (cown) {
-    \textbf{Child NFT --- User C}\\
+    \textbf{Child NFT: User C}\\
     {\footnotesize \textit{rights\_type} = Ownership}
 };
 \draw[->, thick] (par.south west) -- (csub.north);
@@ -182,7 +182,7 @@ The nesting pattern is inspired by RMRK 2.0, the composable NFT specification fo
 \label{fig:nft-nesting}
 \end{figure}
 
-One significant constraint is that the \texttt{Children} storage entry is a \texttt{BoundedVec} (a fixed-capacity collection type in FRAME that enforces an explicit upper bound at the type level), limiting each content item to fifty child NFTs. Because each first-time purchase mints one for the buyer and expired subscriptions never release theirs, this caps a content item at fifty subscribers, view-pack holders and owners over its lifetime. The bound is not intrinsic to the design; holders are already recorded in the three rights maps (Appendix~\ref{sec:e-child-cap}). The examination of this constraint is detailed in Appendix~\ref{sec:children-bound}, and mitigation is described in Appendix~\ref{sec:e-child-cap}.
+The prototype originally kept a \texttt{Children} index as a \texttt{BoundedVec} (a FRAME collection type with a fixed upper bound), which limited each content item to fifty holders over its lifetime. Because holders are already recorded in the three rights maps and nesting in the \texttt{Parent} map, commit \texttt{2865ed0} removed the index and the cap; Appendix~\ref{sec:children-bound} describes how the bound was found and Appendix~\ref{sec:e-child-cap} what remains.
 
 \subsection{Cross-Chain Communication Model}\label{subsec:cross-chain-model}
 
@@ -195,6 +195,7 @@ Cross-chain operation is the mechanism by which the unified rights record model 
 \begin{figure}[htbp]
 \vspace{\baselineskip}
 \centering
+\resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[
     chain/.style={draw, rectangle, rounded corners=4pt,
                   minimum width=3cm, minimum height=2.2cm,
@@ -229,7 +230,8 @@ Cross-chain operation is the mechanism by which the unified rights record model 
     3.\ \texttt{Transact}(\textit{xcm\_subscribe})
 };
 \draw[dashed, gray, ->] (msg.south) -- ++(0,-1.1cm);
-\end{tikzpicture}
+\end{tikzpicture}%
+}
 \caption{XCM cross-chain rights operation (addresses SQ1 and SQ4). The three-instruction sequence dispatches an \texttt{xcm\_*} extrinsic on the CCRMS parachain, decoupling the paying account (Para~B sovereign account) from the rights beneficiary (the end user). The other \texttt{xcm\_*} extrinsics use the same pattern; \texttt{xcm\_transfer\_ownership} succeeds remotely only when the owner signs the message on Para~B and holds ownership through their derived account, not through the sovereign-account path shown here (Finding~B, Section~\ref{subsec:security-audit} and Appendix~\ref{sec:d-finding-b}).}
 \label{fig:xcm-flow}
 \end{figure}
@@ -248,7 +250,7 @@ The most significant architectural decision was to centralize the business logic
 
 The layered architecture determines the answers to SQ1 (cross-chain reach) and SQ2 (the latency--decentralization trade-off): each layer can evolve independently, so XCM protocol upgrades and relay-chain migration to JAM do not require changes to the Layer~3 business logic.
 
-The system is organized into six distinct, independently replaceable layers: (1) the \textbf{Polkadot relay chain} provides shared security and enables HRMP message passing; (2) the \textbf{parachain runtime} composes the CCRMS FRAME pallets, configures the XCM executor, and includes a custom EVM precompile; (3) the \textbf{business logic} layer comprises \texttt{pallet-content-rights} (17 extrinsics, 11 storage items) and \texttt{pallet-rights-verifier}; (4) the \textbf{NFT layer} uses the standard \texttt{pallet-nfts}, with parent--child nesting enabled by \texttt{pallet-content-rights}; (5) the \textbf{smart contract~/ precompile layer} provides EVM- and ink!-compatible access through the \texttt{rights\_manager} contract and the \texttt{ContentRightsPrecompile}, both of which are non-load-bearing wrappers; (6) the \textbf{cross-chain layer} manages XCM messaging (the runtime executes XCM~v5) and the Snowbridge integration. Independence among layers is a fundamental design objective: the smart contract layer may be removed or replaced, the XCM protocol may evolve beyond v5, and the relay chain may transition to JAM, all without affecting the pallet code.
+The system is organized into six distinct, independently replaceable layers: (1) the \textbf{Polkadot relay chain} provides shared security and enables HRMP message passing; (2) the \textbf{parachain runtime} composes the CCRMS FRAME pallets, configures the XCM executor, and includes a custom EVM precompile; (3) the \textbf{business logic} layer comprises \texttt{pallet-content-rights} (17 extrinsics, 10 storage items) and \texttt{pallet-rights-verifier}; (4) the \textbf{NFT layer} uses the standard \texttt{pallet-nfts}, with parent--child nesting enabled by \texttt{pallet-content-rights}; (5) the \textbf{smart contract~/ precompile layer} provides EVM- and ink!-compatible access through the \texttt{rights\_manager} contract and the \texttt{ContentRightsPrecompile}, both of which are non-load-bearing wrappers; (6) the \textbf{cross-chain layer} manages XCM messaging (the runtime executes XCM~v5) and the Snowbridge integration. Independence among layers is a fundamental design objective: the smart contract layer may be removed or replaced, the XCM protocol may evolve beyond v5, and the relay chain may transition to JAM, all without affecting the pallet code.
 
 \begin{figure}[t]
 \centering
@@ -258,22 +260,22 @@ The system is organized into six distinct, independently replaceable layers: (1)
     node distance=3pt
 ]
 \node[layer, fill=gray!25] (l1)
-    {\textbf{Layer 1 --- Polkadot Relay Chain}\\
+    {\textbf{Layer 1: Polkadot Relay Chain}\\
      {\footnotesize Shared security via Nominated Proof-of-Stake; HRMP channel routing between parachains}};
 \node[layer, fill=blue!18, below=3pt of l1] (l2)
-    {\textbf{Layer 2 --- Parachain Runtime}\\
+    {\textbf{Layer 2: Parachain Runtime}\\
      {\footnotesize FRAME pallet composition, XCM executor configuration, EVM precompile registration}};
 \node[layer, fill=green!18, below=3pt of l2] (l3)
-    {\textbf{Layer 3 --- Business Logic}\\
-     {\footnotesize \texttt{pallet-content-rights} (17 extrinsics, 11 storage items); \texttt{pallet-rights-verifier}}};
+    {\textbf{Layer 3: Business Logic}\\
+     {\footnotesize \texttt{pallet-content-rights} (17 extrinsics, 10 storage items); \texttt{pallet-rights-verifier}}};
 \node[layer, fill=orange!18, below=3pt of l3] (l4)
-    {\textbf{Layer 4 --- NFT Layer}\\
+    {\textbf{Layer 4: NFT Layer}\\
      {\footnotesize \texttt{pallet-nfts}: parent Content NFT per item; child rights NFTs per user per access mode}};
 \node[layer, fill=yellow!35, below=3pt of l4] (l5)
-    {\textbf{Layer 5 --- Smart Contract / Precompile}\\
+    {\textbf{Layer 5: Smart Contract / Precompile}\\
      {\footnotesize \texttt{rights\_manager} ink!\ wrapper contract; \texttt{ContentRightsPrecompile} (EVM read-only access)}};
 \node[layer, fill=purple!18, below=3pt of l5] (l6)
-    {\textbf{Layer 6 --- Cross-Chain}\\
+    {\textbf{Layer 6: Cross-Chain}\\
      {\footnotesize XCM inter-parachain messaging (v5 executor); Snowbridge trust-minimized Polkadot--Ethereum bridge}};
 \end{tikzpicture}
 \caption{CCRMS six-layer architecture (addresses SQ1 and SQ2). Each layer is independently replaceable: Layer~5 (smart contracts) may be removed, Layer~6 (XCM) may adopt later XCM versions, and Layer~1 (relay chain) may migrate to JAM, without modifying the business logic in Layer~3.}

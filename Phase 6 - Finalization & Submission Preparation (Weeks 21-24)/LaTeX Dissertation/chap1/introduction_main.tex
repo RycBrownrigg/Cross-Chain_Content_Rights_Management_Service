@@ -105,7 +105,7 @@ The dissertation does not claim, assert, or imply:
 
 \item \textbf{Cross-chain atomicity or auto-renewal.} XCM \texttt{Transact} does not guarantee atomicity across chains, and cross-chain recurring renewals are not implemented: XCM has no scheduling instruction, so a renewal paid from another chain would require that chain to schedule the messages (e.g., with \texttt{pallet-scheduler}).
 
-\item \textbf{The prototype can host the audience tiers that win in the simulation.} The \texttt{BoundedVec<\_, ConstU32<50>{}>} lifetime cap limits each content item to fifty subscribers, view-pack holders and owners in total, placing the high-follower audience tiers beyond the current instantiation.
+\item \textbf{The prototype has been tested at the audience sizes that win in the simulation.} The former fifty-holder cap was removed, but no test exceeded 60 holders per content item (Section~\ref{sec:limitations}).
 
 \end{itemize}
 

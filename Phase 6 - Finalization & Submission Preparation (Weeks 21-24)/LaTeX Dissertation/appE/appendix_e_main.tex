@@ -44,13 +44,13 @@ The prototype already runs with asynchronous backing (Section~\ref{subsec:26-tps
 
 The January 2026 ink! discontinuation leaves \texttt{rights\_manager} without upstream toolchain support. Three migration paths are available: (a)~Solidity rewrite using the \texttt{revive} Solidity-to-PolkaVM compiler (broadest tooling support, requires Solidity reimplementation); (b)~adoption of \texttt{wrevive}, the community-maintained ink! successor (preserves the Rust experience, introduces a community-project dependency); (c)~removal of the contract layer entirely (zero maintenance cost, loses ink!-style API convenience). The right choice depends on the intended client base and available maintenance resources.
 
-\section{The 50-Child Cap}\label{sec:e-child-cap}
+\section{Holder Scale and Creator Deposits}\label{sec:e-child-cap}
 
-The \texttt{Children} vector duplicates information already held in \texttt{Subscriptions}, \texttt{ViewPacks}, and \texttt{Ownership} (holders) and in \texttt{Parent} (nesting), so the simplest mitigation is to remove it or replace it with a counter.
+The bounded \texttt{Children} vector duplicated information already held in \texttt{Subscriptions}, \texttt{ViewPacks}, and \texttt{Ownership} (holders) and in \texttt{Parent} (nesting), and capped each content item at fifty holders. Commit \texttt{2865ed0} removed it; content items no longer have a holder cap, and the regression test \texttt{security\_no\_holder\_cap} admits 60 holders.
 
-Three mitigation paths: raise the bound and re-benchmark (trades worst-case extrinsic weight for capacity); replace the bounded vector with a counter plus a separate membership map (removes the cap but loses single-read enumeration); introduce hierarchical ``rights bucket'' NFTs (more complex query patterns but unbounded fan-out). Any production deployment expecting highly popular content items would need to address the cap as a priority.
+Two tasks remain. First, benchmark content items with thousands of holders, including purchases, burns and \texttt{check\_access}, to confirm that per-holder costs stay constant. Second, review per-holder deposits: each child NFT reserves a \texttt{pallet-nfts} item deposit and an attribute deposit from the creator (about two existential deposits per holder; regression test \texttt{child\_mint\_reserves\_creator\_deposit}), so a creator with a large audience needs a matching reserved balance, and for low-priced content the deposit can exceed the price. A production runtime could charge these deposits to the buyer, or waive them for non-transferable receipts.
 
-Whichever path is chosen, subscription expiry should also release or burn the associated child NFT, so that capacity reflects current rather than historical holders.
+Subscription expiry should also release or burn the associated child NFT, so that state and deposits reflect current rather than historical holders.
 
 \section[User Study and Consumer Application]{User Study and Consumer-Facing Application}\label{sec:e-user-study}
 

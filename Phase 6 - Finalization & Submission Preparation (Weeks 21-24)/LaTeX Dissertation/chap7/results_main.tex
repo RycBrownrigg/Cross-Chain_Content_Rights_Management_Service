@@ -43,11 +43,11 @@ The technical results address SQ1 (Section~\ref{subsec:latency}), SQ2 (Section~\
 
 Table~\ref{tab:throughput} reports 100 concurrent extrinsics per type against a single collator (6-second blocks). All four non-minting extrinsics achieved 100/100 inclusion in one block ($\geq$100 extrinsics per block, $\approx$16.6~TPS). No failure arose from block weight, space, or transaction-pool capacity.
 
-All failures were dispatch errors from the fifty-child bound (Section~\ref{subsec:nft-tokenization}): \texttt{MaxChildrenReached} directly, or cascading \texttt{SubscriptionNotFound}/\texttt{ViewPackNotFound} for dependent extrinsics. The benchmark characterizes storage-design capacity, not parachain throughput. Sustained throughput is in Section~\ref{subsec:stress-test}.
+All failures were dispatch errors from the fifty-child bound then in place (removed in \texttt{2865ed0}; Section~\ref{subsec:nft-tokenization}): \texttt{MaxChildrenReached} directly, or cascading \texttt{SubscriptionNotFound}/\texttt{ViewPackNotFound} for dependent extrinsics. The benchmark characterizes storage-design capacity, not parachain throughput. Sustained throughput is in Section~\ref{subsec:stress-test}.
 
 Per-extrinsic TPS is not reported: elapsed time reflects how many blocks the harness waited before observing inclusion (1--4 blocks), not execution cost. Relative costs are in the FRAME weights (Appendix~\ref{app:code}; hand-estimated, not benchmarked).
 
-\begin{longtable}{@{}L{0.26\linewidth} R{0.10\linewidth} R{0.10\linewidth} R{0.09\linewidth} L{0.35\linewidth}@{}}
+\begin{longtable}{@{}L{0.29\linewidth} R{0.10\linewidth} R{0.10\linewidth} R{0.09\linewidth} L{0.30\linewidth}@{}}
 \caption{Single-Chain Inclusion Capacity at Batch Size 100}\label{tab:throughput}\\
 \toprule
 \textbf{Extrinsic} & \textbf{Succ.} & \textbf{Failed} & \textbf{Blocks} & \textbf{Failure cause} \\
@@ -64,10 +64,10 @@ Per-extrinsic TPS is not reported: elapsed time reflects how many blocks the har
 \bottomrule
 \endlastfoot
 
-\texttt{register\_content}      & 100 &   0 & 1 & --- \\
-\texttt{check\_access}          & 100 &   0 & 1 & --- \\
-\texttt{set\_royalty\_splits}   & 100 &   0 & 1 & --- \\
-\texttt{query\_rights\_metadata} & 100 &  0 & 1 & --- \\
+\texttt{register\_content}      & 100 &   0 & 1 & None \\
+\texttt{check\_access}          & 100 &   0 & 1 & None \\
+\texttt{set\_royalty\_splits}   & 100 &   0 & 1 & None \\
+\texttt{query\_rights\_metadata} & 100 &  0 & 1 & None \\
 \addlinespace
 \texttt{subscribe}             &  50 &  50 & 1 & \texttt{MaxChildrenReached} \\
 \texttt{purchase\_ownership}    &  50 &  50 & 1 & \texttt{MaxChildrenReached} \\
@@ -79,7 +79,7 @@ Per-extrinsic TPS is not reported: elapsed time reflects how many blocks the har
 \texttt{consume\_view}          &  22 &  78 & 1 & \texttt{ViewPackNotFound}$^{\dagger}$ \\
 \end{longtable}
 
-{\footnotesize $\dagger$~Subscription, ownership and auto-renewal batches each used a freshly registered content item, so their 100-call batches exceeded the fifty-child bound on that item: 50 calls succeeded and 50 failed (renewal and auto-renewal calls failed for the 50 accounts whose subscriptions could not be created). Pay-per-view batches reused one item; this run predates the Finding~E fix, so each repeat purchase minted a new child, and the item reached the bound during the 50-call batch. \texttt{consume\_view} then succeeded only for the 22 accounts holding view packs.}
+{\footnotesize $\dagger$~Subscription, ownership and auto-renewal batches each used a freshly registered content item, so their 100-call batches exceeded the fifty-child bound on that item: 50 calls succeeded and 50 failed (renewal and auto-renewal calls failed for the 50 accounts whose subscriptions could not be created). Pay-per-view batches reused one item; this run predates the Finding~E fix, so each repeat purchase minted a new child, and the item reached the bound during the 50-call batch. \texttt{consume\_view} then succeeded only for the 22 accounts holding view packs. The bound was later removed (commit \texttt{2865ed0}).}
 
 \subsection{Sustained Throughput (Stress Test)}\label{subsec:stress-test}
 
@@ -93,7 +93,7 @@ In the XCM benchmark, Para~B sent each message with \texttt{sudo(polkadotXcm.sen
 
 XCM results are in Table~\ref{tab:xcm-latency}.
 
-\begin{longtable}{@{}L{0.28\linewidth} R{0.14\linewidth} R{0.24\linewidth} R{0.26\linewidth}@{}}
+\begin{longtable}{@{}L{0.30\linewidth} R{0.14\linewidth} R{0.24\linewidth} R{0.23\linewidth}@{}}
 \caption{XCM Cross-Chain Delivery ($n=10$ per operation; finalized blocks)}\label{tab:xcm-latency}\\
 \toprule
 \textbf{Operation} & \textbf{Delivered} & \textbf{CCRMS blocks, median (range)} & \textbf{Latency (s), median (mean~$\pm$~s.d.)} \\
@@ -125,7 +125,7 @@ Each run sent an \texttt{xcm\_*} extrinsic from Para~B with a fresh beneficiary,
 
 \subsection{Block Weight Utilization}\label{subsec:block-weight}
 
-\begin{longtable}{@{}R{0.16\linewidth} R{0.25\linewidth} R{0.25\linewidth} R{0.26\linewidth}@{}}
+\begin{longtable}{@{}R{0.16\linewidth} R{0.25\linewidth} R{0.25\linewidth} R{0.25\linewidth}@{}}
 \caption{Block Weight Utilization at Increasing Batch Sizes}\label{tab:block-weight}\\
 \toprule
 \textbf{Batch Size} & \textbf{\texttt{ref\_time} Consumed} & \textbf{\texttt{proof\_size} Consumed} & \textbf{Block Construction Time} \\
@@ -182,7 +182,7 @@ Active subscription & \texttt{Subscriptions} & 112 \\
 View pack & \texttt{ViewPacks} & 111 \\
 Ownership record & \texttt{Ownership} & 36 \\
 Royalty splits (per collaborator) & \texttt{RoyaltySplits} & 34 \\
-Child NFT nesting record & \texttt{Children} & 8 (per child) \\
+Child NFT nesting record & \texttt{Children} (removed in \texttt{2865ed0}; \texttt{Parent} also stores 8~bytes per child) & 8 (per child) \\
 \end{longtable}
 
 Growth was linear: the 50th item costs the same number of bytes as the first, so the cost per record does not depend on how many records exist. This measures storage cost, not lookup time. At one million content items and ten million subscribers, the CCRMS values alone come to about 1.3~GB, within the 500-byte-per-record Phase~2 target. This is a lower bound on state size: each child NFT also creates \texttt{pallet-nfts} entries (the item, the owner's account index and the \texttt{rights\_type} attribute), and every entry adds a storage key and trie nodes. None of these were measured.
@@ -192,7 +192,7 @@ Growth was linear: the 50th item costs the same number of bytes as the first, so
 \begin{table}[htbp]
 \centering
 \caption{Reliability Test Results (median and range over three SIGKILL runs; one SIGTERM run for comparison)}\label{tab:reliability}
-\begin{tabular}{llll}
+\begin{tabular}{@{}l L{0.30\linewidth} l l@{}}
 \toprule
 Phase & Metric & SIGKILL (3 runs) & SIGTERM (1 run) \\
 \midrule
@@ -222,7 +222,7 @@ Two practical points follow. Blocks that are not yet finalized can be discarded 
 
 We bridged two 1~ETH transactions from the local Ethereum network to AssetHub via Snowbridge (four parachains, Geth, Lodestar, 16 Gateway contracts, two relayers). Both succeeded; the destination account held 22~ETH on AssetHub (20 pre-minted, 2 bridged). Table~\ref{tab:snowbridge-path} provides the message pathway.
 
-\begin{longtable}{@{}L{0.04\linewidth} L{0.20\linewidth} L{0.70\linewidth}@{}}
+\begin{longtable}{@{}L{0.06\linewidth} L{0.20\linewidth} L{0.68\linewidth}@{}}
 \caption{Snowbridge End-to-End Message Path (ETH Transfers to AssetHub; CCRMS Not Exercised)}\label{tab:snowbridge-path}\\
 \toprule
 \textbf{Step} & \textbf{Component} & \textbf{Action} \\
@@ -258,7 +258,7 @@ CCRMS was not on the path; the result confirms the local pipeline and the CCRMS 
 
 We benchmarked CCRMS against Express.js with SQL.js for the same six operations, using the same methodology. Table~\ref{tab:comparative} presents the comparison.
 
-\begin{longtable}{@{}L{0.28\linewidth} L{0.22\linewidth} L{0.22\linewidth} L{0.20\linewidth}@{}}
+\begin{longtable}{@{}L{0.27\linewidth} L{0.22\linewidth} L{0.22\linewidth} L{0.20\linewidth}@{}}
 \caption{Comparative Analysis: CCRMS Parachain vs.\ Centralized (Express.js + SQL.js)}\label{tab:comparative}\\
 \toprule
 \textbf{Metric} & \textbf{CCRMS Parachain} & \textbf{Centralized} & \textbf{Ratio} \\
@@ -303,7 +303,7 @@ The economic results address SQ5 using Monte Carlo simulation, the audience-size
 
 \subsection{Monte Carlo Creator Revenue Simulation}\label{subsec:monte-carlo}
 
-The simulation models 1,000 creators across 10,000 iterations under four platform configurations, of which this chapter reports three. The fourth, a bridge-based configuration, uses an assumed fee range (8--15\%) with no published source, so it is reported only in Appendix~\ref{app:monte-carlo} as an illustrative comparator. The simulation projects one-year revenue using platform-specific fees, algorithmic discovery, and monthly churn. It uses a seeded pseudo-random number generator (xoshiro128**, seed~42), so every figure is exactly reproducible. Full parameters are in Appendix~\ref{app:monte-carlo}; sensitivity analysis in Section~\ref{subsec:sensitivity}.
+The simulation models 1,000 creators across 10,000 iterations under four platform configurations, of which this chapter reports three. The fourth, a bridge-based configuration, uses an assumed fee range (8--15\%) with no published source, so it is reported only in Appendix~\ref{app:monte-carlo} as an illustrative comparator. The simulation projects one-year revenue using platform-specific fees, algorithmic discovery, and monthly churn. It uses a seeded pseudo-random number generator (xoshiro128**, seed~42), so every figure is reproducible to every reported digit (Node.js 22 or later). Full parameters are in Appendix~\ref{app:monte-carlo}; sensitivity analysis in Section~\ref{subsec:sensitivity}.
 
 \begin{figure}[htbp]
 \vspace{\baselineskip}
@@ -352,7 +352,7 @@ The simulation models 1,000 creators across 10,000 iterations under four platfor
 \label{fig:monte-carlo-flow}
 \end{figure}
 
-\begin{longtable}{@{}L{0.28\linewidth} L{0.12\linewidth} R{0.16\linewidth} R{0.16\linewidth} L{0.20\linewidth}@{}}
+\begin{longtable}{@{}L{0.24\linewidth} L{0.12\linewidth} R{0.16\linewidth} R{0.16\linewidth} L{0.20\linewidth}@{}}
 \caption{Monte Carlo Creator Revenue Simulation (Annual Revenue Per Creator: Mean and Median)}\label{tab:monte-carlo}\\
 \toprule
 \textbf{Platform Model} & \textbf{Fee Range} & \textbf{Mean Revenue} & \textbf{Median Revenue} & \textbf{Mean vs.\ CCRMS} \\
@@ -387,7 +387,7 @@ The model credits every platform with a secondary-sale stream, which the prototy
 
 CCRMS's mean advantage (Table~\ref{tab:monte-carlo}) is not uniform: it is heavily dependent on \textbf{audience size}. Table~\ref{tab:audience-tiers} breaks results down by tier.
 
-\begin{longtable}{@{}L{0.12\linewidth} L{0.18\linewidth} R{0.20\linewidth} L{0.42\linewidth}@{}}
+\begin{longtable}{@{}L{0.12\linewidth} L{0.18\linewidth} R{0.20\linewidth} L{0.41\linewidth}@{}}
 \caption{CCRMS Win Rate Against Centralized Platform by Audience Tier}\label{tab:audience-tiers}\\
 \toprule
 \textbf{Tier} & \textbf{Followers} & \textbf{Win rate vs centralized} & \textbf{Notes} \\
@@ -422,7 +422,7 @@ Mega   & 100,000+          & 93.0\% & CCRMS usually preferred \\
 
 Win rate is the share of simulated scenarios in which a creator earns more under CCRMS than under a centralized platform. Below $\sim$6,000 followers (the 50\% point), centralized discovery usually outweighs fee savings; the win rate falls to 8.7\% at 1,500--2,000 followers (Table~\ref{tab:crossover-fine}). At 10,000 followers or more, the fee differential usually dominates, and CCRMS wins in 76--92\% of scenarios, rising with audience size. The crossover follows from the assumed additive discovery bonus: with no bonus on either platform, CCRMS wins in 97\% of scenarios (Table~\ref{tab:discovery-sweep}). It therefore characterizes the model, not observed creator behavior.
 
-These results describe the CCRMS design; the prototype's fifty-holder bound (Section~\ref{sec:limitations}) must be lifted before the mid-size and large tiers can be served.
+These results describe the CCRMS design; the prototype no longer caps holders per content item but has not been tested at these audience sizes (Section~\ref{sec:limitations}).
 
 
 Table~\ref{tab:breakeven} reports the per-scenario break-even rates.
@@ -514,22 +514,22 @@ CCRMS & 1--5\% & Modeling assumption: protocol or treasury allowance, not a meas
 
 A sensitivity analysis (Appendix~\ref{app:monte-carlo}) finds the advantage insensitive to content price (expected by construction: price multiplies every platform's gross revenue equally), moderately sensitive to adoption and conversion rates, and strongly sensitive to the audience distribution, the subscription period, the CCRMS fee, and the centralized discovery bonus. Each of the following eliminates the advantage on its own: a median audience of 500 followers, a 24-month subscription period, a CCRMS fee above about 7\%, or a discovery bonus about 25\% larger than assumed.
 
-\subsection{Prototype-Bound versus Simulated Cohorts}\label{subsec:prototype-bound}
+\subsection{Tested versus Simulated Audience Sizes}\label{subsec:prototype-bound}
 
 The win-rate results in Tables~\ref{tab:audience-tiers} and~\ref{tab:breakeven} characterize the CCRMS design. They do not characterize the artifact as benchmarked.
 
-The prototype stores each first-time buyer as a child NFT within a \texttt{BoundedVec<\_, ConstU32<50>{}>}. Expired subscriptions do not free their slots. Consequently, a single content item can accumulate at most fifty subscribers, view-pack holders and owners over its lifetime (Appendix~A.8). The simulation's Large, Huge, and Mega tiers assume no such cap, and CCRMS usually wins only in the Huge and Mega tiers (Table~\ref{tab:audience-tiers}). Until the mitigation in Appendix~\ref{sec:e-child-cap} is implemented, the prototype cannot host the audiences for which the fee-side advantage is claimed.
+The prototype originally capped each content item at fifty holders; commit \texttt{2865ed0} removed the cap (Section~\ref{sec:limitations}, item~4). CCRMS usually wins only in the Huge and Mega tiers (Table~\ref{tab:audience-tiers}), which imply far more holders per item than any test exercised (at most 60). The prototype can now represent these audiences, but its behavior at that scale is untested.
 
-What the current artifact supports is independent of that cap: the three rights maps and the priority \texttt{check\_access} (Claim~1, Section~\ref{subsec:claims}); the fee assumptions used in the simulation; and the issuance-style XCM on local HRMP (Claim~2). The economic figures remain a design-level result under Appendix~\ref{app:monte-carlo} (Claim~3, Section~\ref{subsec:claims}).
+What the current artifact supports does not depend on audience size: the three rights maps and the priority \texttt{check\_access} (Claim~1, Section~\ref{subsec:claims}); the fee assumptions used in the simulation; and the issuance-style XCM on local HRMP (Claim~2). The economic figures remain a design-level result under Appendix~\ref{app:monte-carlo} (Claim~3, Section~\ref{subsec:claims}).
 
 \section{Security and User-Centric Results}\label{sec:security-user-results}
 
 
 \subsection{Security Audit Findings}\label{subsec:security-audit}
 
-The security audit (Scenario 6, Section~\ref{sec:test-scenarios}) produced Findings~A--I; a later code review added J and K. Table~\ref{tab:security-findings} summarizes all eleven.
+The security audit (Scenario 6, Section~\ref{sec:test-scenarios}) produced Findings~A--I; later code reviews added J--M. Table~\ref{tab:security-findings} summarizes all thirteen.
 
-\begin{longtable}{@{}L{0.04\linewidth} L{0.16\linewidth} L{0.50\linewidth} L{0.22\linewidth}@{}}
+\begin{longtable}{@{}L{0.04\linewidth} L{0.16\linewidth} L{0.49\linewidth} L{0.22\linewidth}@{}}
 \caption{Security Audit Findings}\label{tab:security-findings}\\
 \toprule
 \textbf{ID} & \textbf{Severity} & \textbf{Description} & \textbf{Status} \\
@@ -570,19 +570,23 @@ I & Medium & Zero-view denial of service: \texttt{purchase\_views(num\_views=0)}
 J & \textbf{High} & Child-NFT divergence: collections created with default settings allowed child NFTs to be moved via \texttt{pallet-nfts} while \texttt{Ownership} still listed the original account; a subsequent \texttt{transfer\_ownership} then burned the buyer's token & \textbf{Fixed} (commit \texttt{221e5fa}) \\
 \addlinespace
 K & Medium & Auto-renewal starvation and non-atomic payment: the \texttt{on\_initialize} hook read only the first 20 \texttt{AutoRenewIndex} entries per block (FIFO starvation); multi-split payments were not rolled back on partial failure & \textbf{Fixed} (commit \texttt{221e5fa}) \\
+\addlinespace
+L & Medium if deployed & Unbenchmarked weights: every extrinsic weight is hand-set with zero proof size, so fees and block admission do not reflect proof-size cost (Appendix~\ref{sec:d-finding-l}) & Open (benchmarking needed before deployment) \\
+\addlinespace
+M & Medium & Renewal-queue griefing: about 1,000 short-period auto-renewing subscriptions could keep the shared \texttt{RenewalQueue} full, disabling auto-renewal for all users (Appendix~\ref{sec:d-finding-m}) & \textbf{Fixed} (commit \texttt{facc3dc}) \\
 \end{longtable}
 
-Five findings (B, E, I, J, K) have been remediated: B and E in commit \texttt{9ceca57}; J and K in commit \texttt{221e5fa}; and I, together with E's cross-chain path, in commit \texttt{a20ad8c}. Regression tests are listed in Appendix~\ref{app:security}. The Finding~B remediation still allows a cross-chain transfer when the owner signs the message on the sending chain and holds ownership through their derived account; two xcm-simulator tests (commit \texttt{e258f1e}) confirm both the permitted transfer and the rejection of a different user. Transfers from a sovereign account, or between a user's local and remote identities, remain future work (Appendix~\ref{sec:e-delegation}). Three findings (A, C, D) are accepted design properties, and three (F, G, H) are reliability observations.
+Six findings (B, E, I, J, K, M) have been remediated: B and E in commit \texttt{9ceca57}; J and K in commit \texttt{221e5fa}; I, together with E's cross-chain path, in commit \texttt{a20ad8c}; and M in commit \texttt{facc3dc}. Regression tests are listed in Appendix~\ref{app:security}. The Finding~B remediation still allows a cross-chain transfer when the owner signs the message on the sending chain and holds ownership through their derived account; two xcm-simulator tests (commit \texttt{e258f1e}) confirm both the permitted transfer and the rejection of a different user. Transfers from a sovereign account, or between a user's local and remote identities, remain future work (Appendix~\ref{sec:e-delegation}). Three findings (A, C, D) are accepted design properties, three (F, G, H) are reliability observations, and L (unbenchmarked weights) remains open.
 
 \subsection{Test Coverage}\label{subsec:test-coverage}
 
-Our unit test suite covers \textbf{18 of the 21 distinct error variants} defined in \texttt{pallet-content-rights} (86 percent), exceeding the Phase~2 objective of 80 percent. One of these, \texttt{NoViewsRemaining}, is no longer reachable through the public API after the Finding~I fix; it is tested by writing an empty view pack directly to storage. Three variants remain untested: \texttt{ItemIdOverflow} requires exhausting a \texttt{u32} counter under normal extrinsic dispatch; \texttt{NftOperationFailed} is triggered only by internal \texttt{pallet-nfts} state corruption that the mock runtime does not replicate; and \texttt{ChildAlreadyNested} cannot be reached through any publicly exposed extrinsic. The comprehensive error variant table is provided in Appendix~\ref{app:security}.
+Our unit test suite covers \textbf{18 of the 20 distinct error variants} defined in \texttt{pallet-\allowbreak content-\allowbreak rights} (90 percent), exceeding the Phase~2 objective of 80 percent. One of these, \texttt{NoViewsRemaining}, is no longer reachable through the public API after the Finding~I fix; it is tested by writing an empty view pack directly to storage. Two variants remain untested: \texttt{ItemIdOverflow} requires exhausting a \texttt{u32} counter under normal extrinsic dispatch, and \texttt{NftOperationFailed} is triggered only by internal \texttt{pallet-nfts} state corruption that the mock runtime does not replicate. The comprehensive error variant table is provided in Appendix~\ref{app:security}.
 
 \subsection{Decentralization Assessment (HHI)}\label{subsec:decentralization-hhi}
 
 The Herfindahl-Hirschman Index (HHI) was calculated from the Polkadot mainnet validator distribution (parachains inherit relay-chain security). Comparison values for Ethereum PoS and Solana are our estimates from publicly reported stake distributions \citep{ratedNetwork2026, solanaCompass2026}; the U.S.\ DOJ Horizontal Merger Guidelines define HHI below 1,500 as unconcentrated \citep{dojFTC2010}. Table~\ref{tab:hhi} presents the comparison.
 
-\begin{longtable}{@{}L{0.28\linewidth} L{0.30\linewidth} R{0.15\linewidth} R{0.22\linewidth}@{}}
+\begin{longtable}{@{}L{0.27\linewidth} L{0.27\linewidth} R{0.15\linewidth} R{0.22\linewidth}@{}}
 \caption{Herfindahl-Hirschman Index (HHI) Comparison}\label{tab:hhi}\\
 \toprule
 \textbf{System} & \textbf{Validators / Entities} & \textbf{HHI (approx.)} & \textbf{Nakamoto Coefficient} \\
@@ -627,7 +631,7 @@ Table~\ref{tab:hhi} should be read as a statement about safety under a productio
 
 Table~\ref{tab:kpi-results} consolidates the measured outcomes for all 11 KPIs.
 
-\begin{longtable}{@{}L{0.03\linewidth} L{0.22\linewidth} L{0.18\linewidth} L{0.33\linewidth} L{0.18\linewidth}@{}}
+\begin{longtable}{@{}L{0.03\linewidth} L{0.22\linewidth} L{0.18\linewidth} L{0.27\linewidth} L{0.18\linewidth}@{}}
 \caption{KPI Results Summary}\label{tab:kpi-results}\\
 \toprule
 \textbf{\#} & \textbf{KPI} & \textbf{Target} & \textbf{Measured} & \textbf{Target met?} \\
@@ -665,7 +669,7 @@ Table~\ref{tab:kpi-results} consolidates the measured outcomes for all 11 KPIs.
 \addlinespace
 9 & Security findings & No Critical/High unremediated at submission & \textbf{2 High (Findings~B, J) identified and patched by the author; 0 unremediated Critical/High findings in that audit. No third-party review (Section~\ref{subsec:operational-limitations}).} & Met as interpreted: no unremediated Critical/High findings in the author's audit. Not independently verified. \\
 \addlinespace
-10 & Test coverage & $>$80\% & \textbf{86\%} (18/21 error variants) & \textbf{Yes} \\
+10 & Test coverage & $>$80\% & \textbf{90\%} (18/20 error variants) & \textbf{Yes} \\
 \addlinespace
 11 & Decentralization ratio & Documented & \textbf{Up to $270\times$ lower throughput; qualitatively superior decentralization} & \textbf{Yes} \\
 \end{longtable}

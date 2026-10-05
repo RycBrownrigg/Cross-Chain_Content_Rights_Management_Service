@@ -32,7 +32,7 @@
 
 \chapter{Monte Carlo Simulation Parameters and Sensitivity}\label{app:monte-carlo}
 
-This appendix documents the full parameter set and sensitivity results for the Monte Carlo revenue simulation described in Section~\ref{sec:economic-results}. The simulation is seeded (xoshiro128**, seed~42) and exactly reproducible from the published repository.
+This appendix documents the full parameter set and sensitivity results for the Monte Carlo revenue simulation described in Section~\ref{sec:economic-results}. The simulation is seeded (xoshiro128**, seed~42) and reproducible to every reported digit from the published repository (Node.js 22 or later).
 
 The headline run used 1,000 creators $\times$ 10,000 iterations. Creator attributes are redrawn in every iteration, so the simulation samples ten million independent creator-scenarios per platform rather than following 1,000 fixed creators. The sensitivity and sweep results below used 200 creators $\times$ 2,000 iterations with the same seed; on this smaller grid the baseline advantage reads 4.7\% against the 4.4\% of the headline run.
 

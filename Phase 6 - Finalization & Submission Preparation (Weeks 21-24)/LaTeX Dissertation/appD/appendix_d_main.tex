@@ -4,10 +4,10 @@
 %% Appendix D: Security and Coverage Findings
 %%
 %% Expanded narratives and reference tables supporting Chapter 7's
-%% security and user-centric results. Covers the four remediated security
-%% findings (B, E, J, K), the three accepted design properties (A, C, D),
-%% the open Finding I (zero-view DoS), the full error-variant test
-%% coverage matrix (17 of 20 tested), and the breakdown of cargo audit
+%% security and user-centric results. Covers the remediated security
+%% findings (B, E, I, J, K, M), the three accepted design properties
+%% (A, C, D), the open Finding L (unbenchmarked weights), the full
+%% error-variant test coverage matrix (18 of 20 tested), and the breakdown of cargo audit
 %% advisories from the transitive Polkadot SDK dependencies.
 %%
 %% Sections:
@@ -18,8 +18,10 @@
 %%   D.4 Finding I: Zero-View Denial of Service
 %%   D.5 Finding J: Child-NFT Divergence (High, Fixed)
 %%   D.6 Finding K: Auto-Renewal Starvation (Medium, Fixed)
-%%   D.7 Error Variant Coverage (Table: 20 error variants, 17 tested)
-%%   D.8 Static Analysis Advisory Breakdown (Table: 8 advisories)
+%%   D.7 Finding L: Unbenchmarked Extrinsic Weights (Medium if deployed, Open)
+%%   D.8 Finding M: Renewal-Queue Griefing (Medium, Fixed)
+%%   D.9 Error Variant Coverage (Table: error variants and tests)
+%%   D.10 Static Analysis Advisory Breakdown (Table: 8 advisories)
 %%
 %% External labels referenced: none (self-contained appendix).
 %%
@@ -46,7 +48,7 @@ This remediation initially covered the local \texttt{purchase\_views} path only;
 
 \section{Accepted Design Findings (A, C, D)}\label{sec:d-accepted}
 
-\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; the \texttt{XcmExecuteFilter}, \texttt{XcmTeleportFilter}, and \texttt{XcmReserveTransferFilter} are similarly set to \texttt{Everything}, and \texttt{FixedWeightBounds} is used in place of measured XCM weights; production should restrict all four to explicit allowlists (this also inflates XCM fees; Appendix~\ref{sec:xcm-fee-scaling}). We rate this Low for the prototype because the reach of \texttt{Transact} is bounded by the origin converter, not by the filter: the runtime has no superuser conversion, so a remote \texttt{Transact} dispatches only as a signed sovereign or derived account, or as a relay-chain or sibling native origin, and, except from the relay chain, must pay for execution (\texttt{AllowTopLevelPaidExecutionFrom}). With a signed origin, a remote chain can do nothing a funded local account cannot. The remaining exposure is calls whose weight cannot be bounded before dispatch, which is what \texttt{SafeCallFilter} exists to exclude. If deployed unchanged, we would rate it Medium. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
+\textbf{Finding A:} \texttt{xcm\_*} extrinsics are callable locally as gift transactions (economically neutral; documented for transparency). \textbf{Finding C:} Runtime XCM \texttt{SafeCallFilter} is set to \texttt{Everything}; the \texttt{XcmExecuteFilter}, \texttt{XcmTeleportFilter}, and \texttt{XcmReserve\allowbreak TransferFilter} are similarly set to \texttt{Everything}, and \texttt{FixedWeightBounds} is used in place of measured XCM weights; production should restrict all four to explicit allowlists (this also inflates XCM fees; Appendix~\ref{sec:xcm-fee-scaling}). We rate this Low for the prototype because the reach of \texttt{Transact} is bounded by the origin converter, not by the filter: the runtime has no superuser conversion, so a remote \texttt{Transact} dispatches only as a signed sovereign or derived account, or as a relay-chain or sibling native origin, and, except from the relay chain, must pay for execution (\texttt{AllowTopLevelPaidExecutionFrom}). With a signed origin, a remote chain can do nothing a funded local account cannot. The remaining exposure is calls whose weight cannot be bounded before dispatch, which is what \texttt{SafeCallFilter} exists to exclude. If deployed unchanged, we would rate it Medium. \textbf{Finding D:} Content can be registered with all prices at zero (legitimate free-content feature, not a vulnerability).
 
 \section{Finding I: Zero-View Denial of Service}\label{subsec:finding-i}
 
@@ -54,7 +56,7 @@ This remediation initially covered the local \texttt{purchase\_views} path only;
 
 \textbf{Description.} \texttt{purchase\_views} accepted \texttt{num\_views = 0}, charged \texttt{ppv\_price} $\times$ 0 = 0, and still minted a child NFT. \texttt{consume\_view} then failed with \texttt{NoViewsRemaining}, so the slot was never released. Fifty throwaway accounts could permanently block all future sales of any content item for the cost of transaction fees alone.
 
-\textbf{Remediation.} Both purchase paths now call a shared function that rejects \texttt{num\_views = 0} with a new \texttt{ZeroViews} error before any payment or minting. Regression tests: \texttt{security\_zero\_views\_purchase\_rejected} and \texttt{security\_xcm\_zero\_views\_purchase\_rejected}. The fix removes the free exploit but not the bound itself; Section~\ref{sec:limitations} (item~4) and Appendix~\ref{sec:e-child-cap} cover the remaining exposure.
+\textbf{Remediation.} Both purchase paths now call a shared function that rejects \texttt{num\_views = 0} with a new \texttt{ZeroViews} error before any payment or minting. Regression tests: \texttt{security\_zero\_views\_purchase\_rejected} and \texttt{security\_xcm\_zero\_views\_purchase\_rejected}. The fix removed the free exploit; commit \texttt{2865ed0} later removed the bound itself (Appendix~\ref{sec:e-child-cap}).
 
 \section[Finding J: Child-NFT Divergence]{Finding J: Child-NFT Divergence}\label{sec:d-finding-j}
 
@@ -75,9 +77,25 @@ The \texttt{on\_initialize} hook reads the first 20 entries of \texttt{AutoRenew
 Regression tests: the four existing auto-renewal group tests plus\\
 \texttt{enable\_auto\_renew\_fails\_when\_queue\_full}.
 
+\section[Finding L: Unbenchmarked Weights]{Finding L: Unbenchmarked Extrinsic Weights}\label{sec:d-finding-l}
+
+\textbf{Severity:} Medium if deployed; Informational on the local testnet. \textbf{Status:} Open.
+
+\textbf{Description.} Every weight in \texttt{pallet-content-rights} (13 functions in \texttt{weights.rs}) and in \texttt{pallet-rights-verifier} (three functions) is hand-set with \texttt{Weight::from\_parts(\ldots, 0)}: an estimated \texttt{ref\_time} plus database reads and writes, and a declared proof size of zero. The \texttt{on\_initialize} renewal hook also accounts only for database operations. The runtime's \texttt{StorageWeightReclaim} extension records the proof size each transaction actually consumed, which is why the proof-size figures in Section~\ref{subsec:block-weight} are measured, but it does so after dispatch. Fees and block admission use the declared weight, so on a live parachain the proof-size cost of a transaction is not charged and cannot be bounded before it executes, and the \texttt{ref\_time} figures are estimates rather than measurements.
+
+\textbf{Remediation.} Benchmark both pallets with FRAME benchmarking, including worst cases (the maximum number of royalty splits, a full \texttt{RenewalQueue} bucket, the deepest Merkle proof), and replace the hand-set values with the generated weights. Benchmarking was outside the scope of the prototype; it is a prerequisite for deployment (Appendix~\ref{sec:e-production}).
+
+\section[Finding M: Renewal-Queue Griefing]{Finding M: Renewal-Queue Griefing}\label{sec:d-finding-m}
+
+\textbf{Severity:} Medium. \textbf{Status:} Fixed (commit \texttt{facc3dc}).
+
+\textbf{Description.} The \texttt{RenewalQueue} introduced for Finding~K (Section~\ref{sec:d-finding-k}) is shared by all content: each block holds at most ten renewals, and \texttt{enqueue\_renewal} searches at most 100 blocks ahead. \texttt{enable\_auto\_renew} accepted content with any period. Keeping every bucket full needs about $10 \times \max(p, 100)$ queued entries for a period of $p$ blocks, so about 1,000 auto-renewing subscriptions with periods of 100 blocks or less would suffice; since the holder cap was removed (commit \texttt{2865ed0}) they can all target a single content item. The attacker pays the subscription price to themselves, and renewals in \texttt{on\_initialize} pay no transaction fee, so after the initial transactions the queue stays full at no further cost; a minimum price would not prevent this. While the queue is full, \texttt{enable\_auto\_renew} fails for every user with \texttt{RenewalQueueFull}, and existing subscribers lose auto-renewal when their next renewal cannot be queued. A period of zero also re-queued the entry into the bucket just processed, where it never ran again. We found this by code review; the attack was not executed.
+
+\textbf{Remediation.} \texttt{enable\_auto\_renew} now rejects content whose period is below a new configuration constant, \texttt{MinAutoRenewPeriod} (14,400 blocks in the runtime, about one day at 6-second blocks), with a new \texttt{AutoRenewPeriodTooShort} error. Keeping the whole queue full then needs about 144,000 subscriptions. Content with a shorter period can still be registered, subscribed to and renewed manually. Regression tests: \texttt{enable\_auto\_renew\_rejects\_\allowbreak period\_below\_minimum} and \texttt{enable\_auto\_renew\_rejects\_\allowbreak zero\_period\_\allowbreak and\_accepts\_minimum}. A targeted variant remains: an attacker can still fill the 100-block window around one predictable expiry block, at a one-time cost of about 1,000 subscriptions per window. A refundable deposit per queued entry would raise that cost further.
+
 \section{Error Variant Coverage}\label{sec:d-coverage}
 
-\begin{longtable}{@{}L{0.34\linewidth} L{0.12\linewidth} L{0.34\linewidth} L{0.16\linewidth}@{}}
+\begin{longtable}{@{}L{0.35\linewidth} L{0.10\linewidth} L{0.33\linewidth} L{0.10\linewidth}@{}}
 \caption{Error Variant Coverage}\label{tab:error-coverage}\\
 \toprule
 \textbf{Error Variant} & \textbf{Tested} & \textbf{Error Variant} & \textbf{Tested} \\
@@ -97,7 +115,7 @@ Regression tests: the four existing auto-renewal group tests plus\\
 \bottomrule
 \endlastfoot
 
-\texttt{ContentNotFound} & Yes & \texttt{MaxChildrenReached} & Yes \\
+\texttt{ContentNotFound} & Yes & \texttt{AutoRenewPeriodTooShort} & Yes \\
 \texttt{NotContentCreator} & Yes & \texttt{ContentIdOverflow} & Yes \\
 \texttt{SubscriptionAlreadyExists} & Yes & \texttt{ItemIdOverflow} & No \\
 \texttt{SubscriptionNotFound} & Yes & \texttt{OwnershipNotFound} & Yes \\
@@ -106,7 +124,7 @@ Regression tests: the four existing auto-renewal group tests plus\\
 \texttt{NoViewsRemaining} & Yes$^\dagger$ & \texttt{AutoRenewNotEnabled} & Yes \\
 \texttt{AlreadyOwned} & Yes & \texttt{Unauthorized} & Yes \\
 \texttt{InsufficientPayment} & Yes & \texttt{NftOperationFailed} & No \\
-\texttt{RenewalQueueFull} & Yes & \texttt{ChildAlreadyNested} & No (unreachable) \\
+\texttt{RenewalQueueFull} & Yes & & \\
 \texttt{ZeroViews} & Yes & & \\
 \end{longtable}
 
@@ -114,7 +132,7 @@ Regression tests: the four existing auto-renewal group tests plus\\
 
 \section{Static Analysis Advisory Breakdown}\label{sec:d-static-analysis}
 
-\begin{longtable}{@{}L{0.18\linewidth} L{0.24\linewidth} L{0.22\linewidth} L{0.30\linewidth}@{}}
+\begin{longtable}{@{}L{0.18\linewidth} L{0.25\linewidth} L{0.22\linewidth} L{0.26\linewidth}@{}}
 \caption{Static Analysis Advisory Breakdown}\label{tab:advisories}\\
 \toprule
 \textbf{Category} & \textbf{Package} & \textbf{Risk} & \textbf{Mitigation} \\

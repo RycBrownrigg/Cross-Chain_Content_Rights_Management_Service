@@ -1,4 +1,4 @@
-\begin{thebibliography}{99}
+\begin{thebibliography}{100}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -494,6 +494,15 @@ S.~S. Patil et~al.
 \newblock \emph{International Journal of Innovative Research in Technology
   (IJIRT)}, 2022.
 
+\bibitem[Peffers et~al.(2007)Peffers, Tuunanen, Rothenberger, and
+  Chatterjee]{peffersEtAl2007}
+K.~Peffers, T.~Tuunanen, M.~A. Rothenberger, and S.~Chatterjee.
+\newblock {A Design Science Research Methodology for Information Systems
+  Research}.
+\newblock \emph{Journal of Management Information Systems}, 24\penalty0
+  (3):\penalty0 45--77, 2007.
+\newblock \doi{10.2753/MIS0742-1222240302}.
+
 \bibitem[{Polkadot Network}(2025)]{polkadotNetwork2025}
 {Polkadot Network}.
 \newblock {Polkadot Roundup 2025}.
@@ -527,7 +536,7 @@ I.~S. Rao, M.~L.~M. Kiah, M.~M. Hameed, and Z.~A. Memon.
 {Rated Labs}.
 \newblock {Rated Network Explorer: Ethereum Validator and Operator Data}, 2026.
 \newblock URL \url{https://explorer.rated.network/}.
-\newblock Accessed September~2026.
+\newblock Accessed August 2026.
 
 \bibitem[Reggianini(2025)]{reggianini2025}
 E.~Reggianini.
@@ -576,7 +585,7 @@ R.~Singh et~al.
 {Solana Compass}.
 \newblock {Solana Validators}, 2026.
 \newblock URL \url{https://solanacompass.com/validators}.
-\newblock Accessed September~2026.
+\newblock Accessed August 2026.
 
 \bibitem[{Spotify AB}(2025)]{spotifyForArtists}
 {Spotify AB}.
